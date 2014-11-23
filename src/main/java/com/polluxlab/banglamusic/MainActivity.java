@@ -1,12 +1,14 @@
 package com.polluxlab.banglamusic;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -20,17 +22,28 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements View.OnClickListener{
 
     ViewPager pager;
 
     ArrayList<HashMap<String,String>> freeCategories;
     ArrayList<HashMap<String,String>> premCategories;
 
+    Button freeCatBtn,prermCatBtn,settingCatBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        freeCatBtn= (Button) findViewById(R.id.mainFreeBtn);
+        prermCatBtn= (Button) findViewById(R.id.mainPremBtn);
+        settingCatBtn= (Button) findViewById(R.id.mainAccBtn);
+
+        Typeface tf=Typeface.createFromAsset(getAssets(), "fonts/solaiman-bold.ttf");
+        freeCatBtn.setTypeface(tf);
+        prermCatBtn.setTypeface(tf);
+        settingCatBtn.setTypeface(tf);
 
         Parse.initialize(this, "2msjexhy2q7cYTDwUuGbqZLOOcJE9GEVLuyFjCQD", "gwL8F50eSzbvqoRBbGOA3nmxxDm5aRsvQJhsdMn7");
 
@@ -61,19 +74,31 @@ public class MainActivity extends FragmentActivity {
 
                     pager= (ViewPager) findViewById(R.id.pager);
                     pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-                    PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-                    tabs.setViewPager(pager);
-                    tabs.setShouldExpand(true);
-                    tabs.setTextSize(23);
-                    tabs.setBackgroundColor(Color.parseColor("#dddddd"));
-                    tabs.setTextColor(Color.parseColor("#000000"));
-                    tabs.setIndicatorColor(Color.RED);
+
+                    freeCatBtn.setOnClickListener(MainActivity.this);
+                    prermCatBtn.setOnClickListener(MainActivity.this);
+                    settingCatBtn.setOnClickListener(MainActivity.this);
                 } else {
                     Toast.makeText(MainActivity.this,"Error "+e.getMessage().toString(),Toast.LENGTH_SHORT).show();
                 }
             }
         });
         //tabs.setIndicatorHeight(10);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.mainFreeBtn:
+                pager.setCurrentItem(0);
+                break;
+            case R.id.mainPremBtn:
+                pager.setCurrentItem(1);
+                break;
+            case R.id.mainAccBtn:
+                pager.setCurrentItem(2);
+                break;
+        }
     }
 
     class MyPagerAdapter extends FragmentPagerAdapter{

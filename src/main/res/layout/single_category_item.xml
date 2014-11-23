@@ -20,7 +20,7 @@
           android:textSize="17sp"
           android:textColor="#fff"
           android:padding="5dp"
-          android:background="#70000000"
+          android:background="#193A1B"
           android:id="@+id/singleCategoryName"/>
     </LinearLayout>
 </LinearLayout>
