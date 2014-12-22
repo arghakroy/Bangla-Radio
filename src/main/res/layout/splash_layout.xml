@@ -2,5 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/splash">
+              android:orientation="vertical"
+              android:background="#EFEFEF">
+
+
+
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView"
+      android:src="@drawable/logo"
+      android:padding="50dp"
+      android:layout_gravity="center_horizontal"/>
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView2"
+      android:src="@drawable/logo_text"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:paddingBottom="30dp"
+      android:layout_gravity="center_vertical"/>
+
+    <com.polluxlab.banglamusic.MyTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:text="ইন্টারনেট সংযোগ ছাড়াই, "
+      android:id="@+id/textView"/>
+    <com.polluxlab.banglamusic.MyTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:text="বাংলা রেডিও অনুষ্ঠান শুনুন "/>
 </LinearLayout>

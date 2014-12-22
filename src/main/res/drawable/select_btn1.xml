@@ -3,20 +3,20 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <gradient android:startColor="#C6BF11"
-                      android:endColor="#D7D256"
+            <gradient android:startColor="#50AA0E"
+                      android:endColor="#82C353"
                       android:angle="90"/>
-            <corners android:radius="8dip" />
-            <stroke android:color="#E7E481" android:width="2dp"/>
+            <corners android:radius="4dip" />
+            <stroke android:color="#ADDB81" android:width="1dp"/>
         </shape>
     </item>
     <item>
         <shape>
-            <gradient android:startColor="#D7D256"
-                      android:endColor="#C6BF11"
+            <gradient android:startColor="#82C353"
+                      android:endColor="#50AA0E"
                       android:angle="90"/>
-            <corners android:radius="8dip" />
-            <stroke android:color="#E7E481" android:width="2dp"/>
+            <corners android:radius="4dip" />
+            <stroke android:color="#ADDB81" android:width="1dp"/>
         </shape>
     </item>
 </selector>

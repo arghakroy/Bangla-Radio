@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@drawable/bg"
+              android:background="#F1F1F1"
               tools:context="com.polluxlab.banglamusic.MainActivity">
 
     <android.support.v4.view.ViewPager
@@ -15,7 +15,7 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="#0F3A1C"
+      android:background="#282828"
       android:padding="10dp"
       >
         <Button
@@ -24,8 +24,8 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:background="@drawable/select_btn1"
-          android:textColor="#fff"
-          android:layout_marginRight="10dp"
+          android:textColor="#000"
+          android:layout_marginRight="20dp"
           android:textSize="20sp"
           android:textStyle="bold"
           android:text="@string/string_free"/>
@@ -35,8 +35,8 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:background="@drawable/select_btn2"
-          android:textColor="#fff"
-          android:layout_marginRight="10dp"
+          android:textColor="#000"
+          android:layout_marginRight="20dp"
           android:text="@string/string_prem"/>
         <Button
           android:id="@+id/mainAccBtn"
@@ -44,7 +44,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:background="@drawable/select_btn3"
-          android:textColor="#fff"
+          android:textColor="#000"
           android:text="@string/string_set"/>
     </LinearLayout>
 </LinearLayout>

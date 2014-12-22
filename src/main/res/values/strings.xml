@@ -7,12 +7,12 @@
     <string name="action_settings">Settings</string>
 
     <string name="string_free">ফ্রি</string>
-    <string name="string_prem">প্রিমিয়াম</string>
+    <string name="string_prem">স্পেশাল</string>
     <string name="string_set">অ্যাকাউন্ট</string>
-    <string name="string_buy">কিনুন</string>
-    <string name="string_pkg1">৭ দিন ----- ১.০০ রিংগিত</string>
-    <string name="string_pkg2">১০ দিন ----- ২.০০ রিংগিত</string>
-    <string name="string_pkg3">৩০ দিন ----- ৩.০০ রিংগিত</string>
+    <string name="string_buy">এখনি কিনুন</string>
+    <string name="string_st1"> আকর্ষনীয় রেডিওর</string>
+    <string name="string_st2"> স্পেশাল অনুষ্ঠান শুনুন </string>
+    <string name="string_pkg1">১ সপ্তাহ মাত্র ১ রিংগিত</string>
     <string name="string_premprice">প্রিমিয়াম মূল্য</string>
     <string name="string_dayrest"> দিন বাকি</string>
 
