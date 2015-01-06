@@ -1,0 +1,3 @@
+web_service:
+    resource: "@WebServiceBundle/Resources/config/routing.xml"
+    prefix:   /webservice
