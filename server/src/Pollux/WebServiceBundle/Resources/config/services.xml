@@ -12,6 +12,12 @@
       <argument>%kernel.cache_dir%/ampache.token</argument>
       <argument type="service" id="logger"/>
     </service>
+
+    <service id="csa.twig.date.extension" class="Pollux\WebServiceBundle\Service\Twig\AuthTokenFilterExtension">
+      <tag name="twig.extension" />
+      <argument>%kernel.cache_dir%/ampache.token</argument>
+    </service>
+
   </services>
 
 </container>
