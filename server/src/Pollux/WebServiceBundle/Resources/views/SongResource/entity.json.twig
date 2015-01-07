@@ -1,0 +1,14 @@
+{
+"title": "{{ entity.title }}",
+"album": "{{ entity.album }}",
+"track": "{{ entity.track }}",
+"time": "{{ entity.time }}",
+"year": "{{ entity.year }}",
+"bitrate": "{{ entity.bitrate }}",
+"mode": "{{ entity.mode }}",
+"links": {
+"self": "{{ url('webservice.song', { songId: entity.attributes.id }) }}",
+"album" : "{{ url('webservice.album', { albumId: entity.album.attributes.id }) }}",
+"artist" : "{{ url('webservice.artist', { artistId: entity.artist.attributes.id }) }}"
+}
+}
