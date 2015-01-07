@@ -1,0 +1,12 @@
+{
+    "name": "{{ entity.name }}",
+    "summary": "{{ entity.summary }}",
+    "yearformed": "{{ entity.yearformed }}",
+    "placeformed": "{{ entity.placeformed }}",
+    "links": {
+        "self": "{{ url('webservice.artist', { artistId: entity.attributes.id }) }}",
+        "preview": "{{ entity.art }}",
+        "songs": "{{ url('webservice.artist.songs', { artistId: entity.attributes.id }) }}",
+        "artist" : "{{ url('webservice.artist.albums', { artistId: entity.attributes.id }) }}"
+    }
+}

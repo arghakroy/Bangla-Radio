@@ -1,0 +1,6 @@
+{% set size = entities|length %}
+[
+{% for entity in entities %}
+    {{ include('WebServiceBundle:ArtistResource:entity.json.twig', {'entity': entity}) }}{% if size != loop.index %},{% endif %}
+{% endfor %}
+]
