@@ -7,6 +7,6 @@
         "self": "{{ url('webservice.album', { albumId: entity.attributes.id }) }}",
         "preview": "{{ entity.art|filterAuthToken }}",
         "songs": "{{ url('webservice.album.songs', { albumId: entity.attributes.id }) }}",
-        "artist" : "{{ url('webservice.artist', { artistId: entity.artist.attributes.id }) }}"
+        "artists" : "{{ url('webservice.artist', { artistId: entity.artist.attributes.id }) }}"
     }
 }
