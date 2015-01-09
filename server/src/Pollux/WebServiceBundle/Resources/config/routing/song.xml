@@ -11,4 +11,8 @@
     <default key="_controller">WebServiceBundle:SongResource:get</default>
   </route>
 
+  <route id="webservice.song.streamUri" path="/{songId}/stream" methods="GET">
+    <default key="_controller">WebServiceBundle:SongResource:getStreamUri</default>
+  </route>
+
 </routes>

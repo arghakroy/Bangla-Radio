@@ -6,6 +6,7 @@ namespace Pollux\WebServiceBundle\Controller;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class SongResourceController extends Controller {
 
@@ -31,6 +32,15 @@ class SongResourceController extends Controller {
     $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
 
     return $response;
+  }
+
+  public function getStreamUriAction($songId) {
+    $musicClient = $this->get('webservice.musicClient');
+    $song = $musicClient->getSong($songId);
+
+    return new Response($song->url, 200, array(
+      Headers::CONTENT_TYPE => MimeType::TEXT_URI_LIST
+    ));
   }
 
 }

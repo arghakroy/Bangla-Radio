@@ -9,6 +9,7 @@
     "links": {
         "self": "{{ url('webservice.song', { songId: entity.attributes.id }) }}",
         "albums" : "{{ url('webservice.album', { albumId: entity.album.attributes.id }) }}",
-        "artists" : "{{ url('webservice.artist', { artistId: entity.artist.attributes.id }) }}"
+        "artists" : "{{ url('webservice.artist', { artistId: entity.artist.attributes.id }) }}",
+        "media" : "{{ url('webservice.song.streamUri', { songId: entity.attributes.id }) }}"
     }
 }
