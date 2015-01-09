@@ -4,6 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+  <import resource="@WebServiceBundle/Resources/config/routing/endpoint.xml" prefix="/"/>
   <import resource="@WebServiceBundle/Resources/config/routing/song.xml" prefix="/songs"/>
   <import resource="@WebServiceBundle/Resources/config/routing/album.xml" prefix="/albums"/>
   <import resource="@WebServiceBundle/Resources/config/routing/artist.xml" prefix="/artists"/>
