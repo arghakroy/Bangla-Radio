@@ -121,7 +121,8 @@ class AmpacheClient {
     $xml = simplexml_load_string($output);
     $token = "" . $xml->auth;
     file_put_contents($this->tokenPath, $token);
-    return "" . $token;
+    $this->token = $token;
+    return $this->token;
   }
 
   private function getTokenFromFile() {
