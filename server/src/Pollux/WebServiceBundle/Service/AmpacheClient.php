@@ -110,6 +110,7 @@ class AmpacheClient {
     $passPhrase = hash('sha256', $time . hash('sha256', $this->password));
     $url = "{$this->endpoint}?action=handshake&auth={$passPhrase}&timestamp={$time}&version=350001&user={$this->username}";
 
+    $this->logger->debug("Token URL: " . $url);
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_RETURNTRANSFER => 1,
@@ -118,6 +119,7 @@ class AmpacheClient {
 
     $output = curl_exec($curl);
     curl_close($curl);
+    $this->logger->debug("Token: " . $output);
     $xml = simplexml_load_string($output);
     $token = "" . $xml->auth;
     file_put_contents($this->tokenPath, $token);
