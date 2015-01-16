@@ -5,7 +5,7 @@
     "tracks": "{{ entity.tracks }}",
     "links": {
         "self": "{{ url('webservice.album', { albumId: entity.attributes.id }) }}",
-        "preview": "{{ entity.art|filterAuthToken }}",
+        "preview": "{{ entity.art }}",
         "songs": "{{ url('webservice.album.songs', { albumId: entity.attributes.id }) }}",
         "artists" : "{{ url('webservice.artist', { artistId: entity.artist.attributes.id }) }}"
     }
