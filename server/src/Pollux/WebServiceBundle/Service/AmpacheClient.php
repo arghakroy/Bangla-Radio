@@ -3,6 +3,7 @@
 namespace Pollux\WebServiceBundle\Service;
 
 
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,31 +79,7 @@ class AmpacheClient {
   }
 
   private function execute($action, array $parameters = array()) {
-    if(!$this->token) {
-      $this->lazyLoadToken();
-    }
-
-    $params = "";
-    foreach ($parameters as $key => $value) {
-      $params .= "&{$key}={$value}";
-    }
-
-    $url = "{$this->endpoint}?auth={$this->token}&action={$action}{$params}";
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => $url
-    ));
-
-    $output = curl_exec($curl);
-    curl_close($curl);
-
-    $xml = simplexml_load_string($output);
-    if (isset($xml->error) && $xml->error->attributes()['code'] = Response::HTTP_UNAUTHORIZED) {
-      $this->getTokenFromServer();
-      return $this->execute($action, $parameters);
-    }
-    return $xml;
+    return $this->executeInternal($action, $parameters, 0);
   }
 
   private function getTokenFromServer() {
@@ -138,6 +115,44 @@ class AmpacheClient {
     }
 
     $this->token = $token;
+  }
+
+  /**
+   * @param $action
+   * @param array $parameters
+   * @return \SimpleXMLElement
+   */
+  private function executeInternal($action, array $parameters, $totalRetry) {
+    $totalRetry++;
+    if($totalRetry == 3) {
+      $this->logger->warning('Failed to authenticate with ampache. TotalRetry: ' . $totalRetry);
+      throw new InvalidArgumentException('Failed to retrieve media information.');
+    }
+    if (!$this->token) {
+      $this->lazyLoadToken();
+    }
+
+    $params = "";
+    foreach ($parameters as $key => $value) {
+      $params .= "&{$key}={$value}";
+    }
+
+    $url = "{$this->endpoint}?auth={$this->token}&action={$action}{$params}";
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => $url
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    $xml = simplexml_load_string($output);
+    if (isset($xml->error) && $xml->error->attributes()['code'] = Response::HTTP_UNAUTHORIZED) {
+      $this->getTokenFromServer();
+      return $this->executeInternal($action, $parameters, $totalRetry);
+    }
+    return $xml;
   }
 
 }
