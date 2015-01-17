@@ -1,137 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@drawable/bg">
+<ScrollView
+  android:layout_height="match_parent"
+  android:layout_width="match_parent"
+  android:background="#EFEFEF"
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:background="#2C5E2D"
-      android:layout_margin="25dp"
-      android:padding="15dp">
+      android:orientation="vertical">
+
         <LinearLayout
-          android:orientation="horizontal"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:gravity="center_horizontal"
-          >
-            <com.polluxlab.banglamusic.MyTextView
-              android:layout_width="wrap_content"
+          android:orientation="vertical"
+          android:background="#447452"
+          android:layout_margin="25dp"
+          android:padding="15dp">
+
+            <LinearLayout
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="৫ "
+              android:gravity="center_horizontal"
+              >
+
+                <com.polluxlab.banglamusic.helper.MyTextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="৫ "
+                  android:textColor="#fff"
+                  android:gravity="center_horizontal"
+                  android:textSize="45sp"/>
+
+                <com.polluxlab.banglamusic.helper.MyTextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/string_dayrest"
+                  android:textColor="#fff"
+                  android:textSize="25sp"/>
+            </LinearLayout>
+
+            <com.polluxlab.banglamusic.helper.MyTextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="মেয়াদ শেষ হবে ৫ ডিসেম্বর ২০১৪"
               android:textColor="#fff"
               android:gravity="center_horizontal"
-              android:textSize="45sp"/>
-            <com.polluxlab.banglamusic.MyTextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/string_dayrest"
-              android:textColor="#fff"
-              android:textSize="25sp"/>
+              android:textSize="18sp"/>
         </LinearLayout>
-        <com.polluxlab.banglamusic.MyTextView
+
+        <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="মেয়াদ শেষ হবে ৫ ডিসেম্বর ২০১৪"
-          android:textColor="#fff"
-          android:gravity="center_horizontal"
-          android:textSize="18sp"/>
-    </LinearLayout>
-    <com.polluxlab.banglamusic.MyTextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="@string/string_premprice"
-      android:textSize="25sp"
-      android:gravity="center"
-      android:padding="5dp"
-      android:textColor="#fff"
-      android:id="@+id/textView2"/>
-
-    <LinearLayout
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
-      android:layout_marginBottom="5dp"
-      android:layout_marginTop="20dp"
-      android:background="#402C5F">
-
-        <com.polluxlab.banglamusic.MyTextView
-          android:layout_width="0dp"
-          android:layout_weight="1"
-          android:layout_height="wrap_content"
-          android:text="@string/string_pkg1"
-          android:textSize="16sp"
-          android:textColor="#fff"
+          android:background="#F9F9F9"
           android:gravity="center"
-          android:id="@+id/textView3"/>
+          android:padding="10dp"
+          android:layout_margin="20dp"
+          android:orientation="vertical">
 
-        <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/string_buy"
-          android:textSize="16sp"
-          android:textColor="#fff"
-          android:background="@android:color/transparent"
-          android:id="@+id/button"/>
+            <com.polluxlab.banglamusic.helper.MyTextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/string_st1"
+              android:textSize="22sp"
+              android:textColor="#C72121"
+              />
 
-    </LinearLayout>
-    <LinearLayout
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
-      android:layout_marginBottom="5dp"
-      android:background="#402C5F">
+            <com.polluxlab.banglamusic.helper.MyTextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/string_st2"
+              android:textSize="22sp"
+              android:textColor="#C72121"
+              />
 
-        <com.polluxlab.banglamusic.MyTextView
-          android:layout_width="0dp"
-          android:layout_weight="1"
-          android:layout_height="wrap_content"
-          android:text="@string/string_pkg2"
-          android:textColor="#fff"
-          android:gravity="center"
-          android:textSize="16sp"/>
+            <com.polluxlab.banglamusic.helper.MyTextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/string_pkg1"
+              android:textSize="22sp"
 
-        <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="#fff"
-          android:textSize="16sp"
-          android:background="@android:color/transparent"
-          android:text="@string/string_buy"/>
+              />
 
-    </LinearLayout>
-    <LinearLayout
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
-      android:layout_marginBottom="5dp"
-      android:background="#402C5F">
-
-        <com.polluxlab.banglamusic.MyTextView
-          android:layout_width="0dp"
-          android:layout_weight="1"
-          android:layout_height="wrap_content"
-          android:text="@string/string_pkg3"
-          android:gravity="center"
-          android:textColor="#fff"
-          android:textSize="16sp"/>
-
-        <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="#fff"
-          android:textSize="16sp"
-          android:background="@android:color/transparent"
-          android:text="@string/string_buy"/>
+            <Button
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/string_buy"
+              android:id="@+id/button"
+              android:background="#EAC416"
+              android:layout_margin="15dp"
+              android:textSize="20sp"
+              android:padding="10dp"
+              android:textStyle="bold"
+              android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

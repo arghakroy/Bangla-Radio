@@ -1,142 +1,79 @@
 package com.polluxlab.banglamusic;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.polluxlab.banglamusic.model.Category;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener{
+public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
-    ViewPager pager;
-
-    ArrayList<HashMap<String,String>> freeCategories;
-    ArrayList<HashMap<String,String>> premCategories;
-
-    Button freeCatBtn,prermCatBtn,settingCatBtn;
+    private CarouselFragment carouselFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        freeCatBtn= (Button) findViewById(R.id.mainFreeBtn);
-        prermCatBtn= (Button) findViewById(R.id.mainPremBtn);
-        settingCatBtn= (Button) findViewById(R.id.mainAccBtn);
+        if (savedInstanceState == null) {
+            // withholding the previously created fragment from being created again
+            // On orientation change, it will prevent fragment recreation
+            // its necessary to reserving the fragment stack inside each tab
+            initScreen();
 
-        Typeface tf=Typeface.createFromAsset(getAssets(), "fonts/solaiman-bold.ttf");
-        freeCatBtn.setTypeface(tf);
-        prermCatBtn.setTypeface(tf);
-        settingCatBtn.setTypeface(tf);
+        } else {
+            // restoring the previously created fragment
+            // and getting the reference
+            carouselFragment = (CarouselFragment) getSupportFragmentManager().getFragments().get(0);
+        }
+    }
 
-        Parse.initialize(this, "2msjexhy2q7cYTDwUuGbqZLOOcJE9GEVLuyFjCQD", "gwL8F50eSzbvqoRBbGOA3nmxxDm5aRsvQJhsdMn7");
+    private void initScreen() {
+        // Creating the ViewPager container fragment once
+        carouselFragment = new CarouselFragment();
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Categories");
-        query.findInBackground(new FindCallback<ParseObject>() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, carouselFragment)
+                .commit();
+    }
 
-            @Override
-            public void done(List<ParseObject> parseObjects, com.parse.ParseException e) {
-                if (e == null) {
-                    freeCategories=new ArrayList<HashMap<String, String>>();
-                    premCategories=new ArrayList<HashMap<String, String>>();
-                    for (int i=0;i<parseObjects.size();i++){
-                        HashMap<String,String> map=new HashMap();
-                        map.put(Category.name,parseObjects.get(i).get(Category.name).toString());
-                        map.put(Category.accessLevel,parseObjects.get(i).get(Category.accessLevel).toString());
-                        map.put(Category.image,parseObjects.get(i).get(Category.image).toString());
-                        map.put(Category.externalId,parseObjects.get(i).get(Category.externalId).toString());
-                        String access=parseObjects.get(i).get(Category.accessLevel).toString();
-                        if(access.equals("free")){
-                            freeCategories.add(map);
-                        }else if(access.equals("premium")){
-                            premCategories.add(map);
-                        }
-                    }
+    /**
+     * Only Activity has this special callback method
+     * Fragment doesn't have any onBackPressed callback
+     *
+     * Logic:
+     * Each time when the back button is pressed, this Activity will propagate the call to the
+     * container Fragment and that Fragment will propagate the call to its each tab Fragment
+     * those Fragments will propagate this method call to their child Fragments and
+     * eventually all the propagated calls will get back to this initial method
+     *
+     * If the container Fragment or any of its Tab Fragments and/or Tab child Fragments couldn't
+     * handle the onBackPressed propagated call then this Activity will handle the callback itself
+     */
+    @Override
+    public void onBackPressed() {
 
-                    Category_Frag.freeCategories=freeCategories;
-                    Category_Frag.premCategories=premCategories;
+        if (!carouselFragment.onBackPressed()) {
+            // container Fragment or its associates couldn't handle the back pressed task
+            // delegating the task to super class
+            super.onBackPressed();
 
-                    pager= (ViewPager) findViewById(R.id.pager);
-                    pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-
-                    freeCatBtn.setOnClickListener(MainActivity.this);
-                    prermCatBtn.setOnClickListener(MainActivity.this);
-                    settingCatBtn.setOnClickListener(MainActivity.this);
-                } else {
-                    Toast.makeText(MainActivity.this,"Error "+e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        //tabs.setIndicatorHeight(10);
+        } else {
+            // carousel handled the back pressed task
+            // do not call super
+        }
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.mainFreeBtn:
-                pager.setCurrentItem(0);
-                break;
-            case R.id.mainPremBtn:
-                pager.setCurrentItem(1);
-                break;
-            case R.id.mainAccBtn:
-                pager.setCurrentItem(2);
-                break;
-        }
+    public void play(int pos) {
+        FragmentManager mgr=getSupportFragmentManager();
+        CarouselFragment carousel= (CarouselFragment) mgr.findFragmentById(R.id.container);
+        carousel.player(pos);
     }
 
-    class MyPagerAdapter extends FragmentPagerAdapter{
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Bundle bun = new Bundle();
-            Category_Frag catFrag=new Category_Frag();
-            if(i==0){
-                bun.putInt("pos",0);
-                catFrag.setArguments(bun);
-                return catFrag;
-            }
-            else if(i==1){
-                bun.putInt("pos",1);
-                catFrag.setArguments(bun);
-                return catFrag;
-            }
-            else return new Setting_Frag();
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position){
-                case 0: return "Free";
-                case 1: return "Premium";
-                case 2: return "Account";
-            }
-            return "";
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        play(0);
     }
 }

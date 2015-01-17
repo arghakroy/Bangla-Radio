@@ -29,77 +29,59 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by ARGHA K ROY on 11/20/2014.
+ * Created by ARGHA K ROY on 12/26/2014.
  */
-public class Category_Frag extends RootFragment {
+public class Category_Sub_Frag extends RootFragment {
 
-    GridView categoryList;
-    int pos=0;
 
+    GridView categoryItemList;
+    ArrayList<HashMap<String,String>> categoryItem;
     Context con;
     public static String albumUrl="http://162.248.162.2/musicapp/server/web/app_dev.php/webservice/albums/";
     JSONParser jparser=new JSONParser();
 
-    static ArrayList<HashMap<String,String>> premCategories;
-    static ArrayList<HashMap<String,String>> freeCategories;
-
-    public Category_Frag(){
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.category_layout_frag, container,  false);
-        categoryList= (GridView) rootView.findViewById(R.id.categoryList);
-
         con=getActivity();
-        Bundle b=getArguments();
-        pos=b.getInt("pos");
 
-        if(freeCategories==null) {
-            GetAlbums getAlbums = new GetAlbums();
-            getAlbums.execute();
-        }else{
-            categoryList.setAdapter(new MyListAdapter());
-        }
-        categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        categoryItemList=(GridView) rootView.findViewById(R.id.categoryList);
+
+        new GetAlbums().execute();
+
+        categoryItemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Category_Sub_Frag subFragment = new Category_Sub_Frag();
+                Category_List_Frag listFragment = new Category_List_Frag();
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 // Store the Fragment in stack
-                transaction.addToBackStack(null);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.replace(R.id.root_container, subFragment).commit();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.root_container, listFragment).commit();
             }
         });
+
         return rootView;
     }
 
+    private void generate_data() {
+        categoryItem=new ArrayList<HashMap<String, String>>();
 
-/*    private void generate_data() {
-        premCategories=new ArrayList<HashMap<String, String>>();
-        freeCategories=new ArrayList<HashMap<String, String>>();
         for (int i=0;i<10;i++){
             HashMap<String,String> map=new HashMap<String, String>();
-            map.put(Category.name, "Prem Category " + i);
-            premCategories.add(map);
-
-            map=new HashMap<String, String>();
-            map.put(Category.name, "Free Category " + i);
-            freeCategories.add(map);
+            map.put(Category.name,"SubCategory "+i);
+            map.put(Category.externalId,i+"");
+            categoryItem.add(map);
         }
-    }*/
+    }
 
 
-    class MyListAdapter extends BaseAdapter{
+    class MyListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            if(pos==0) return freeCategories.size();
-            else
-                return premCategories.size();
+            return  categoryItem.size();
         }
 
         @Override
@@ -117,19 +99,15 @@ public class Category_Frag extends RootFragment {
             View rowView=view;
             if(rowView==null){
                 LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                rowView = inflater.inflate(R.layout.single_category_item, null);
+                rowView = inflater.inflate(R.layout.single_subcategory_item, null);
             }
-            TextView categoryName= (TextView) rowView.findViewById(R.id.singleCategoryName);
-
-            if(pos==0)
-                categoryName.setText(freeCategories.get(i).get(Category.name));
-            else if(pos==1)
-                categoryName.setText(premCategories.get(i).get(Category.name));
+            TextView categoryName= (TextView) rowView.findViewById(R.id.singleSubCategoryName);
+            categoryName.setText(categoryItem.get(i).get(Category.name));
             return rowView;
         }
     }
 
-    class GetAlbums extends AsyncTask<String,String,String>{
+    class GetAlbums extends AsyncTask<String,String,String> {
 
         ProgressDialog pDialog;
         String s="";
@@ -148,8 +126,7 @@ public class Category_Frag extends RootFragment {
 
         @Override
         protected String doInBackground(String... st) {
-            freeCategories=new ArrayList<>();
-            premCategories=new ArrayList<>();
+            categoryItem=new ArrayList<>();
             try {
                 List<NameValuePair> params=new ArrayList<NameValuePair>();
                 String respond=jparser.makeHttpRequest(albumUrl, "GET", params);
@@ -158,11 +135,7 @@ public class Category_Frag extends RootFragment {
                 for (int i=0;i<jArray.length();i++){
                     HashMap<String,String> map=new HashMap<String, String>();
                     map.put(Category.name, jArray.getJSONObject(i).getString("name"));
-                    premCategories.add(map);
-
-                    map=new HashMap<String, String>();
-                    map.put(Category.name, jArray.getJSONObject(i).getString("name"));
-                    freeCategories.add(map);
+                    categoryItem.add(map);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -186,7 +159,7 @@ public class Category_Frag extends RootFragment {
                     Util.showNoInternetDialog(con);
                 return;
             }
-            categoryList.setAdapter(new MyListAdapter());
+            categoryItemList.setAdapter(new MyListAdapter());
         }
     }
 }
