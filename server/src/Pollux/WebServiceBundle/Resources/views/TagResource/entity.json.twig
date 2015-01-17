@@ -1,0 +1,13 @@
+{% set id = entity.attributes.id %}
+{
+    "name": "{{ entity.name }}",
+    "totalArtist": "{{ entity.artists }}",
+    "totalAlbum": "{{ entity.albums }}",
+    "totalSongs": "{{ entity.songs }}",
+    "links": {
+        "self": "{{ url('webservice.tag', { tagId: id }) }}",
+        "songs": "{{ url('webservice.tag.songs', { tagId: id }) }}",
+        "albums": "{{ url('webservice.tag.albums', { tagId: id }) }}",
+        "artists" : "{{ url('webservice.tag.artists', { tagId: id }) }}"
+    }
+}
