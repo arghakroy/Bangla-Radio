@@ -40,9 +40,12 @@ class TelenorAuthenticationProvider implements AuthenticationProviderInterface {
   public function authenticate(TokenInterface $token) {
     if ($token instanceof TelenorUserToken) {
       $secret = $this->session->get(self::AUTHORIZATION_CODE_KEY);
+      $this->logger->debug("secret = $secret");
       if ($this->validateDigest($token, $secret)) {
+        $this->logger->debug("Passed");
         return new TelenorUserToken($this->providerKey, $token->getDigest(), $token->getNonce(), $token->getCreated(), array('USER') );
       }
+      $this->logger->debug("Failed");
     }
 
     throw new AuthenticationException('The WSSE authentication failed.');
