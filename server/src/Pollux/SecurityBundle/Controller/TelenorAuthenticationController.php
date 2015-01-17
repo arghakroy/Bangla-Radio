@@ -5,8 +5,8 @@ namespace Pollux\SecurityBundle\Controller;
 
 use Pollux\SecurityBundle\Security\Provider\TelenorAuthenticationProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -45,7 +45,18 @@ class TelenorAuthenticationController extends Controller {
     return $this->redirectToRoute('webservice.endpoint');
   }
 
+  public function testAction(Request $request) {
+    $code = $this->get('session')->get(TelenorAuthenticationProvider::AUTHORIZATION_CODE_KEY);
+    var_dump($code);
+    var_dump($request);
+    var_dump($this->getUser());
+
+    return new Response();
+  }
+
   public function getTokenRedirectAction(Request $request) {
+    $code = $this->get('session')->get(TelenorAuthenticationProvider::AUTHORIZATION_CODE_KEY);
+    var_dump($code);
     var_dump($request);
     return new Response();
   }

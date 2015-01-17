@@ -13,5 +13,8 @@
   <route id="telenor.authentication.getTokenRedirect" pattern="/getTokenRedirect" methods="GET">
     <default key="_controller">PolluxSecurityBundle:TelenorAuthentication:getTokenRedirect</default>
   </route>
+  <route id="telenor.authentication.test" pattern="/test" methods="GET">
+    <default key="_controller">PolluxSecurityBundle:TelenorAuthentication:test</default>
+  </route>
 
 </routes>
