@@ -4,5 +4,24 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+  <services>
+    <service id="telenor.security.authentication.provider"
+             class="Pollux\SecurityBundle\Security\Provider\TelenorAuthenticationProvider" public="false">
+      <argument/> <!-- provider key -->
+      <argument>%kernel.cache_dir%/security/nonces</argument>
+      <argument type="service" id="doctrine.orm.entity_manager"/>
+      <argument type="service" id="session"/>
+      <argument type="service" id="logger"/>
+    </service>
+    <service id="telenor.security.authentication.listener"
+             class="Pollux\SecurityBundle\Security\Firewall\TelenorAuthenticationListener" public="false">
+      <argument type="service" id="security.context"/>
+      <argument type="service" id="security.authentication.manager"/>
+      <argument/> <!-- provider key -->
+      <argument type="service" id="router"/>
+      <argument type="service" id="session"/>
+      <argument type="service" id="logger"/>
+    </service>
+  </services>
 
 </container>
