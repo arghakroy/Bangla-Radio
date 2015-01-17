@@ -35,9 +35,9 @@ class TagResourceController extends Controller {
 
   public function getArtistsAction($tagId) {
     $musicClient = $this->get('webservice.musicClient');
-    $entities = $musicClient->getTag($tagId);
+    $entities = $musicClient->getTagArtists($tagId);
 
-    $response = $this->render('@WebService/TagResource/entity.json.twig', array(
+    $response = $this->render('@WebService/ArtistResource/collection.json.twig', array(
         'entities' => $entities
     ));
     $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
