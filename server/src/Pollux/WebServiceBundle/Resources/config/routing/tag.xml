@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+  <route id="webservice.tags" path="/" methods="GET">
+    <default key="_controller">WebServiceBundle:TagResource:getCollection</default>
+  </route>
+  <route id="webservice.tag" path="/{tagId}" methods="GET">
+    <default key="_controller">WebServiceBundle:TagResource:get</default>
+  </route>
+  <route id="webservice.tag.artists" path="/{tagId}/artists" methods="GET">
+    <default key="_controller">WebServiceBundle:TagResource:getArtists</default>
+  </route>
+  <route id="webservice.tag.albums" path="/{tagId}/albums" methods="GET">
+    <default key="_controller">WebServiceBundle:TagResource:getAlbums</default>
+  </route>
+  <route id="webservice.tag.songs" path="/{tagId}/songs" methods="GET">
+    <default key="_controller">WebServiceBundle:TagResource:getSongs</default>
+  </route>
+
+</routes>
