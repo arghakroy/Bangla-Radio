@@ -8,5 +8,6 @@
   <import resource="@WebServiceBundle/Resources/config/routing/song.xml" prefix="/songs"/>
   <import resource="@WebServiceBundle/Resources/config/routing/album.xml" prefix="/albums"/>
   <import resource="@WebServiceBundle/Resources/config/routing/artist.xml" prefix="/artists"/>
+  <import resource="@PolluxSecurityBundle/Resources/config/routing.xml" prefix="/auth"/>
 
 </routes>
