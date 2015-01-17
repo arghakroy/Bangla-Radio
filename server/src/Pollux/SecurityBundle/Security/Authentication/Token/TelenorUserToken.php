@@ -13,6 +13,13 @@ class TelenorUserToken extends AbstractToken {
 
   private $providerKey;
 
+  /**
+   * @param $providerKey
+   * @param $digest
+   * @param $nonce
+   * @param $created
+   * @param array $roles
+   */
   function __construct($providerKey, $digest, $nonce, $created, array $roles = array()) {
     parent::__construct($roles);
 
