@@ -78,6 +78,35 @@ class AmpacheClient {
     ));
   }
 
+  public function getTags() {
+    return $this->execute('tags');
+  }
+
+  public function getTag($tagId) {
+    $root = $this->execute('tag', array(
+        'filter' => $tagId
+    ));
+    return $root->tag;
+  }
+
+  public function getTagArtists($tagId) {
+    return $this->execute('tag_artists', array(
+        'filter' => $tagId
+    ));
+  }
+
+  public function getTagAlbums($tagId) {
+    return $this->execute('tag_albums', array(
+        'filter' => $tagId
+    ));
+  }
+
+  public function getTagSongs($tagId) {
+    return $this->execute('tag_songs', array(
+        'filter' => $tagId
+    ));
+  }
+
   private function execute($action, array $parameters = array()) {
     return $this->executeInternal($action, $parameters, 0);
   }
