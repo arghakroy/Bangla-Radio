@@ -1,0 +1,9 @@
+{
+    "name": "{{ entity.name }}",
+    "public": "{{ entity.public }}",
+    "totalItems": "{{ entity.items }}",
+    "links": {
+        "self": "{{ url('webservice.playlist', { playlistId: entity.attributes.id }) }}",
+        "songs": "{{ url('webservice.playlist.songs', { playlistId: entity.attributes.id }) }}",
+    }
+}
