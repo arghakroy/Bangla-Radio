@@ -89,7 +89,7 @@ public class Category_List_Frag extends RootFragment {
             plaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    helper.play(1);
+                    //helper.play(1);
                     //Intent objIntent = new Intent(getActivity(), PlayAudio.class);
                     //getActivity().startService(objIntent);
                 }

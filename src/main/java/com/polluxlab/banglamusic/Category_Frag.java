@@ -2,6 +2,8 @@ package com.polluxlab.banglamusic;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Category;
+import com.polluxlab.banglamusic.model.Endpoint;
+import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -37,11 +41,9 @@ public class Category_Frag extends RootFragment {
     int pos=0;
 
     Context con;
-    public static String albumUrl="http://162.248.162.2/musicapp/server/web/app_dev.php/webservice/albums/";
-    JSONParser jparser=new JSONParser();
-
-    static ArrayList<HashMap<String,String>> premCategories;
-    static ArrayList<HashMap<String,String>> freeCategories;
+    static List<Song> premCategories;
+    static List<Song> freeCategories;
+    PlaySoundHelper helper;
 
     public Category_Frag(){
     }
@@ -53,6 +55,7 @@ public class Category_Frag extends RootFragment {
         categoryList= (GridView) rootView.findViewById(R.id.categoryList);
 
         con=getActivity();
+        helper= (PlaySoundHelper) getActivity();
         Bundle b=getArguments();
         pos=b.getInt("pos");
 
@@ -65,32 +68,66 @@ public class Category_Frag extends RootFragment {
         categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
-
+/*
                 Category_Sub_Frag subFragment = new Category_Sub_Frag();
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 // Store the Fragment in stack
                 transaction.addToBackStack(null);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.replace(R.id.root_container, subFragment).commit();
+                transaction.replace(R.id.root_container, subFragment).commit();*/
+                new GetStreamLink(i).execute();
             }
         });
         return rootView;
     }
 
+    class GetStreamLink extends AsyncTask<String,String,String>{
 
-/*    private void generate_data() {
-        premCategories=new ArrayList<HashMap<String, String>>();
-        freeCategories=new ArrayList<HashMap<String, String>>();
-        for (int i=0;i<10;i++){
-            HashMap<String,String> map=new HashMap<String, String>();
-            map.put(Category.name, "Prem Category " + i);
-            premCategories.add(map);
-
-            map=new HashMap<String, String>();
-            map.put(Category.name, "Free Category " + i);
-            freeCategories.add(map);
+        ProgressDialog pDialog;
+        int pos;
+        String link="";
+        GetStreamLink(int i){
+            pos=i;
         }
-    }*/
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog=new ProgressDialog(con);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            link=freeCategories.get(pos).getStreamLink();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pDialog.dismiss();
+            Util.showToast(con,"Please wait...");
+            try {
+                MediaPlayer player = new MediaPlayer();
+                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                player.setDataSource(link);
+                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.start();
+                    }
+                });
+                player.prepareAsync();
+            } catch (Exception e) {
+                Util.showToast(con,"Error in playing");
+            }
+        }
+    }
 
 
     class MyListAdapter extends BaseAdapter{
@@ -122,9 +159,9 @@ public class Category_Frag extends RootFragment {
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleCategoryName);
 
             if(pos==0)
-                categoryName.setText(freeCategories.get(i).get(Category.name));
+                categoryName.setText(freeCategories.get(i).getTitle());
             else if(pos==1)
-                categoryName.setText(premCategories.get(i).get(Category.name));
+                categoryName.setText(premCategories.get(i).getTitle());
             return rowView;
         }
     }
@@ -151,22 +188,9 @@ public class Category_Frag extends RootFragment {
             freeCategories=new ArrayList<>();
             premCategories=new ArrayList<>();
             try {
-                List<NameValuePair> params=new ArrayList<NameValuePair>();
-                String respond=jparser.makeHttpRequest(albumUrl, "GET", params);
-                s=respond;
-                JSONArray jArray=new JSONArray(respond);
-                for (int i=0;i<jArray.length();i++){
-                    HashMap<String,String> map=new HashMap<String, String>();
-                    map.put(Category.name, jArray.getJSONObject(i).getString("name"));
-                    premCategories.add(map);
-
-                    map=new HashMap<String, String>();
-                    map.put(Category.name, jArray.getJSONObject(i).getString("name"));
-                    freeCategories.add(map);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                error=1;
+                Endpoint.init();
+                freeCategories=Endpoint.instance().getSongs();
+                premCategories=freeCategories;
             }catch(Exception e){
                 error=1;
             }

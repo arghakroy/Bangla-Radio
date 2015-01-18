@@ -37,6 +37,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     ImageButton pauseBtn;
     LinearLayout playerLay;
 
+    static String songLoc;
+
     int pos=0;
 
     public CarouselFragment() {
@@ -93,8 +95,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 pager.setCurrentItem(2);
                 break;
             case R.id.pauseBtn:
-                if(pos==0)player(1);
-                else if(pos==1)player(0);
+                if(pos==0)player(1,songLoc);
+                else if(pos==1)player(0,songLoc);
                 break;
         }
     }
@@ -117,11 +119,13 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    public void player(int pos) {
+    public void player(int pos,String loc) {
+        songLoc=loc;
         playerLay.setVisibility(View.VISIBLE);
         this.pos=pos;
-       if(pos==1){
+        if(pos==1){
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
+            objIntent.putExtra("song",songLoc);
             getActivity().startService(objIntent);
             pauseBtn.setImageResource(R.drawable.ic_pause);
         }else if(pos==0){

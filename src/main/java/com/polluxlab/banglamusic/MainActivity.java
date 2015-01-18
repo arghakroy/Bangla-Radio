@@ -65,15 +65,15 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     }
 
     @Override
-    public void play(int pos) {
+    public void play(int pos,String loc) {
         FragmentManager mgr=getSupportFragmentManager();
         CarouselFragment carousel= (CarouselFragment) mgr.findFragmentById(R.id.container);
-        carousel.player(pos);
+        carousel.player(pos,loc);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        play(0);
+        play(0,"");
     }
 }

@@ -37,8 +37,6 @@ public class Category_Sub_Frag extends RootFragment {
     GridView categoryItemList;
     ArrayList<HashMap<String,String>> categoryItem;
     Context con;
-    public static String albumUrl="http://162.248.162.2/musicapp/server/web/app_dev.php/webservice/albums/";
-    JSONParser jparser=new JSONParser();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,18 +126,7 @@ public class Category_Sub_Frag extends RootFragment {
         protected String doInBackground(String... st) {
             categoryItem=new ArrayList<>();
             try {
-                List<NameValuePair> params=new ArrayList<NameValuePair>();
-                String respond=jparser.makeHttpRequest(albumUrl, "GET", params);
-                s=respond;
-                JSONArray jArray=new JSONArray(respond);
-                for (int i=0;i<jArray.length();i++){
-                    HashMap<String,String> map=new HashMap<String, String>();
-                    map.put(Category.name, jArray.getJSONObject(i).getString("name"));
-                    categoryItem.add(map);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                error=1;
+
             }catch(Exception e){
                 error=1;
             }
