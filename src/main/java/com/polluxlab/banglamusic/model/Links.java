@@ -11,6 +11,16 @@ public class Links {
     private String artists;
     private String albums;
     private String tags;
+    private Preview preview;
+    private String media;
+
+    public Preview getPreview() {
+        return preview;
+    }
+
+    public String getMedia() {
+        return media;
+    }
 
     public String getSelf() {
         return self;
