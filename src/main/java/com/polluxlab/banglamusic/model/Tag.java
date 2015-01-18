@@ -22,17 +22,17 @@ import java.util.List;
 
 public class Tag extends ModelBase {
 
-    public String name;
-    public String totalArtist;
-    public String totalAlbum;
-    public String totalSongs;
-    public Links links;
+    private String name;
+    private String totalArtist;
+    private String totalAlbum;
+    private String totalSongs;
+    private Links links;
 
     /**
      *
      */
     public List<Song> getSongs(){
-        String response = get(this.links.songs);
+        String response = get(this.links.getSongs());
         if(response.isEmpty())
             return new ArrayList<Song>();
         else {

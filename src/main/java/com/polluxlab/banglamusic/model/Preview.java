@@ -10,11 +10,11 @@ public class Preview {
     /**
      *
      */
-    public String href;
+    private String href;
 
     /**
      *
      */
-    public String type;
+    private String type;
 
 }

@@ -11,12 +11,13 @@ import java.util.List;
  * Created by samiron on 1/17/2015.
  */
 public class Endpoint extends ModelBase {
-    public Links links;
-
-
+    private Links links;
+    public static Endpoint instance(){
+        return self;
+    }
 
     public List<Song> getSongs(){
-        String response = get(this.links.songs);
+        String response = get(this.links.getSongs());
         if(response.isEmpty())
             return new ArrayList<Song>();
         else {
@@ -26,7 +27,7 @@ public class Endpoint extends ModelBase {
     }
 
     public List<Tag> getTags(){
-        String response = get(this.links.tags);
+        String response = get(this.links.getTags());
         if(response.isEmpty())
             return new ArrayList<Tag>();
         else {
@@ -51,9 +52,8 @@ public class Endpoint extends ModelBase {
         return true;
     }
 
-    private static Endpoint self = null;
-
-    private static final String ENDPOINT_URL = "http://162.248.162.2/music/server/web/app_dev.php/webservice/";
+    private transient static Endpoint self = null;
+    private transient static final String ENDPOINT_URL = "http://162.248.162.2/music/server/web/app_dev.php/webservice/";
     private Endpoint(){
         super();
     }

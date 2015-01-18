@@ -10,18 +10,18 @@ public class Song extends ModelBase  {
     /**
      *
      */
-    public String title;
-    public String album;
-    public int track;
-    public int time;
-    public int year;
-    public long bitrate;
-    public String mode;
+    private String title;
+    private String album;
+    private int track;
+    private int time;
+    private int year;
+    private long bitrate;
+    private String mode;
 
     /**
      *
      */
-    public MusicLinks links;
+    private MusicLinks links;
 
     static class MusicLinks extends Links {
         public Preview preview;
