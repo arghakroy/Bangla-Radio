@@ -10,6 +10,10 @@ public class Song extends ModelBase  {
     /**
      *
      */
+    private SongLinks links;
+    /**
+     *
+     */
     private String title;
     private String album;
     private int track;
@@ -46,9 +50,8 @@ public class Song extends ModelBase  {
         return mode;
     }
 
-    /**
-     *
-     */
-    private SongLinks links;
+    public String getSteamLink(){
+        return get(this.links.getMedia());
+    }
 
 }

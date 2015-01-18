@@ -4,6 +4,14 @@ package com.polluxlab.banglamusic.model;
  * Created by samiron on 1/18/2015.
  */
 public class SongLinks extends Links {
-    public Preview preview;
-    public String media;
+    private Preview preview;
+    private String media;
+
+    public Preview getPreview() {
+        return preview;
+    }
+
+    public String getMedia() {
+        return media;
+    }
 }
