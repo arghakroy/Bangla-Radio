@@ -41,4 +41,14 @@ public class Tag extends ModelBase {
         }
     }
 
+    public List<Artist> getArtists(){
+        String response = get(this.links.getArtists());
+        if(response.isEmpty())
+            return new ArrayList<Artist>();
+        else {
+            Type songCollectionType = new TypeToken<List<Artist>>(){}.getType();
+            return gson.fromJson(response, songCollectionType);
+        }
+    }
+
 }
