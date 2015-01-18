@@ -50,7 +50,7 @@ public class Song extends ModelBase  {
         return mode;
     }
 
-    public String getSteamLink(){
+    public String getStreamLink(){
         return get(this.links.getMedia());
     }
 
