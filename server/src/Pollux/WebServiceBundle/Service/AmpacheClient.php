@@ -107,6 +107,23 @@ class AmpacheClient {
     ));
   }
 
+  public function getPlaylists() {
+    return $this->execute('playlists');
+  }
+
+  public function getPlaylist($playlistId) {
+    $root = $this->execute('playlists', array(
+        'filter' => $playlistId
+    ));
+    return $root->playlist;
+  }
+
+  public function getPlaylistSongs($playlistId) {
+    return $this->execute('playlist_songs', array(
+        'filter' => $playlistId
+    ));
+  }
+
   private function execute($action, array $parameters = array()) {
     return $this->executeInternal($action, $parameters, 0);
   }
