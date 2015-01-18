@@ -11,6 +11,12 @@ public class Song extends ModelBase  {
      *
      */
     public String title;
+    public String album;
+    public int track;
+    public int time;
+    public int year;
+    public long bitrate;
+    public String mode;
 
     /**
      *
@@ -19,6 +25,7 @@ public class Song extends ModelBase  {
 
     static class MusicLinks extends Links {
         public Preview preview;
+        public String media;
     }
 
 }
