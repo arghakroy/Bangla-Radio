@@ -15,7 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
+import com.polluxlab.banglamusic.model.Artist;
 import com.polluxlab.banglamusic.model.Category;
+import com.polluxlab.banglamusic.model.Endpoint;
+import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -34,14 +38,11 @@ public class Category_List_Frag extends RootFragment {
 
 
     ListView itemList;
-    ArrayList<HashMap<String,String>> categoryItem;
+    List<Song> categoryItem;
     PlaySoundHelper helper;
-
-
     Context con;
-    public static String albumUrl="http://162.248.162.2/musicapp/server/web/app_dev.php/webservice/albums/8/songs";
-    JSONParser jparser=new JSONParser();
-
+    public static Artist artist;
+    int position;
 
 
     @Override
@@ -50,6 +51,9 @@ public class Category_List_Frag extends RootFragment {
         con=getActivity();
         helper = (PlaySoundHelper) getActivity();
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
+
+        position=getArguments().getInt("position");
+
         new GetSongs().execute();
         return rootView;
     }
@@ -73,7 +77,7 @@ public class Category_List_Frag extends RootFragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             View rowView=view;
             if(rowView==null){
                 LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,7 +85,7 @@ public class Category_List_Frag extends RootFragment {
             }
 
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleListItemTitle);
-            categoryName.setText(categoryItem.get(i).get(Category.name));
+            categoryName.setText(categoryItem.get(i).getTitle());
 
 
 
@@ -89,15 +93,45 @@ public class Category_List_Frag extends RootFragment {
             plaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //helper.play(1);
-                    //Intent objIntent = new Intent(getActivity(), PlayAudio.class);
-                    //getActivity().startService(objIntent);
+                    new GetStreamLink(i).execute();
                 }
             });
             return rowView;
         }
     }
+    class GetStreamLink extends AsyncTask<String,String,String>{
 
+        ProgressDialog pDialog;
+        int pos;
+        String link="";
+        GetStreamLink(int i){
+            pos=i;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog=new ProgressDialog(con);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            link=categoryItem.get(pos).getStreamLink();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pDialog.dismiss();
+            Util.showToast(con,"Please wait...");
+            helper.play(1,link,categoryItem.get(pos));
+        }
+    }
     class GetSongs extends AsyncTask<String,String,String> {
 
         ProgressDialog pDialog;
@@ -119,18 +153,18 @@ public class Category_List_Frag extends RootFragment {
         protected String doInBackground(String... st) {
             categoryItem=new ArrayList<>();
             try {
-                List<NameValuePair> params=new ArrayList<NameValuePair>();
-                String respond=jparser.makeHttpRequest(albumUrl, "GET", params);
-                s=respond;
-                JSONArray jArray=new JSONArray(respond);
-                for (int i=0;i<jArray.length();i++){
-                    HashMap<String,String> map=new HashMap<String, String>();
-                    map.put(Category.name, jArray.getJSONObject(i).getString("title"));
-                    categoryItem.add(map);
+                if(artist!=null){
+                    categoryItem=artist.getSongs();
+                    return null;
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                error=1;
+                Endpoint.init();
+                List<Tag> tag=Endpoint.instance().getTags();
+                if(position==0)
+                    categoryItem=tag.get(3).getSongs();
+                else if(position==2)
+                    categoryItem=tag.get(1).getSongs();
+                else if(position==3)
+                    categoryItem=tag.get(4).getSongs();
             }catch(Exception e){
                 error=1;
             }

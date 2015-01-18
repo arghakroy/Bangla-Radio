@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Category;
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -35,17 +37,15 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 11/20/2014.
  */
-public class Category_Frag extends RootFragment {
+public class Free_Category_Frag extends RootFragment {
 
     GridView categoryList;
-    int pos=0;
 
     Context con;
-    static List<Song> premCategories;
     static List<Song> freeCategories;
     PlaySoundHelper helper;
 
-    public Category_Frag(){
+    public Free_Category_Frag(){
     }
 
     @Override
@@ -56,8 +56,6 @@ public class Category_Frag extends RootFragment {
 
         con=getActivity();
         helper= (PlaySoundHelper) getActivity();
-        Bundle b=getArguments();
-        pos=b.getInt("pos");
 
         if(freeCategories==null) {
             GetAlbums getAlbums = new GetAlbums();
@@ -111,21 +109,7 @@ public class Category_Frag extends RootFragment {
             super.onPostExecute(s);
             pDialog.dismiss();
             Util.showToast(con,"Please wait...");
-            try {
-                MediaPlayer player = new MediaPlayer();
-                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                player.setDataSource(link);
-                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.start();
-                    }
-                });
-                player.prepareAsync();
-            } catch (Exception e) {
-                Util.showToast(con,"Error in playing");
-            }
+            helper.play(1,link,freeCategories.get(pos));
         }
     }
 
@@ -134,9 +118,7 @@ public class Category_Frag extends RootFragment {
 
         @Override
         public int getCount() {
-            if(pos==0) return freeCategories.size();
-            else
-                return premCategories.size();
+            return freeCategories.size();
         }
 
         @Override
@@ -158,10 +140,7 @@ public class Category_Frag extends RootFragment {
             }
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleCategoryName);
 
-            if(pos==0)
-                categoryName.setText(freeCategories.get(i).getTitle());
-            else if(pos==1)
-                categoryName.setText(premCategories.get(i).getTitle());
+            categoryName.setText(freeCategories.get(i).getTitle());
             return rowView;
         }
     }
@@ -169,9 +148,8 @@ public class Category_Frag extends RootFragment {
     class GetAlbums extends AsyncTask<String,String,String>{
 
         ProgressDialog pDialog;
-        String s="";
-        int success=-1;
         int error=0;
+        String msg="";
 
         @Override
         protected void onPreExecute() {
@@ -186,12 +164,17 @@ public class Category_Frag extends RootFragment {
         @Override
         protected String doInBackground(String... st) {
             freeCategories=new ArrayList<>();
-            premCategories=new ArrayList<>();
             try {
                 Endpoint.init();
-                freeCategories=Endpoint.instance().getSongs();
-                premCategories=freeCategories;
+                List<Tag> tag=Endpoint.instance().getTags();
+                for (int i=0;i<tag.size();i++){
+                    if(tag.get(i).getName().equals("free")){
+                        freeCategories=tag.get(i).getSongs();
+                        break;
+                    }
+                }
             }catch(Exception e){
+                msg=e.getMessage();
                 error=1;
             }
 
@@ -205,11 +188,13 @@ public class Category_Frag extends RootFragment {
 
             if(error==1){
                 if(Util.isConnectingToInternet(con)){
-                    Toast.makeText(con, "Server is down, Please try again later", Toast.LENGTH_SHORT).show();
-                }else
+                    Toast.makeText(con, "Server is down, Please try again later "+msg, Toast.LENGTH_SHORT).show();
+                }else {
                     Util.showNoInternetDialog(con);
+                }
                 return;
             }
+            Log.d("MuSIC", msg);
             categoryList.setAdapter(new MyListAdapter());
         }
     }

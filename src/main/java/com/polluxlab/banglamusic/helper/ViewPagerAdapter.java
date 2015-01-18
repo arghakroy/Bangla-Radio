@@ -8,7 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.polluxlab.banglamusic.Category_Frag;
+import com.polluxlab.banglamusic.Free_Category_Frag;
+import com.polluxlab.banglamusic.Prem_Category_Frag;
 import com.polluxlab.banglamusic.Setting_Frag;
 
 
@@ -32,18 +33,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         final Fragment result;
-        Bundle b=new Bundle();
-        Category_Frag a1=new Category_Frag();;
         switch (position) {
             case 0:
-                // First Fragment of First Tab
-            	b.putInt("pos", 0);
-            	a1.setArguments(b);
-               return a1;
+                return new Free_Category_Frag();
             case 1:
-            	b.putInt("pos", 1);
-            	a1.setArguments(b);
-                return a1;
+            	return new Prem_Category_Frag();
             case 2:
                 return new Setting_Frag();
             default:

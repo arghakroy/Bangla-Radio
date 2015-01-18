@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
+import com.polluxlab.banglamusic.model.Song;
+
 
 public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
@@ -65,15 +67,15 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     }
 
     @Override
-    public void play(int pos,String loc) {
+    public void play(int pos,String loc,Song song) {
         FragmentManager mgr=getSupportFragmentManager();
         CarouselFragment carousel= (CarouselFragment) mgr.findFragmentById(R.id.container);
-        carousel.player(pos,loc);
+        carousel.player(pos,loc,song);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        play(0,"");
+        play(0,"",null);
     }
 }

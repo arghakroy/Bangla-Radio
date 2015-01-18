@@ -2,6 +2,8 @@ package com.polluxlab.banglamusic;
 
 
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.polluxlab.banglamusic.helper.OnBackPressListener;
 import com.polluxlab.banglamusic.helper.ViewPagerAdapter;
+import com.polluxlab.banglamusic.model.Song;
 
 
 /**
@@ -36,8 +40,10 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     Button freeCatBtn,prermCatBtn,settingCatBtn;
     ImageButton pauseBtn;
     LinearLayout playerLay;
+    TextView songName,artistName;
 
     static String songLoc;
+    static Song currentSong;
 
     int pos=0;
 
@@ -57,6 +63,9 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         freeCatBtn= (Button) rootView.findViewById(R.id.mainFreeBtn);
         prermCatBtn= (Button) rootView.findViewById(R.id.mainPremBtn);
         settingCatBtn= (Button) rootView.findViewById(R.id.mainAccBtn);
+        songName= (TextView) rootView.findViewById(R.id.playerUiName);
+        artistName= (TextView) rootView.findViewById(R.id.playerUiArtist);
+
         pager = (ViewPager) rootView.findViewById(R.id.vp_pages);
 
 
@@ -95,8 +104,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 pager.setCurrentItem(2);
                 break;
             case R.id.pauseBtn:
-                if(pos==0)player(1,songLoc);
-                else if(pos==1)player(0,songLoc);
+                if(pos==0)player(1,songLoc,currentSong);
+                else if(pos==1)player(0,songLoc,currentSong);
                 break;
         }
     }
@@ -119,12 +128,18 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    public void player(int pos,String loc) {
+    public void player(int pos,String loc,Song song) {
         songLoc=loc;
+        currentSong=song;
         playerLay.setVisibility(View.VISIBLE);
         this.pos=pos;
         if(pos==1){
+            songName.setText(song.getTitle());
+            artistName.setText(song.getAlbum());
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
+            if(isMyServiceRunning(PlayAudio.class))
+                getActivity().stopService(objIntent);
+
             objIntent.putExtra("song",songLoc);
             getActivity().startService(objIntent);
             pauseBtn.setImageResource(R.drawable.ic_pause);
@@ -133,5 +148,15 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             getActivity().stopService(objIntent);
             pauseBtn.setImageResource(R.drawable.ic_play);
         }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
