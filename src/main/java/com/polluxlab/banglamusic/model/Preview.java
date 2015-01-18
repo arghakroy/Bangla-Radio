@@ -17,4 +17,11 @@ public class Preview {
      */
     private String type;
 
+    public String getHref() {
+        return href;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
