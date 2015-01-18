@@ -18,14 +18,37 @@ public class Song extends ModelBase  {
     private long bitrate;
     private String mode;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public int getTrack() {
+        return track;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public long getBitrate() {
+        return bitrate;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
     /**
      *
      */
-    private MusicLinks links;
-
-    static class MusicLinks extends Links {
-        public Preview preview;
-        public String media;
-    }
+    private SongLinks links;
 
 }
