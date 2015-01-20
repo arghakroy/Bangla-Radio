@@ -40,7 +40,7 @@ class TelenorClient {
     curl_setopt_array($curl, array(
         CURLOPT_URL => $this->getUserInfoUrl(),
         CURLOPT_HTTPHEADER => array(
-          'Authorization' => "Bearer $accessToken"
+          "Authorization: Bearer $accessToken"
         ),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
@@ -50,7 +50,7 @@ class TelenorClient {
     $output = curl_exec($curl);
     curl_close($curl);
 
-    return $output;
+    return json_decode($output);
   }
 
   public function getToken($authorizationCode) {
