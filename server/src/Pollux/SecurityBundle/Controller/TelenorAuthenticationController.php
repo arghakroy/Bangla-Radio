@@ -4,6 +4,7 @@ namespace Pollux\SecurityBundle\Controller;
 
 
 use Pollux\SecurityBundle\Security\Provider\TelenorAuthenticationProvider;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
@@ -22,21 +23,12 @@ class TelenorAuthenticationController extends Controller {
   }
 
   public function callbackAction(Request $request) {
+    $telenorClient = $this->get('service.telenor.client');
     $logger = $this->get('logger');
 
-    $error = $request->query->get('error');
-    $errorDescription = $request->query->get('error_description');
-    if ($error || $errorDescription) {
-      $logger->debug("Failed to authenticate $error=$errorDescription");
-    }
-
-    if ($request->query->get('state') != $this->get('session')->get(self::TELENOR_OAUTH_STATE)) {
-      $logger->debug("Invalid state");
-    }
-
+    $this->validateIncomingRequest($request, $logger);
     $code = $request->query->get('code');
-
-    $token = $this->get('service.telenor.client')->getToken($code);
+    $token = $telenorClient->getToken($code);
     $logger->debug("Code => $code");
     $logger->debug("Token => $token");
     $this->get('session')->set(TelenorAuthenticationProvider::AUTHORIZATION_CODE_KEY, $token);
@@ -63,6 +55,28 @@ class TelenorAuthenticationController extends Controller {
     $this->get('logger')->debug("Authorizing with URL: " . $authorizeUrl);
 
     return $authorizeUrl;
+  }
+
+  /**
+   * @param Request $request
+   * @param $logger
+   */
+  public function validateIncomingRequest(Request $request, LoggerInterface $logger) {
+    $error = $request->query->get('error');
+    $errorDescription = $request->query->get('error_description');
+    if ($error || $errorDescription) {
+      $message = "Failed to authenticate $error=$errorDescription";
+      $logger->debug($message);
+      throw new \InvalidArgumentException($message);
+    }
+
+    $telenorOauthState = $request->query->get('state');
+    $savedTelenorState = $this->get('session')->get(self::TELENOR_OAUTH_STATE);
+    if ($telenorOauthState != $savedTelenorState) {
+      $message = "Possible session hijacking. $telenorOauthState != $savedTelenorState";
+      $logger->debug($message);
+      throw new \InvalidArgumentException($message);
+    }
   }
 
 }
