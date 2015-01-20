@@ -22,6 +22,13 @@
       <argument type="service" id="session"/>
       <argument type="service" id="logger"/>
     </service>
+
+    <service id="service.telenor.client" class="Pollux\SecurityBundle\Service\TelenorClient">
+      <argument type="service" id="router"/>
+      <argument>%telenor.client.endpoint%</argument>
+      <argument>%telenor.client.id%</argument>
+      <argument>%telenor.client.secret%</argument>
+    </service>
   </services>
 
 </container>

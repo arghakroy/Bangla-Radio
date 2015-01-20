@@ -23,7 +23,6 @@ parameters:
     ampache.username: ~
     ampache.password: ~
 
-    telenor.url.authorize:  ~
-    telenor.url.token:      ~
+    telenor.url.endpoint:   ~
     telenor.client.id:      ~
     telenor.client.secret:  ~
