@@ -11,12 +11,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TelenorAuthenticationController extends Controller {
 
-  const STATE_KEY = 'oauthState';
+  const TELENOR_OAUTH_STATE = 'telenor.oauth.state';
 
   public function loginAction() {
-    $state = uniqid();
-    $this->get('session')->set(self::STATE_KEY, $state);
-    $authorizeUrl = $this->prepareAuthorizeUrl($state);
+    $telenorAuthState = uniqid();
+    $this->get('session')->set(self::TELENOR_OAUTH_STATE, $telenorAuthState);
+    $authorizeUrl = $this->prepareAuthorizeUrl($telenorAuthState);
 
     return $this->redirect($authorizeUrl);
   }
@@ -30,7 +30,7 @@ class TelenorAuthenticationController extends Controller {
       $logger->debug("Failed to authenticate $error=$errorDescription");
     }
 
-    if ($request->query->get('state') != $this->get('session')->get(self::STATE_KEY)) {
+    if ($request->query->get('state') != $this->get('session')->get(self::TELENOR_OAUTH_STATE)) {
       $logger->debug("Invalid state");
     }
 
