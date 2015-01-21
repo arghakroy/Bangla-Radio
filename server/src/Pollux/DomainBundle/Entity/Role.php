@@ -96,7 +96,11 @@ class Role implements RoleInterface {
    * @inheritdoc
    */
   public function getRole() {
-    return $this->getName();
+    return $this->name;
+  }
+
+  function __toString() {
+    return $this->name;
   }
 
 }
