@@ -249,25 +249,24 @@ class User implements UserInterface {
    * @return \Doctrine\Common\Collections\Collection
    */
   public function getRoles() {
-    return $this->roles;
+    return $this->roles->toArray();
   }
 
   /**
    * @inheritdoc
    */
   public function getPassword() {
-    throw new MethodNotImplementedException("User#getPassword");
+    return $this->sharedSecret;
   }
 
   /**
    * @inheritdoc
    */
   public function eraseCredentials() {
-    throw new MethodNotImplementedException("User#eraseCredentials");
   }
 
   public function getSalt() {
-    throw new MethodNotImplementedException("User#eraseCredentials");
+    return "";
   }
 
 }
