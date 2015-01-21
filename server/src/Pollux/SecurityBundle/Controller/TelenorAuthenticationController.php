@@ -3,6 +3,7 @@
 namespace Pollux\SecurityBundle\Controller;
 
 
+use Pollux\DomainBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,9 +36,11 @@ class TelenorAuthenticationController extends Controller {
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
     if($this->isValidUserInfo($userInfo)) {
-      $this->get('session')->remove(self::PHONE_NUMBER);
+      $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
-      return $this->redirectToRoute('webservice.endpoint');
+
+      $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
+      return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
     }
     else {
       return new Response('', Response::HTTP_UNAUTHORIZED);
@@ -96,6 +99,36 @@ class TelenorAuthenticationController extends Controller {
         && $userInfo->phone_number_verified
         && property_exists($userInfo, 'phone_number')
         && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
+  }
+
+  /**
+   * @param $phoneNumber
+   * @param $accessToken
+   * @param $userInfo
+   * @return null|string
+   */
+  public function updateUser($phoneNumber, $accessToken, $userInfo) {
+    $em = $this->getDoctrine()->getManager();
+    $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($phoneNumber);
+    if (!$user) {
+      $user = new User();
+      $user->setUsername($phoneNumber);
+      $em->persist($user);
+      $em->flush();
+    }
+
+    $expireTime = new \DateTime();
+    $expireTime->add(new \DateInterval("PT3600S"));
+    $user->setExpireTime($expireTime);
+
+    $user->setSharedSecret(uniqid("", true));
+    $user->setAccessToken($accessToken->access_token);
+    $user->setAccessTokenData(json_encode($accessToken));
+    $user->setUserInfoData(json_encode($userInfo));
+    $em->merge($user);
+    $em->flush();
+
+    return $user->getSharedSecret();
   }
 
 }
