@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  * Role
  *
  * @ORM\Table(name="role")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\RoleRepository")
  */
 class Role implements RoleInterface {
 

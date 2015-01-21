@@ -2,7 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Pollux\DomainBundle\Entity\Role" table="role">
+  <entity name="Pollux\DomainBundle\Entity\Role" repository-class="Pollux\DomainBundle\Repository\RoleRepository" table="role">
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
