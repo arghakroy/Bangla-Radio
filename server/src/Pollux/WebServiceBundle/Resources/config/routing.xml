@@ -10,6 +10,7 @@
   <import resource="@WebServiceBundle/Resources/config/routing/artist.xml" prefix="/artists"/>
   <import resource="@WebServiceBundle/Resources/config/routing/playlist.xml" prefix="/playlists"/>
   <import resource="@WebServiceBundle/Resources/config/routing/tag.xml" prefix="/tags"/>
+  <import resource="@WebServiceBundle/Resources/config/routing/product.xml" prefix="/products"/>
   <import resource="@WebServiceBundle/Resources/config/routing/subscription.xml" prefix="/subscriptions"/>
   <import resource="@PolluxSecurityBundle/Resources/config/routing.xml" prefix="/auth"/>
 
