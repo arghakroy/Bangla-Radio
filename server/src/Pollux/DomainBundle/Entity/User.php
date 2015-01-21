@@ -3,14 +3,16 @@
 namespace Pollux\DomainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Exception\MethodNotImplementedException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  *
  * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="unique_username", columns={"username"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\UserRepository")
  */
-class User {
+class User implements UserInterface {
   /**
    * @var string
    *
@@ -248,5 +250,27 @@ class User {
    */
   public function getRoles() {
     return $this->roles;
+  }
+
+  /**
+   * Returns the password used to authenticate the user.
+   *
+   * This should be the encoded password. On authentication, a plain-text
+   * password will be salted, encoded, and then compared to this value.
+   *
+   * @return string The password
+   */
+  public function getPassword() {
+    throw new MethodNotImplementedException("User#getPassword");
+  }
+
+  /**
+   * Removes sensitive data from the user.
+   *
+   * This is important if, at any given point, sensitive information like
+   * the plain-text password is stored on this object.
+   */
+  public function eraseCredentials() {
+    throw new MethodNotImplementedException("User#eraseCredentials");
   }
 }
