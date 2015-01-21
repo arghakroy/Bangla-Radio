@@ -253,24 +253,21 @@ class User implements UserInterface {
   }
 
   /**
-   * Returns the password used to authenticate the user.
-   *
-   * This should be the encoded password. On authentication, a plain-text
-   * password will be salted, encoded, and then compared to this value.
-   *
-   * @return string The password
+   * @inheritdoc
    */
   public function getPassword() {
     throw new MethodNotImplementedException("User#getPassword");
   }
 
   /**
-   * Removes sensitive data from the user.
-   *
-   * This is important if, at any given point, sensitive information like
-   * the plain-text password is stored on this object.
+   * @inheritdoc
    */
   public function eraseCredentials() {
     throw new MethodNotImplementedException("User#eraseCredentials");
   }
+
+  public function getSalt() {
+    throw new MethodNotImplementedException("User#eraseCredentials");
+  }
+
 }
