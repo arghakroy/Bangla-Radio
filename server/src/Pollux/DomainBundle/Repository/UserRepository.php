@@ -27,7 +27,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
       $user = $query->getSingleResult();
     }
     catch (NoResultException $e) {
-      $message = sprintf('Csa:User object identified by "%s".', $username);
+      $message = sprintf('User identified by "%s" is not found.', $username);
       throw new UsernameNotFoundException($message, 0, $e);
     }
 
