@@ -16,7 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
+import com.polluxlab.banglamusic.model.Artist;
 import com.polluxlab.banglamusic.model.Category;
+import com.polluxlab.banglamusic.model.Endpoint;
+import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -35,23 +38,38 @@ public class Category_Sub_Frag extends RootFragment {
 
 
     GridView categoryItemList;
-    ArrayList<HashMap<String,String>> categoryItem;
+    List<Artist> categoryItem;
     Context con;
+
+    public int position=0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.category_layout_frag, container,  false);
-        con=getActivity();
+        View rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
+        con = getActivity();
 
-        categoryItemList=(GridView) rootView.findViewById(R.id.categoryList);
+        getActivity().getActionBar().setHomeButtonEnabled(true);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        new GetAlbums().execute();
+        position = getArguments().getInt("position");
+        categoryItemList = (GridView) rootView.findViewById(R.id.categoryList);
 
+        if (position == 1){
+            new GetArtists().execute();
+        }
+        else{
+            Category_List_Frag listFragment = new Category_List_Frag();
+            listFragment.setArguments(getArguments());
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.root_container, listFragment).commit();
+        }
         categoryItemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Category_List_Frag.artist=categoryItem.get(i);
                 Category_List_Frag listFragment = new Category_List_Frag();
+                listFragment.setArguments(getArguments());
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 // Store the Fragment in stack
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -63,8 +81,8 @@ public class Category_Sub_Frag extends RootFragment {
         return rootView;
     }
 
-    private void generate_data() {
-        categoryItem=new ArrayList<HashMap<String, String>>();
+/*    private void generate_data() {
+        categoryItem=new ArrayList<>();
 
         for (int i=0;i<10;i++){
             HashMap<String,String> map=new HashMap<String, String>();
@@ -72,7 +90,7 @@ public class Category_Sub_Frag extends RootFragment {
             map.put(Category.externalId,i+"");
             categoryItem.add(map);
         }
-    }
+    }*/
 
 
     class MyListAdapter extends BaseAdapter {
@@ -100,12 +118,12 @@ public class Category_Sub_Frag extends RootFragment {
                 rowView = inflater.inflate(R.layout.single_subcategory_item, null);
             }
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleSubCategoryName);
-            categoryName.setText(categoryItem.get(i).get(Category.name));
+            categoryName.setText(categoryItem.get(i).getName());
             return rowView;
         }
     }
 
-    class GetAlbums extends AsyncTask<String,String,String> {
+    class GetArtists extends AsyncTask<String,String,String> {
 
         ProgressDialog pDialog;
         String s="";
@@ -126,7 +144,14 @@ public class Category_Sub_Frag extends RootFragment {
         protected String doInBackground(String... st) {
             categoryItem=new ArrayList<>();
             try {
-
+                Endpoint.init();
+                List<Tag> tag=Endpoint.instance().getTags();
+                for (int i=0;i<tag.size();i++){
+                    if(tag.get(i).getName().equals("BanglaSong")){
+                        categoryItem=tag.get(i).getArtists();
+                        break;
+                    }
+                }
             }catch(Exception e){
                 error=1;
             }

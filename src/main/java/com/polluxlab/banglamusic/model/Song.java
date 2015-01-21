@@ -16,10 +16,10 @@ public class Song extends ModelBase  {
      */
     private String title;
     private String album;
-    private int track;
-    private int time;
-    private int year;
-    private long bitrate;
+    private String track;
+    private String time;
+    private String year;
+    private String bitrate;
     private String mode;
 
     public String getTitle() {
@@ -30,19 +30,19 @@ public class Song extends ModelBase  {
         return album;
     }
 
-    public int getTrack() {
+    public String getTrack() {
         return track;
     }
 
-    public int getTime() {
+    public String getTime() {
         return time;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public long getBitrate() {
+    public String getBitrate() {
         return bitrate;
     }
 
@@ -54,4 +54,7 @@ public class Song extends ModelBase  {
         return get(this.links.getMedia());
     }
 
+    public void setTitile(String title){
+        this.title=title;
+    }
 }

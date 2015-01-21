@@ -51,4 +51,11 @@ public class Tag extends ModelBase {
         }
     }
 
+    public String getName(){
+        return name;
+    }
+    public String getSongLink(){
+        return links.getSongs();
+    }
+
 }

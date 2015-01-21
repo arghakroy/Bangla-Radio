@@ -11,10 +11,10 @@ public class Links {
     private String artists;
     private String albums;
     private String tags;
-    private Preview preview;
+    private String preview;
     private String media;
 
-    public Preview getPreview() {
+    public String getPreview() {
         return preview;
     }
 

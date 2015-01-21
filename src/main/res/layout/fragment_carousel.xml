@@ -37,6 +37,7 @@
           android:padding="5dp">
 
             <com.polluxlab.banglamusic.helper.MyTextView
+              android:id="@+id/playerUiName"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="#fff"
@@ -44,6 +45,7 @@
               android:text="@string/dami_text1"/>
 
             <com.polluxlab.banglamusic.helper.MyTextView
+              android:id="@+id/playerUiArtist"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="#fff"
@@ -52,6 +54,7 @@
         </LinearLayout>
 
         <ImageButton
+          android:id="@+id/prevBtn"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@android:color/transparent"
@@ -66,6 +69,7 @@
           android:src="@drawable/ic_pause"/>
 
         <ImageButton
+          android:id="@+id/nextBtn"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@android:color/transparent"

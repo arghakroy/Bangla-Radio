@@ -2,6 +2,8 @@ package com.polluxlab.banglamusic;
 
 
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,9 +15,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.polluxlab.banglamusic.helper.OnBackPressListener;
 import com.polluxlab.banglamusic.helper.ViewPagerAdapter;
+import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.Util;
+
+import java.util.List;
 
 
 /**
@@ -30,16 +37,20 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
      * Please refer to ViewPagerIndicator library
      */
 
+
+
     protected ViewPager pager;
 
     private ViewPagerAdapter adapter;
     Button freeCatBtn,prermCatBtn,settingCatBtn;
-    ImageButton pauseBtn;
+    ImageButton pauseBtn,prevBtn,nextBtn;
     LinearLayout playerLay;
+    TextView songName,artistName;
 
-    static String songLoc;
+    public static List<Song> currentSongs;
 
-    int pos=0;
+    static int pos;
+    static int currentState;
 
     public CarouselFragment() {
         // Required empty public constructor
@@ -54,16 +65,47 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
 
         playerLay= (LinearLayout) rootView.findViewById(R.id.playerLayout);
         pauseBtn= (ImageButton) rootView.findViewById(R.id.pauseBtn);
+        prevBtn= (ImageButton) rootView.findViewById(R.id.prevBtn);
+        nextBtn= (ImageButton) rootView.findViewById(R.id.nextBtn);
+
         freeCatBtn= (Button) rootView.findViewById(R.id.mainFreeBtn);
         prermCatBtn= (Button) rootView.findViewById(R.id.mainPremBtn);
         settingCatBtn= (Button) rootView.findViewById(R.id.mainAccBtn);
+        songName= (TextView) rootView.findViewById(R.id.playerUiName);
+        artistName= (TextView) rootView.findViewById(R.id.playerUiArtist);
+
         pager = (ViewPager) rootView.findViewById(R.id.vp_pages);
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                String title=getResources().getString(R.string.free_catefory_title);
+                if(i==0){
+                    title=getResources().getString(R.string.free_catefory_title);
+                }else if(i==1){
+                    title=getResources().getString(R.string.category_title);
+                }else
+                    title=getResources().getString(R.string.string_set);
+
+                getActivity().getActionBar().setTitle(title);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
 
         freeCatBtn.setOnClickListener(this);
         prermCatBtn.setOnClickListener(this);
         settingCatBtn.setOnClickListener(this);
         pauseBtn.setOnClickListener(this);
+        prevBtn.setOnClickListener(this);
+        nextBtn.setOnClickListener(this);
 
         Typeface tf=Typeface.createFromAsset(getActivity().getAssets(), "fonts/solaiman-bold.ttf");
         freeCatBtn.setTypeface(tf);
@@ -89,14 +131,27 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 pager.setCurrentItem(0);
                 break;
             case R.id.mainPremBtn:
+                onBackPressed();
                 pager.setCurrentItem(1);
                 break;
             case R.id.mainAccBtn:
                 pager.setCurrentItem(2);
                 break;
             case R.id.pauseBtn:
-                if(pos==0)player(1,songLoc);
-                else if(pos==1)player(0,songLoc);
+                if(currentState==0)player(1,pos,currentSongs);
+                else if(currentState==1)player(0,pos,currentSongs);
+                break;
+            case R.id.prevBtn:
+                if(currentSongs.size()==1)return;
+                else if(pos==0)pos=currentSongs.size()-1;
+                else pos--;
+                player(1,pos,currentSongs);
+                break;
+            case R.id.nextBtn:
+                if(currentSongs.size()==1)return;
+                else if(pos==currentSongs.size()-1)pos=0;
+                else pos++;
+                player(1,pos,currentSongs);
                 break;
         }
     }
@@ -119,19 +174,38 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    public void player(int pos,String loc) {
-        songLoc=loc;
-        playerLay.setVisibility(View.VISIBLE);
+    public void player(int command, int pos,List<Song> songs) {
+        this.currentSongs=songs;
+        currentState=command;
         this.pos=pos;
-        if(pos==1){
+        playerLay.setVisibility(View.VISIBLE);
+        if(command==1){
+            songName.setText(songs.get(pos).getTitle());
+            artistName.setText(songs.get(pos).getAlbum());
+            PlayAudio.songs=songs;
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
-            objIntent.putExtra("song",songLoc);
+            if(isMyServiceRunning(PlayAudio.class))
+                getActivity().stopService(objIntent);
+
+            objIntent.putExtra("pos",pos);
             getActivity().startService(objIntent);
             pauseBtn.setImageResource(R.drawable.ic_pause);
-        }else if(pos==0){
-            Intent objIntent = new Intent(getActivity(), PlayAudio.class);
-            getActivity().stopService(objIntent);
-            pauseBtn.setImageResource(R.drawable.ic_play);
+        }else if(command==0){
+            if(isMyServiceRunning(PlayAudio.class)) {
+                Intent objIntent = new Intent(getActivity(), PlayAudio.class);
+                getActivity().stopService(objIntent);
+                pauseBtn.setImageResource(R.drawable.ic_play);
+            }
         }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

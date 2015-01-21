@@ -29,5 +29,13 @@ public class Artist extends ModelBase  {
         }
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public String getSongsLink(){
+        return links.getSongs();
+    }
+
 
 }
