@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class TelenorAuthenticationController extends Controller {
 
@@ -109,7 +110,14 @@ class TelenorAuthenticationController extends Controller {
    */
   public function updateUser($phoneNumber, $accessToken, $userInfo) {
     $em = $this->getDoctrine()->getManager();
-    $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($phoneNumber);
+    $user = null;
+    try {
+      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($phoneNumber);
+    }
+    catch(UsernameNotFoundException $ex) {
+      $this->get('logger')->debug("New user found with phoneNumber: $phoneNumber");
+    }
+
     if (!$user) {
       $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
       $user = new User();
