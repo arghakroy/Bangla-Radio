@@ -3,19 +3,22 @@
 namespace Pollux\SecurityBundle\Controller;
 
 
-use Pollux\SecurityBundle\Security\Provider\TelenorAuthenticationProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TelenorAuthenticationController extends Controller {
 
   const TELENOR_OAUTH_STATE = 'telenor.oauth.state';
+  const PHONE_NUMBER = 'internal.user.phone.number';
 
-  public function loginAction() {
+  public function loginAction(Request $request) {
     $telenorAuthState = uniqid();
+    $phoneNumber = $request->get('phone_number');
+    $this->get('session')->set(self::PHONE_NUMBER, $phoneNumber);
     $this->get('session')->set(self::TELENOR_OAUTH_STATE, $telenorAuthState);
     $authorizeUrl = $this->prepareAuthorizeUrl($telenorAuthState);
 
@@ -28,12 +31,15 @@ class TelenorAuthenticationController extends Controller {
 
     $this->validateIncomingRequest($request, $logger);
     $code = $request->query->get('code');
-    $token = $telenorClient->getToken($code);
-    $logger->debug("Code => $code");
-    $logger->debug("Token => $token");
-    $this->get('session')->set(TelenorAuthenticationProvider::AUTHORIZATION_CODE_KEY, $token);
 
-    return $this->redirectToRoute('webservice.endpoint');
+    $accessToken = $telenorClient->getToken($code);
+    $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
+    if($this->isValidUserInfo($userInfo)) {
+      return $this->redirectToRoute('webservice.endpoint');
+    }
+    else {
+      return new Response('', Response::HTTP_UNAUTHORIZED);
+    }
   }
 
   /**
@@ -77,6 +83,17 @@ class TelenorAuthenticationController extends Controller {
       $logger->debug($message);
       throw new \InvalidArgumentException($message);
     }
+  }
+
+  /**
+   * @param $userInfo
+   * @return bool
+   */
+  public function isValidUserInfo($userInfo) {
+    return property_exists($userInfo, 'phone_number_verified')
+        && $userInfo->phone_number_verified
+        && property_exists($userInfo, 'phone_number')
+        && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
   }
 
 }
