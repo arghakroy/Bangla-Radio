@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<srv:container xmlns="http://symfony.com/schema/dic/security"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:srv="http://symfony.com/schema/dic/services"
+               xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+  <config>
+    <role id="ROLE_USER">ROLE_USER</role>
+    <role id="ROLE_ADMIN">ROLE_ADMIN</role>
+    <role id="ROLE_SUPER_ADMIN">ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH</role>
+
+    <firewall name="webservice" pattern="^/webservice">
+      <telenor />
+    </firewall>
+
+    <rule path="^/webservice/auth" role="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    <rule path="^/webservice" role="ROLE_USER"/>
+
+    <provider name="administrators">
+      <entity class="Pollux\DomainBundle\Entity\User" property="username"/>
+    </provider>
+  </config>
+
+</srv:container>
