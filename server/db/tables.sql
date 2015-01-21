@@ -51,3 +51,26 @@ CREATE TABLE `user_role` (
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8
   COLLATE = utf8_bin;
+
+
+-- -----------------------------------------------------
+-- Table `user_role`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `subscription` (
+  `id`                 INT(11)       NOT NULL AUTO_INCREMENT,
+  `date_created`       DATETIME      NOT NULL,
+  `order_id`           VARCHAR(100)  NOT NULL,
+  `amount`             DECIMAL(6, 2) NOT NULL,
+  `vat_percentage`     DECIMAL(6, 2) NOT NULL,
+  `description`        VARCHAR(300)  NOT NULL,
+  `status`             TINYINT(4)    NOT NULL,
+  `connect_tx_id`      VARCHAR(150)  NOT NULL,
+  `connect_tx_url`     VARCHAR(350)  NOT NULL,
+  `connect_status`     TINYINT(4)    NOT NULL,
+  `connect_start_time` DATETIME      NOT NULL,
+  `connect_tx_json`    TEXT          NOT NULL,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8
+  COLLATE = utf8_bin;
