@@ -35,6 +35,8 @@ class TelenorAuthenticationController extends Controller {
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
     if($this->isValidUserInfo($userInfo)) {
+      $this->get('session')->remove(self::PHONE_NUMBER);
+      $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
       return $this->redirectToRoute('webservice.endpoint');
     }
     else {
