@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Subscription
  *
  * @ORM\Table(name="subscription")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\SubscriptionRepository")
  */
 class Subscription {
   /**
