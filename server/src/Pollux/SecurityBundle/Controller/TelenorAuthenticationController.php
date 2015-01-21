@@ -17,9 +17,8 @@ class TelenorAuthenticationController extends Controller {
   const TELENOR_OAUTH_STATE = 'telenor.oauth.state';
   const PHONE_NUMBER = 'internal.user.phone.number';
 
-  public function loginAction(Request $request) {
+  public function loginAction($phoneNumber) {
     $telenorAuthState = uniqid();
-    $phoneNumber = $request->get('phone_number');
     $this->get('session')->set(self::PHONE_NUMBER, $phoneNumber);
     $this->get('session')->set(self::TELENOR_OAUTH_STATE, $telenorAuthState);
     $authorizeUrl = $this->prepareAuthorizeUrl($telenorAuthState);
