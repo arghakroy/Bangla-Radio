@@ -20,7 +20,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
         ->select('u, r')
         ->leftJoin('u.roles', 'r')
         ->where('u.username = :username')
-        ->setParameter('email', $username)
+        ->setParameter('username', $username)
         ->getQuery();
 
     try {
