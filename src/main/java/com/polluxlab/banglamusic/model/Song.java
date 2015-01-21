@@ -10,7 +10,7 @@ public class Song extends ModelBase  {
     /**
      *
      */
-    private SongLinks links;
+    private Links links;
     /**
      *
      */

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,6 +92,7 @@ public class Prem_Category_Frag extends RootFragment {
 
 
     class MyListAdapter extends BaseAdapter{
+        int images[]={R.drawable.pic0,R.drawable.pic_test_1,R.drawable.pic_test_2,R.drawable.pic5};
 
         @Override
         public int getCount() {
@@ -117,6 +119,9 @@ public class Prem_Category_Frag extends RootFragment {
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleCategoryName);
             categoryName.setTypeface(Typeface.createFromAsset(con.getAssets(), "fonts/solaiman-bold.ttf") );
             categoryName.setText(premCategories.get(i).getTitle());
+
+            LinearLayout imageLay= (LinearLayout) rowView.findViewById(R.id.singleCategoryImageLayout);
+            imageLay.setBackgroundResource(images[i]);
             return rowView;
         }
     }

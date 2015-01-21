@@ -8,8 +8,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +57,12 @@ public class Category_List_Frag extends RootFragment {
         position=getArguments().getInt("position");
 
         new GetSongs().execute();
+        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                helper.play(1,position,categoryItem);
+            }
+        });
         return rootView;
     }
 
@@ -86,50 +94,7 @@ public class Category_List_Frag extends RootFragment {
 
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleListItemTitle);
             categoryName.setText(categoryItem.get(i).getTitle());
-
-
-
-            ImageButton plaBtn= (ImageButton) rowView.findViewById(R.id.playBtn);
-            plaBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new GetStreamLink(i).execute();
-                }
-            });
             return rowView;
-        }
-    }
-    class GetStreamLink extends AsyncTask<String,String,String>{
-
-        ProgressDialog pDialog;
-        int pos;
-        String link="";
-        GetStreamLink(int i){
-            pos=i;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog=new ProgressDialog(con);
-            pDialog.setMessage("Loading. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            link=categoryItem.get(pos).getStreamLink();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            pDialog.dismiss();
-            Util.showToast(con,"Please wait...");
-            helper.play(1,link,categoryItem.get(pos));
         }
     }
     class GetSongs extends AsyncTask<String,String,String> {

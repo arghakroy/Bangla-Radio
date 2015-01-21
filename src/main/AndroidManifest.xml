@@ -5,7 +5,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+    <uses-sdk android:minSdkVersion="14"
+              android:targetSdkVersion="21"/>
     <application
       android:allowBackup="true"
       android:icon="@drawable/ic_launcher"
@@ -21,7 +24,8 @@
         </activity>
 
         <activity android:name=".MainActivity" android:screenOrientation="portrait"
-                  android:label="@string/category_title"/>
+                  android:label="@string/free_catefory_title"/>
+
         <service android:name="PlayAudio"  android:enabled="true"></service>
     </application>
 

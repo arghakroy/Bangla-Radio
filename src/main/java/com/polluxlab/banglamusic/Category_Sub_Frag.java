@@ -48,6 +48,10 @@ public class Category_Sub_Frag extends RootFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
         con = getActivity();
+
+        getActivity().getActionBar().setHomeButtonEnabled(true);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
         position = getArguments().getInt("position");
         categoryItemList = (GridView) rootView.findViewById(R.id.categoryList);
 
