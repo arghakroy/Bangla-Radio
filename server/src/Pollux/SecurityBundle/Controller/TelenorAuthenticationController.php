@@ -3,6 +3,7 @@
 namespace Pollux\SecurityBundle\Controller;
 
 
+use Pollux\DomainBundle\Entity\Role;
 use Pollux\DomainBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -111,9 +112,14 @@ class TelenorAuthenticationController extends Controller {
     $em = $this->getDoctrine()->getManager();
     $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($phoneNumber);
     if (!$user) {
+      $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
       $user = new User();
       $user->setUsername($phoneNumber);
       $em->persist($user);
+
+      $user->addRole($roleUser);
+      $em->persist($user);
+
       $em->flush();
     }
 
