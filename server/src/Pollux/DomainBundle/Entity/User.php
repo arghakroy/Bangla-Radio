@@ -51,9 +51,9 @@ class User implements UserInterface {
   /**
    * @var string
    *
-   * @ORM\Column(name="salt", type="string", length=512, nullable=false)
+   * @ORM\Column(name="shared_secret", type="string", length=512, nullable=false)
    */
-  private $salt;
+  private $sharedSecret;
 
   /**
    * @var integer
@@ -193,24 +193,24 @@ class User implements UserInterface {
   }
 
   /**
-   * Set salt
+   * Set sharedSecret
    *
-   * @param string $salt
+   * @param string $sharedSecret
    * @return User
    */
-  public function setSalt($salt) {
-    $this->salt = $salt;
+  public function setSharedSecret($sharedSecret) {
+    $this->sharedSecret = $sharedSecret;
 
     return $this;
   }
 
   /**
-   * Get salt
+   * Get sharedSecret
    *
    * @return string
    */
-  public function getSalt() {
-    return $this->salt;
+  public function getSharedSecret() {
+    return $this->sharedSecret;
   }
 
   /**
