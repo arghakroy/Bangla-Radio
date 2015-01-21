@@ -44,14 +44,14 @@ class User implements UserInterface {
   /**
    * @var string
    *
-   * @ORM\Column(name="user_info_data", type="text", length=65535, nullable=false)
+   * @ORM\Column(name="user_info_data", type="text", length=65535, nullable=true)
    */
   private $userInfoData;
 
   /**
    * @var string
    *
-   * @ORM\Column(name="shared_secret", type="string", length=512, nullable=false)
+   * @ORM\Column(name="shared_secret", type="string", length=512, nullable=true)
    */
   private $sharedSecret;
 

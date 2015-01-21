@@ -9,9 +9,9 @@ CREATE TABLE `user` (
                       COLLATE utf8_bin          DEFAULT NULL,
   `expire_time`       DATETIME                  DEFAULT NULL,
   `access_token_data` TEXT
-                      COLLATE utf8_bin,
+                      COLLATE utf8_bin          DEFAULT NULL,
   `user_info_data`    TEXT
-                      COLLATE utf8_bin NOT NULL,
+                      COLLATE utf8_bin          DEFAULT NULL,
   `shared_secret`     VARCHAR(512)
                       COLLATE utf8_bin          DEFAULT NULL,
   PRIMARY KEY (`id`),

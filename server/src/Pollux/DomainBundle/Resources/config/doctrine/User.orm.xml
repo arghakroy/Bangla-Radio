@@ -13,8 +13,8 @@
     <field name="accessToken" type="string" column="access_token" length="64" nullable="true"/>
     <field name="expireTime" type="datetime" column="expire_time" nullable="true"/>
     <field name="accessTokenData" type="text" column="access_token_data" length="65535" nullable="true"/>
-    <field name="userInfoData" type="text" column="user_info_data" length="65535" nullable="false"/>
-    <field name="sharedSecret" type="string" column="shared_secret" length="512" nullable="false"/>
+    <field name="userInfoData" type="text" column="user_info_data" length="65535" nullable="true"/>
+    <field name="sharedSecret" type="string" column="shared_secret" length="512" nullable="true"/>
     <many-to-many field="roles" target-entity="Pollux\DomainBundle\Entity\Role">
       <join-table name="user_role">
         <join-columns>
