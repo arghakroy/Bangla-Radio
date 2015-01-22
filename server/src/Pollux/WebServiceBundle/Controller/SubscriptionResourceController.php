@@ -32,7 +32,7 @@ class SubscriptionResourceController extends Controller {
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
 
     var_dump($user);
-    echo $user->getAccessToken();
+    //echo $user->getAccessToken();
     
 
     //get the user info from server based on the secret provided by the client
