@@ -21,19 +21,19 @@ class TelenorClient {
   }
 
   public function getUserInfoUrl() {
-    return $this->endpoint . "/userinfo";
+    return $this->endpoint . "oauth/userinfo";
   }
 
   public function getTokenUrl() {
-    return $this->endpoint . "/token";
+    return $this->endpoint . "oauth/token";
   }
 
   public function getRightsUrl() {
-    return $this->endpoint . "/users";
+    return $this->endpoint . "oauth/users";
   }
   
   public function getTransactionUrl() {
-    return $this->endpoint . "/transactions";
+    return  "https://payment.telenordigital.com/transactions";
   }
 
   public function __construct(Router $router, $endpoint, $clientId, $clientSecret) {
