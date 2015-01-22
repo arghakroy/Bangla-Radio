@@ -148,8 +148,6 @@ class TelenorClient {
           "Authorization: Bearer $accessToken"
         ),
         CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
-        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
         CURLOPT_TIMEOUT => 20,
