@@ -28,6 +28,10 @@ class TelenorClient {
     return $this->endpoint . "/token";
   }
 
+  public function getRightsUrl() {
+    return $this->endpoint . "/users";
+  }
+
   public function __construct(Router $router, $endpoint, $clientId, $clientSecret) {
     $this->router = $router;
     $this->endpoint = $endpoint;
@@ -51,6 +55,28 @@ class TelenorClient {
     curl_close($curl);
 
     return json_decode($output);
+  }
+
+
+  public function getUsersRight($id, $accessToken) {
+
+    $url = $this->getRightsUrl() . $id . "/rights";
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $url,
+        CURLOPT_HTTPHEADER => array(
+          "Authorization: Bearer $accessToken"
+        ),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return json_decode($output);
+
   }
 
   public function getToken($authorizationCode) {
