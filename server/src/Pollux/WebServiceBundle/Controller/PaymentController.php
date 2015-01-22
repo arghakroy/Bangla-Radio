@@ -53,10 +53,7 @@ class PaymentController extends Controller {
     $locationLinks = $transactionResponse->links[0];
     $locationURL = $locationLinks->href;
     
-    print_r($transactionResponse);
-
-    exit;
-    //return $this->redirect($locationURL,303);
+    return $this->redirect($locationURL,303);
     
   }
   
