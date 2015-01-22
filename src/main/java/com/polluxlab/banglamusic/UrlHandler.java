@@ -3,6 +3,7 @@ package com.polluxlab.banglamusic;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -38,8 +39,13 @@ public class UrlHandler extends Activity {
 
         if( host.equals("success")){
             List<String> keys = URIdata.getQueryParameters("sharedSecret");
-            if(!keys.isEmpty())
+            if(!keys.isEmpty()){
                 secret = keys.get(0);
+                SharedPreferences sh=getSharedPreferences("MUSIC_PREF",MODE_PRIVATE);
+                SharedPreferences.Editor edit=sh.edit();
+                edit.putString("sharedSecret",secret);
+                edit.commit();
+            }
             setContentView(R.layout.buy_now_layout);
         } else if( host.equals("cancelled")) {
             setContentView(R.layout.buy_fail_layout);

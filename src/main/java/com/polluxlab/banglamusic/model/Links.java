@@ -1,5 +1,6 @@
 package com.polluxlab.banglamusic.model;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
@@ -53,9 +54,9 @@ public class Links extends ModelBase {
         return tags;
     }
 
-    public Subscription getSubscription(){
+    public Subscription getSubscription(Context con){
         List<Header> headers = new ArrayList<>();
-        headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), Util.getSecretKey()));
+        headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), Util.getSecretKey(con)));
         String response = get(this.subscriptions, headers);
 
         return gson.fromJson(response, Subscription.class);

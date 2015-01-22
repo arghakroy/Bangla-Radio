@@ -96,7 +96,7 @@ public class Prem_Category_Frag extends RootFragment {
         }
         return rootView;
     }
-
+/*
     private void showLoginDialog() {
         Dialog dialog=new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -114,23 +114,21 @@ public class Prem_Category_Frag extends RootFragment {
             }
         });
         dialog.show();
-    }
+    }*/
 
     private boolean isAllowed() {
-        String secret = Util.getSecretKey();
+        String secret = Util.getSecretKey(getActivity());
         if( secret == null || secret.isEmpty() ){
-            //TODO: show the login screen here
+            return false;
         } else {
             Endpoint.init();
-            Subscription s = Endpoint.instance().getSubscription();
+            Subscription s = Endpoint.instance().getSubscription(getActivity());
             if( s != null) {
                 return true;
             } else {
-                //TODO: show the "Ekhoni kinun" screen
                 return false;
             }
         }
-        return false;
     }
 
     private void generateData() {

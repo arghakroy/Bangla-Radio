@@ -1,5 +1,7 @@
 package com.polluxlab.banglamusic.model;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,8 +39,8 @@ public class Endpoint extends ModelBase {
         }
     }
 
-    public Subscription getSubscription(){
-        return this.links.getSubscription();
+    public Subscription getSubscription(Context con){
+        return this.links.getSubscription(con);
     }
 
     public String getPurchase(){

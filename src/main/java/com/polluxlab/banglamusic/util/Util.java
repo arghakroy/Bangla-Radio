@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -80,7 +81,7 @@ public class Util {
 
 	public static boolean isGPSOn(Context context)
 	{
-		return Boolean.valueOf(((LocationManager)context.getSystemService("location")).isProviderEnabled("gps")).booleanValue();
+		return Boolean.valueOf(((LocationManager)context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled("gps")).booleanValue();
 	}
 
 
@@ -117,7 +118,8 @@ public class Util {
      * TODO: Get the secret key from shared preference and return
      * @return
      */
-    public static String getSecretKey(){
-        return "";
+    public static String getSecretKey(Context context){
+        SharedPreferences sh=context.getSharedPreferences("MUSIC_PREF",Context.MODE_PRIVATE);
+        return sh.getString("sharedSecret","");
     }
 }
