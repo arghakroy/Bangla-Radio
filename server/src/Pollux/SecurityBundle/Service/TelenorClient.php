@@ -132,7 +132,7 @@ class TelenorClient {
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
         "products" => [
-            'name'=>$product->getName(),
+            'name'=>$product->getProductName(),
             'price' => $product->getPricing(),
             'vatRate' => $product->getVatPercentage(),
             'sku' => $product->getSku(),
