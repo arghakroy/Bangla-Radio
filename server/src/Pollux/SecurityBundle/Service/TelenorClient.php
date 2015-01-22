@@ -29,7 +29,7 @@ class TelenorClient {
   }
 
   public function getRightsUrl() {
-    return $this->endpoint . "/users/";
+    return $this->endpoint . "id/users/";
   }
   
   public function getTransactionUrl() {
