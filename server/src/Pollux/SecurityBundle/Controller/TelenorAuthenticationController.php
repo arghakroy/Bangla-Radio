@@ -42,7 +42,8 @@ class TelenorAuthenticationController extends Controller {
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
+
+      return $this->redirectToRoute('polluxmusic://success', array('secret' => $sharedSecret));
     }
     else {
       return new Response('', Response::HTTP_UNAUTHORIZED);
@@ -111,12 +112,6 @@ class TelenorAuthenticationController extends Controller {
    * @return null|string
    */
   public function updateUser($phoneNumber, $accessToken, $userInfo) {
-
-    print_r($phoneNumber);
-
-    print_r($accessToken);
-
-    print_r($userInfo);
 
     $em = $this->getDoctrine()->getManager();
     $user = null;
