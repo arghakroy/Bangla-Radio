@@ -33,7 +33,7 @@ class TelenorClient {
   }
   
   public function getTransactionUrl() {
-    return  "https://payment.telenordigital.com/transactions";
+    return  "https://staging-payment-payment2.comoyo.com/transactions";
   }
 
   public function __construct(Router $router, $endpoint, $clientId, $clientSecret) {
