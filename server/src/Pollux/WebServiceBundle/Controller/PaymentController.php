@@ -44,8 +44,8 @@ class PaymentController extends Controller {
     $transactionResponse = $telenorClient->getTransaction($accessToken,$userInfoData->sub,$product);
     $locationLinks = $transactionResponse->links[0];
     $locationURL = $locationLinks->href;
-    echo $locationURL;
-    exit;
+    //echo $locationURL;
+    return $this->redirect($locationURL,303);
     
 //    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
 //    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
