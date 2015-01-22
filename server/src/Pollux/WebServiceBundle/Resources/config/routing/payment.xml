@@ -7,7 +7,7 @@
   <route id="webservice.purchase.collection" path="/" methods="GET">
     <default key="_controller">WebServiceBundle:Payment:getCollection</default>
   </route>
-  <route id="webservice.purchase" path="/{sharedSecret}" methods="GET">
+  <route id="webservice.purchase" path="/" methods="GET">
     <default key="_controller">WebServiceBundle:Payment:get</default>
   </route>
 
