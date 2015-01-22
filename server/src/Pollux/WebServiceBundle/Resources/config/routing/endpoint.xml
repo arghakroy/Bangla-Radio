@@ -7,10 +7,5 @@
   <route id="webservice.endpoint" path="/" methods="GET">
     <default key="_controller">WebServiceBundle:EndPoint:get</default>
   </route>
-  <route id="webservice.endpoint.external" path="/{secret}" methods="GET">
-    <default key="_controller">FrameworkBundle:Redirect:urlRedirect</default>
-    <default key="path">http://polluxmusic://success?sharedSecret={secret}</default>
-    <default key="permanent">true</default>
-  </route>
 
 </routes>
