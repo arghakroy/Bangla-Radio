@@ -31,7 +31,8 @@
                   android:text="৫ "
                   android:textColor="#fff"
                   android:gravity="center_horizontal"
-                  android:textSize="45sp"/>
+                  android:textSize="45sp"
+                  android:id="@+id/settings_remainning_days"/>
 
                 <com.polluxlab.banglamusic.helper.MyTextView
                   android:layout_width="wrap_content"
@@ -47,7 +48,8 @@
               android:text="মেয়াদ শেষ হবে ৫ ডিসেম্বর ২০১৪"
               android:textColor="#fff"
               android:gravity="center_horizontal"
-              android:textSize="18sp"/>
+              android:textSize="18sp"
+              android:id="@+id/settings_last_date"/>
         </LinearLayout>
 
         <LinearLayout
