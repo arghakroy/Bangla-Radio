@@ -139,6 +139,7 @@ class TelenorClient {
         'merchantName' => 'lyltechnology-banglaradio-android',
         'connectId' => $connectId,
         "successRedirect" => $transactionRedirectUrl,
+        'allowedPaymentMethods' => 'DOB',
         'cancelRedirect' => $transactionCancelUrl,
         "products" => [$productArray]
     );
