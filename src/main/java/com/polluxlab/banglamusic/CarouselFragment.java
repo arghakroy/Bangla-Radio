@@ -82,9 +82,9 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onPageSelected(int i) {
-                String title=getResources().getString(R.string.free_catefory_title);
+                String title=getResources().getString(R.string.free_category_title);
                 if(i==0){
-                    title=getResources().getString(R.string.free_catefory_title);
+                    title=getResources().getString(R.string.free_category_title);
                 }else if(i==1){
                     title=getResources().getString(R.string.category_title);
                 }else

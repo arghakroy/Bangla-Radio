@@ -33,7 +33,7 @@ public class Setting_Frag extends RootFragment {
         numberSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/$";
+                String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url+number));
                 startActivity(i);
