@@ -53,7 +53,7 @@ class SubscriptionResourceController extends Controller {
 
     
     $id = "5959599846791847936";
-    $token = "PIxRkgf581rg6HeJHOISXYpDJCP";
+    $token = "7jsPjhVuc8LIcaYVkEFY1mWomsI";
 
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
