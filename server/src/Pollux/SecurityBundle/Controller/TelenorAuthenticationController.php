@@ -43,7 +43,9 @@ class TelenorAuthenticationController extends Controller {
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
 
-      return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
+      $url = "polluxmusic://success?sharedSecret=".$sharedSecret; 
+      return $this->redirect($url);
+      //return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
     }
     else {
       return new Response('', Response::HTTP_UNAUTHORIZED);
