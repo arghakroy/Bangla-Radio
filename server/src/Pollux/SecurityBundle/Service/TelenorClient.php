@@ -134,7 +134,7 @@ class TelenorClient {
     $parameters = array(
         "orderId" => uniqid(),
         "purchaseDescription" => "Product description",
-        "amount" => $product->getPricing(),
+        "amount" => "MYR".$product->getPricing(),
         'vatRate' => $product->getVatPercentage(),
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
