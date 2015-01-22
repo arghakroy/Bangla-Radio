@@ -161,7 +161,7 @@ class TelenorClient {
 
     var_dump($output);
 
-    var_dump(curl_getinfo($ch));
+    var_dump(curl_getinfo($curl));
     exit;
 
     return json_decode($output);
