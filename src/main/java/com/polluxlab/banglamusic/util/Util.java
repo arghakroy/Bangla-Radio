@@ -1,5 +1,9 @@
 package com.polluxlab.banglamusic.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import android.app.AlertDialog;
@@ -97,4 +101,15 @@ public class Util {
 		}
 		return hour+"";
 	}
+
+    public static Date parseISO8601Date(String dateString){
+        DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        try {
+            if (dateString != null)
+                return df1.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

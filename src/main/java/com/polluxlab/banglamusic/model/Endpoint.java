@@ -16,6 +16,7 @@ public class Endpoint extends ModelBase {
         return self;
     }
 
+    @Deprecated
     public List<Song> getSongs(){
         String response = get(this.links.getSongs());
         if(response.isEmpty())
@@ -34,6 +35,19 @@ public class Endpoint extends ModelBase {
             Type songCollectionType = new TypeToken<List<Tag>>(){}.getType();
             return gson.fromJson(response, songCollectionType);
         }
+    }
+
+    public Subscription getSubscription(){
+        return this.links.getSubscription();
+    }
+
+    public String getPurchase(){
+        String purchaseUrl = this.links.getPurchase();
+        String secret = "" ;//getSecretFromSharedPref()
+        if( purchaseUrl != null ){
+            return String.format("%s?%s=%s", purchaseUrl, "sharedSecret", secret);
+        }
+        return null;
     }
 
     /**
