@@ -58,13 +58,19 @@ class SubscriptionResourceController extends Controller {
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
 
-    dump($this->container, $content);
+    #dump($this->container, $content);
 
 
-    die();
+    if(is_null($content)) 
+    {
+      return new Response('', Response::HTTP_NO_CONTENT);
+    }
+  }
 
+  public function postAction() {
 
     
   }
+
 
 }
