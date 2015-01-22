@@ -59,6 +59,20 @@ class Product {
    * @ORM\Column(name="vat_percentage", type="float", precision=10, scale=0, nullable=false)
    */
   private $vatPercentage;
+  
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="product_name", type="string", length=255, nullable=false)
+   */
+  private $productName;
+  
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="time_spec", type="string", length=20, nullable=false)
+   */
+  private $timeSpec;
 
   /**
    * @var integer
@@ -110,6 +124,48 @@ class Product {
    */
   public function getSku() {
     return $this->sku;
+  }
+  
+  /**
+   * Set productName
+   *
+   * @param string $productName
+   * @return Product
+   */
+  public function setProductName($productName) {
+    $this->productName = $productName;
+
+    return $this;
+  }
+  
+  /**
+   * Get productName
+   *
+   * @return string
+   */
+  public function getProductName() {
+    return $this->productName;
+  }
+
+  /**
+   * Set timeSpec
+   *
+   * @param string $timeSpec
+   * @return Product
+   */
+  public function setTimeSpec($timeSpec) {
+    $this->timeSpec = $timeSpec;
+
+    return $this;
+  }
+  
+  /**
+   * Get timeSpec
+   *
+   * @return string
+   */
+  public function getTimeSpec() {
+    return $this->timeSpec;
   }
 
   /**

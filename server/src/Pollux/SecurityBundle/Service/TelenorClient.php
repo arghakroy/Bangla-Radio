@@ -31,6 +31,10 @@ class TelenorClient {
   public function getRightsUrl() {
     return $this->endpoint . "/users";
   }
+  
+  public function getTransactionUrl() {
+    return $this->endpoint . "/transactions";
+  }
 
   public function __construct(Router $router, $endpoint, $clientId, $clientSecret) {
     $this->router = $router;
@@ -113,6 +117,48 @@ class TelenorClient {
     }
 
     return $query;
+  }
+  
+  public function getTransaction($accessToken,$product) {
+    
+    $transactionRedirectUrl = $this->router->generate('telenor.authentication.callback', array());
+    $transactionCancelUrl = $this->router->generate('telenor.authentication.callback', array());
+
+    $parameters = array(
+        "orderId" => uniqid(),
+        "purchaseDescription" => "Product description",
+        "amount" => $product->getPricing(),
+        'vatRate' => $product->getVatPercentage(),
+        "successRedirect" => $transactionRedirectUrl,
+        'cancelRedirect' => $transactionCancelUrl,
+        "products" => [
+            'name'=>$product->getName(),
+            'price' => $product->getPricing(),
+            'vatRate' => $product->getVatPercentage(),
+            'sku' => $product->getSku(),
+            'timeSpec' => $product->getTimeSpec()
+            ]
+    );
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $this->getTransactionUrl(),
+        CURLOPT_HTTPHEADER => array(
+          "Authorization: Bearer $accessToken"
+        ),
+        CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
+        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_POST => 1,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return json_decode($output);
   }
 
 }
