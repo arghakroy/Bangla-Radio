@@ -112,4 +112,12 @@ public class Util {
         }
         return null;
     }
+
+    /**
+     * TODO: Get the secret key from shared preference and return
+     * @return
+     */
+    public static String getSecretKey(){
+        return "";
+    }
 }
