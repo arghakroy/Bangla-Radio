@@ -121,8 +121,8 @@ class TelenorClient {
   
   public function getTransaction($accessToken,$product) {
     
-    $transactionRedirectUrl = $this->router->generate('telenor.authentication.callback', array());
-    $transactionCancelUrl = $this->router->generate('telenor.authentication.callback', array());
+    $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', array('uniqueId'=>'testId'));
+    $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', array('uniqueId'=>'testId'));
 
     $productArray = array(
         'name' => $product->getProductName(),
@@ -148,8 +148,6 @@ class TelenorClient {
           "Authorization: Bearer $accessToken"
         ),
         CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
-        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
         CURLOPT_TIMEOUT => 20,

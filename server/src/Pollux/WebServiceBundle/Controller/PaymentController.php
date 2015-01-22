@@ -56,5 +56,13 @@ class PaymentController extends Controller {
 //    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
 //    return $response;
   }
+  
+  public function successAction($uniqueId) {
+    
+  }
+  
+  public function cancelAction($uniqueId) {
+    
+  }
 
 }
