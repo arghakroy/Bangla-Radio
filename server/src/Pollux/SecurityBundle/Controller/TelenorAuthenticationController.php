@@ -42,6 +42,7 @@ class TelenorAuthenticationController extends Controller {
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
+
       return $this->redirectToRoute('webservice.endpoint.external', array('secret' => $sharedSecret));
     }
     else {
@@ -111,12 +112,6 @@ class TelenorAuthenticationController extends Controller {
    * @return null|string
    */
   public function updateUser($phoneNumber, $accessToken, $userInfo) {
-
-    print_r($phoneNumber);
-
-    print_r($accessToken);
-
-    print_r($userInfo);
 
     $em = $this->getDoctrine()->getManager();
     $user = null;
