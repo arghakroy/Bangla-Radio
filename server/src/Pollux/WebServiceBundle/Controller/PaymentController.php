@@ -42,7 +42,9 @@ class PaymentController extends Controller {
     //$product->getSku();       
     $telenorClient = $this->get('service.telenor.client');
     $transactionResponse = $telenorClient->getTransaction($accessToken,$userInfoData->sub,$product);
-    print_r($transactionResponse);
+    $locationLinks = $transactionResponse->links[0];
+    $locationURL = $locationLinks->href;
+    echo $locationURL;
     exit;
     
 //    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
