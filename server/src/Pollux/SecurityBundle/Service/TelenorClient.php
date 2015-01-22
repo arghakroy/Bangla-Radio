@@ -138,16 +138,19 @@ class TelenorClient {
         'vatRate' => $product->getVatPercentage(),
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
-        "products" => $this->prepareQueryUrl($productArray)
+        "products" => json_encode($productArray)
     );
+    $parameterString = json_encode($parameters);
 
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $this->getTransactionUrl(),
         CURLOPT_HTTPHEADER => array(
+          'Content-Type: application/json',
+          'Content-Length: ' . strlen($parameterString),
           "Authorization: Bearer $accessToken"
         ),
-        CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
+        CURLOPT_POSTFIELDS => $parameterString,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
         CURLOPT_TIMEOUT => 20,
@@ -156,9 +159,6 @@ class TelenorClient {
 
     $output = curl_exec($curl);
     curl_close($curl);
-
-    var_dump($output);
-    exit;
 
     return json_decode($output);
   }
