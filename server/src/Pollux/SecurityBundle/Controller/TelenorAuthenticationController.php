@@ -5,6 +5,7 @@ namespace Pollux\SecurityBundle\Controller;
 
 use Pollux\DomainBundle\Entity\Role;
 use Pollux\DomainBundle\Entity\User;
+use Pollux\WebServiceBundle\Utils\Headers;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,10 +42,14 @@ class TelenorAuthenticationController extends Controller {
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
+      return new Response('', Response::HTTP_SEE_OTHER, array(
+          Headers::LOCATION => "polluxmusic://success?sharedSecret=$sharedSecret"
+      ));
     }
     else {
-      return new Response('', Response::HTTP_UNAUTHORIZED);
+      return new Response('', Response::HTTP_SEE_OTHER, array(
+          Headers::LOCATION => "polluxmusic://cancelled"
+      ));
     }
   }
 
