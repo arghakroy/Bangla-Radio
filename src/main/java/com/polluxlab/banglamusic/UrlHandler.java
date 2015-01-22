@@ -28,7 +28,7 @@ public class UrlHandler extends Activity {
 
         URIdata = getIntent().getData();
          host = URIdata.getHost();  //=> success
-        String secret = String.valueOf(URIdata.getQueryParameters("secret")); // => should return the secret
+        String secret = String.valueOf(URIdata.getQueryParameters("sharedSecret")); // => should return the secret
         Toast.makeText(this,host+" "+secret+" "+URIdata.toString(),Toast.LENGTH_SHORT).show();
 
         if(URIdata != null) {
