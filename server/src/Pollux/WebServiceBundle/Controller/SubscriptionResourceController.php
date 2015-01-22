@@ -29,6 +29,8 @@ class SubscriptionResourceController extends Controller {
     //get the `secret` header with the request
     //HTTP_X_SECRET
     $sharedSecret = $request->headers->get('x-secret');
+    
+    print_r($request->headers->get('http-x-secret'));
     print_r($request->headers->all());
 
     dump($this->container, $sharedSecret);
