@@ -30,6 +30,7 @@ class SubscriptionResourceController extends Controller {
 
     //get the `secret` header with the request
     //HTTP_X_SECRET
+    $telenorClient = $this->get('service.telenor.client');
     $sharedSecret = $request->headers->get('http-x-secret');
 
     if($sharedSecret == '')
@@ -52,16 +53,13 @@ class SubscriptionResourceController extends Controller {
 
     
     $id = "5959599846791847936";
+    $token = "PIxRkgf581rg6HeJHOISXYpDJCP";
 
-    $req = Request::create(
-        self::TELENOR_RIGHTS."/users/".$id."/rights",
-        'GET'
-    );
+    //get the rights info
+    $content = $telenorClient->getUsersRight($id, $token);
 
-    $content = $req->getContent();
+    dump($this->container, $content);
 
-    print_r($req->headers->all());
-    print_r($content);
 
     die();
 
