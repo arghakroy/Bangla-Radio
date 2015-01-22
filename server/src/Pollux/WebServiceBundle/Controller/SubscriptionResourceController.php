@@ -39,7 +39,6 @@ class SubscriptionResourceController extends Controller {
     }
 
     print_r($sharedSecret);
-    die();
     
     //get the user info from server based on the secret provided by the client
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
@@ -63,6 +62,8 @@ class SubscriptionResourceController extends Controller {
 
     print_r($req->headers->all());
     print_r($content);
+
+    die();
 
 
     
