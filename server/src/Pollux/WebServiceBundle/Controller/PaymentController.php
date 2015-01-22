@@ -22,7 +22,7 @@ class PaymentController extends Controller {
 
   public function getAction(Request $request) {
     //$entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->find($subscriptionId);
-    $sharedSecret = $request->headers->get('X_SECRET');
+    $sharedSecret = $request->headers->get('x_secret');
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
     echo $user->getAccessToken();
     $entity = NULL;

@@ -55,7 +55,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
   
   public function getUserFromSecret($secret) {
     $query = $this->createQueryBuilder('u')
-        ->select('u, r')
+        ->select('u')
         ->where('u.sharedSecret = :sharedSecret')
         ->setParameter('sharedSecret', $secret)
         ->getQuery();
