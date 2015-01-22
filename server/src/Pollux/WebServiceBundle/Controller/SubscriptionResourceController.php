@@ -48,6 +48,10 @@ class SubscriptionResourceController extends Controller {
     var_dump($user);
     //echo $user->getAccessToken();
     
+    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
+    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+    return $response;
+    
 
     //get the user info from server based on the secret provided by the client
     
