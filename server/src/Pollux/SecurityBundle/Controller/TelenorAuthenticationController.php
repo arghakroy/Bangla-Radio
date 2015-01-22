@@ -42,7 +42,7 @@ class TelenorAuthenticationController extends Controller {
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
+      return $this->redirectToRoute('webservice.endpoint.external', array('secret' => $sharedSecret));
     }
     else {
       return new Response('', Response::HTTP_UNAUTHORIZED);
