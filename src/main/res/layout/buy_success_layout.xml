@@ -34,7 +34,7 @@
       android:text="OK"
       android:background="@drawable/dialog_btn"
       android:textSize="25sp"
-      android:id="@+id/button"
+      android:id="@+id/buySuccessBtn"
       android:layout_marginTop="50dp"
       android:onClick="btnClicked"
       android:layout_gravity="center_horizontal"/>

@@ -24,5 +24,5 @@
     <string name="buy_success_msg">আপনার নবায়ন সফল হয়েছে</string>
     <string name="expire_date">মেয়াদ শেষ হবে ২৫ জুন ২০১৫</string>
     <string name="try_again">অনুগ্রহ করে আবার চেষ্টা করুন</string>
-    <string name="fail_message">আপনার নবায়ন স্ফল হয়নি</string>
+    <string name="fail_message">আপনার নবায়ন সফল হয়নি</string>
 </resources>
