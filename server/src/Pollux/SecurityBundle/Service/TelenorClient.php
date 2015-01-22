@@ -29,7 +29,7 @@ class TelenorClient {
   }
 
   public function getRightsUrl() {
-    return $this->endpoint . "oauth/users";
+    return $this->endpoint . "/users/";
   }
   
   public function getTransactionUrl() {
@@ -78,6 +78,8 @@ class TelenorClient {
 
     $output = curl_exec($curl);
     curl_close($curl);
+
+    var_dump($ouput);
 
     return json_decode($output);
 
