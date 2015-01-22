@@ -38,38 +38,44 @@ class SubscriptionResourceController extends Controller {
       //if no `secret` send the client a 412 precondition failed error
       return new Response('No client secret', Response::HTTP_PRECONDITION_FAILED);
     }
-
-    print_r($sharedSecret);
     
     //get the user info from server based on the secret provided by the client
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
 
-    if(!is_null($user))
+    if(!$user)
     {
-      print_r($user->getAccessToken());
-
-      print_r($user->getUserInfoData());
+      throw $this->createNotFoundException("User not found");
     }
+    $accessToken = $user->getAccessToken();
+    $userInfoData = json_decode($user->getUserInfoData());
 
     
-    $id = "5959599846791847936";
-    $token = "7jsPjhVuc8LIcaYVkEFY1mWomsI";
+    $id = $userInfoData->sub;
+    $token = $user->getAccessToken();
 
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
 
     #dump($this->container, $content);
+    
+    
+
+
 
 
     if(is_null($content)) 
     {
       return new Response('', Response::HTTP_NO_CONTENT);
     }
+
+    return new Response('<html><body>'.var_dump($content).'</body></html>');
+
+    //$entity['sku'] = $content->
   }
 
   public function postAction() {
 
-    
+
   }
 
 
