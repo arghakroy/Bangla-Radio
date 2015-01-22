@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class SubscriptionResourceController extends Controller {
 
+  const TELENOR_RIGHTS = "https://stagingapi.comoyo.com/id";
+
   public function getCollectionAction() {
     //get the `secret` header with the request
     
@@ -37,9 +39,6 @@ class SubscriptionResourceController extends Controller {
     }
 
     print_r($sharedSecret);
-    print_r($request->headers->get('http-x-secret'));
-    print_r($request->headers->all());
-    print_r($request->headers->get('x-secret'));
     die();
     
     //get the user info from server based on the secret provided by the client
@@ -51,6 +50,20 @@ class SubscriptionResourceController extends Controller {
 
       print_r($user->getUserInfoData());
     }
+
+    
+    $id = "5959599846791847936";
+
+    $req = Request::create(
+        self::TELENOR_RIGHTS."/users/".$id."/rights",
+        'GET'
+    );
+
+    $content = $req->getContent();
+
+    print_r($req->headers->all());
+    print_r($content);
+
 
     
   }
