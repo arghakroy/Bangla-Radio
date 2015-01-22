@@ -119,7 +119,7 @@ class TelenorClient {
     return $query;
   }
   
-  public function getTransaction($accessToken,$product) {
+  public function getTransaction($accessToken,$connectId,$product) {
     
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', array('uniqueId'=>'testId'),  UrlGeneratorInterface::ABSOLUTE_URL);
     $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', array('uniqueId'=>'testId'), UrlGeneratorInterface::ABSOLUTE_URL);
@@ -136,6 +136,8 @@ class TelenorClient {
         "purchaseDescription" => "Product description",
         "amount" => "MYR ".$product->getPricing(),
         'vatRate' => $product->getVatPercentage(),
+        'merchantName' => 'lyltechnology-banglaradio-android',
+        'connectId' => $connectId,
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
         "products" => [$productArray]

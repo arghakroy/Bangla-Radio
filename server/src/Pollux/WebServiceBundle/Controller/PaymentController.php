@@ -31,8 +31,8 @@ class PaymentController extends Controller {
       throw $this->createNotFoundException("User not found");
     }
     $accessToken = $user->getAccessToken();
-    $userInfoData = $user->getUserInfoData();
-    
+    $userInfoData = json_decode($user->getUserInfoData());
+   
     $today = new \DateTime();
     
     $product = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getProduct($today);
@@ -41,7 +41,7 @@ class PaymentController extends Controller {
     }
     //$product->getSku();       
     $telenorClient = $this->get('service.telenor.client');
-    $transactionResponse = $telenorClient->getTransaction($accessToken,$product);
+    $transactionResponse = $telenorClient->getTransaction($accessToken,$userInfoData->sub,$product);
     print_r($transactionResponse);
     exit;
     
