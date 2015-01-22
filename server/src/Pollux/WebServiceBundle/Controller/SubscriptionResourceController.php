@@ -75,8 +75,8 @@ class SubscriptionResourceController extends Controller {
     
 
     $entity['sku'] = $sku;
-    $entity['start_date'] = $start_date;
-    $entity['end_date'] = $end_date;
+    $entity['start_date'] = $start_time;
+    $entity['end_date'] = $end_time;
     $entity['status'] = $j->right[0]->state;
 
     $response = $this->render('WebServiceBundle:Subscription:entity.json.twig', array('entity' => $entity));
