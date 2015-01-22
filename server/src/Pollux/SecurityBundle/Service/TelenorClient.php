@@ -17,7 +17,7 @@ class TelenorClient {
   private $clientSecret;
 
   public function getAuthorizeUrl() {
-    return $this->endpoint . "/authorize";
+    return $this->endpoint . "oauth/authorize";
   }
 
   public function getUserInfoUrl() {
