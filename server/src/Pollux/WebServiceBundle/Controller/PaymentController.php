@@ -2,7 +2,7 @@
 
 namespace Pollux\WebServiceBundle\Controller;
 
-
+use Symfony\Component\HttpFoundation\Request;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
