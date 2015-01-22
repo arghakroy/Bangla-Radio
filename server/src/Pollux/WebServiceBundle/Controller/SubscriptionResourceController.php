@@ -35,15 +35,20 @@ class SubscriptionResourceController extends Controller {
       //if no `secret` send the client a 412 precondition failed error
       return new Response('No client secret', Response::HTTP_PRECONDITION_FAILED);
     }
+
+    print_r($sharedSecret);
     
     //get the user info from server based on the secret provided by the client
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
 
-    print_r($user->getAccessToken());
+    if(!is_null($user))
+    {
+      print_r($user->getAccessToken());
 
-    print_r($user->getUserInfoData());
+      print_r($user->getUserInfoData());
+    }
+
     
-
   }
 
 }
