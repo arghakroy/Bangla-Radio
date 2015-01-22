@@ -1,6 +1,8 @@
 {
-    "description": "{{ entity.description }}",
+    "name": "{{ entity.product_name }}",
+    "sku": "{{ entity.sku }}",
+    "status": "{{ entity.status }}",
     "links" : {
-        "self": "{{ url('webservice.subscription', { id: entity.id }) }}"
+        "self": "{{ url('webservice.subscription') }}"
     }
 }
