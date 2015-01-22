@@ -126,7 +126,7 @@ class TelenorClient {
 
     $productArray = array(
         'name' => $product->getProductName(),
-        'price' => $product->getPricing(),
+        'price' => "MYR ".$product->getPricing(),
         'vatRate' => $product->getVatPercentage(),
         'sku' => $product->getSku(),
         'timeSpec' => $product->getTimeSpec()
@@ -134,13 +134,14 @@ class TelenorClient {
     $parameters = array(
         "orderId" => uniqid(),
         "purchaseDescription" => "Product description",
-        "amount" => "MYR".$product->getPricing(),
+        "amount" => "MYR ".$product->getPricing(),
         'vatRate' => $product->getVatPercentage(),
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
-        "products" => json_encode($productArray)
+        "products" => [$productArray]
     );
     $parameterString = json_encode($parameters);
+    
 
     echo $parameterString;
 
