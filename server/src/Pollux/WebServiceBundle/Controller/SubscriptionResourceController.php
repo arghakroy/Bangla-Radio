@@ -28,26 +28,22 @@ class SubscriptionResourceController extends Controller {
 
     //get the `secret` header with the request
     //HTTP_X_SECRET
-    $sharedSecret = $request->headers->get('x-secret');
+    $sharedSecret = $request->headers->get('http-x-secret');
+
+    if($sharedSecret == '')
+    {
+      //if no `secret` send the client a 412 precondition failed error
+      return new Response('No client secret', Response::HTTP_PRECONDITION_FAILED);
+    }
     
-    print_r($request->headers->get('http-x-secret'));
-    print_r($request->headers->all());
-
-    dump($this->container, $sharedSecret);
-
-    die();
-
+    //get the user info from server based on the secret provided by the client
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
 
-    var_dump($user);
-    //echo $user->getAccessToken();
+    print_r($user->getAccessToken());
+
+    print_r($user->getUserInfoData());
     
 
-
-    //get the user info from server based on the secret provided by the client
-    
-
-    //if no `secret` send the client a 412 precondition failed error
   }
 
 }
