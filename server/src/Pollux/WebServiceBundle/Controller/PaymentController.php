@@ -24,7 +24,7 @@ class PaymentController extends Controller {
   public function getAction(Request $request) {
 
     //$sharedSecret = $request->headers->get('HTTP-X-SECRET');
-    $sharedSecret = "54bface04df142.32346371";
+    $sharedSecret = "54c0e75117ea95.21045659";
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
     
     if(!$user){

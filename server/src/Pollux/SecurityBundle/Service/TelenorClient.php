@@ -124,6 +124,13 @@ class TelenorClient {
     $transactionRedirectUrl = $this->router->generate('telenor.authentication.callback', array());
     $transactionCancelUrl = $this->router->generate('telenor.authentication.callback', array());
 
+    $productArray = array(
+        'name' => $product->getProductName(),
+        'price' => $product->getPricing(),
+        'vatRate' => $product->getVatPercentage(),
+        'sku' => $product->getSku(),
+        'timeSpec' => $product->getTimeSpec()
+    );
     $parameters = array(
         "orderId" => uniqid(),
         "purchaseDescription" => "Product description",
@@ -131,13 +138,7 @@ class TelenorClient {
         'vatRate' => $product->getVatPercentage(),
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
-        "products" => [
-            'name'=>$product->getName(),
-            'price' => $product->getPricing(),
-            'vatRate' => $product->getVatPercentage(),
-            'sku' => $product->getSku(),
-            'timeSpec' => $product->getTimeSpec()
-            ]
+        "products" => $this->prepareQueryUrl($productArray)
     );
 
     $curl = curl_init();
