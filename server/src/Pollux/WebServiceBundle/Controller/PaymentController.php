@@ -45,24 +45,21 @@ class PaymentController extends Controller {
     print_r($transactionResponse);
     exit;
     
-    
-//    $entity = NULL;
-//    if (!$entity) {
-//      $this->get('logger')->debug("Subscription not found with id: " . $subscriptionId);
-//      throw $this->createNotFoundException();
-//    }
-//
 //    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
 //    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
 //    return $response;
   }
   
   public function successAction($uniqueId) {
-    
+    $response = $this->render('WebServiceBundle:Payment:success.json.twig', array('uniqueId' => $uniqueId));
+    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+    return $response;
   }
   
   public function cancelAction($uniqueId) {
-    
+    $response = $this->render('WebServiceBundle:Payment:cancel.json.twig', array('uniqueId' => $uniqueId));
+    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+    return $response;
   }
 
 }
