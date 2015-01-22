@@ -8,6 +8,8 @@
     </id>
     <field name="dateCreated" type="datetime" column="date_created" nullable="false"/>
     <field name="sku" type="string" column="sku" length="100" nullable="false"/>
+    <field name="productName" type="string" column="product_name" length="255" nullable="false"/>
+    <field name="timeSpec" type="string" column="time_spec" length="20" nullable="false"/>
     <field name="pricing" type="decimal" column="pricing" precision="6" scale="2" nullable="false"/>
     <field name="startDate" type="date" column="start_date" nullable="false"/>
     <field name="endDate" type="date" column="end_date" nullable="false"/>
