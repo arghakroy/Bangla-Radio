@@ -42,7 +42,7 @@ class PaymentController extends Controller {
     //$product->getSku();       
     $telenorClient = $this->get('service.telenor.client');
     $transactionResponse = $telenorClient->getTransaction($accessToken,$product);
-    echo $transactionResponse;
+    print_r($transactionResponse);
     exit;
     
     
