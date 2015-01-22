@@ -36,6 +36,7 @@ public class Setting_Frag extends RootFragment {
                 String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+number;
                 Intent i = new Intent(getActivity(),LogInWebViewActivity.class);
                 i.putExtra("url",url);
+                i.setData(Uri.parse(url+number));
                 startActivity(i);
             }
         });

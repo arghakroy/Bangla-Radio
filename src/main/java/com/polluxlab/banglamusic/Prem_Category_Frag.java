@@ -1,18 +1,25 @@
 package com.polluxlab.banglamusic;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,8 +75,45 @@ public class Prem_Category_Frag extends RootFragment {
                     //new GetStreamLink(i).execute();
                 }
             });
+        }else{
+            rootView=inflater.inflate(R.layout.dialog_layout, container,  false);
+            ImageView im=(ImageView) rootView.findViewById(R.id.dialogImageView);
+            im.setImageResource(R.drawable.log_in_logo);
+            Button loginSubmitBtn=(Button) rootView.findViewById(R.id.dialogBtn);
+            loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+                    final String number=tm.getLine1Number();
+                    String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+number;
+                    Intent i = new Intent(getActivity(),LogInWebViewActivity.class);
+                    i.putExtra("url",url);
+                    i.setData(Uri.parse(url + number));
+                    startActivity(i);
+                }
+            });
         }
         return rootView;
+    }
+
+    private void showLoginDialog() {
+        Dialog dialog=new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //regDialog.setTitle("Registration");
+        dialog.setContentView(R.layout.dialog_layout);
+        dialog.setCancelable(false);
+        ImageView im=(ImageView) dialog.findViewById(R.id.dialogImageView);
+
+        Button loginSubmitBtn=(Button) dialog.findViewById(R.id.dialogBtn);
+        loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+            }
+        });
+        dialog.show();
     }
 
     private boolean isAllowed() {
