@@ -68,7 +68,7 @@ class SubscriptionResourceController extends Controller {
       return new Response('', Response::HTTP_NO_CONTENT);
     }
 
-    return new Response('<html><body>'.var_dump($content).'</body></html>');
+    return new Response('<html><body></body></html>');
 
     //$entity['sku'] = $content->
   }
