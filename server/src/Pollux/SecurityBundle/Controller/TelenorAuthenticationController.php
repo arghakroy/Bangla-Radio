@@ -36,8 +36,11 @@ class TelenorAuthenticationController extends Controller {
 
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
+
     if($this->isValidUserInfo($userInfo)) {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
+
+      print_r($phoneNumber);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
@@ -109,6 +112,13 @@ class TelenorAuthenticationController extends Controller {
    * @return null|string
    */
   public function updateUser($phoneNumber, $accessToken, $userInfo) {
+
+    print_r($phoneNumber);
+
+    print_r($accessToken);
+
+    print_r($userInfo);
+    
     $em = $this->getDoctrine()->getManager();
     $user = null;
     try {
