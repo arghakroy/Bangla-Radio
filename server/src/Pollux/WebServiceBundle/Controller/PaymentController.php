@@ -22,8 +22,9 @@ class PaymentController extends Controller {
 
   public function getAction(Request $request) {
     //$entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->find($subscriptionId);
-    echo $sharedSecret = $request->headers->get('secret');
-    exit;
+    $sharedSecret = $request->headers->get('X_SECRET');
+    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
+    echo $user->getAccessToken();
     $entity = NULL;
     if (!$entity) {
       $this->get('logger')->debug("Subscription not found with id: " . $subscriptionId);
