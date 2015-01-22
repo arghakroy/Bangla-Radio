@@ -15,8 +15,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 class SubscriptionResourceController extends Controller {
 
   public function getCollectionAction() {
-
-
     //get the `secret` header with the request
     
 
