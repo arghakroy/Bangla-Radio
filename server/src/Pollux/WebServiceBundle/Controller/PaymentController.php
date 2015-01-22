@@ -22,12 +22,27 @@ class PaymentController extends Controller {
   }
 
   public function getAction(Request $request) {
-   
-    //$sharedSecret = $request->headers->get('x-secret');
+
+    //$sharedSecret = $request->headers->get('HTTP-X-SECRET');
     $sharedSecret = "54bface04df142.32346371";
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
-    echo $user->getAccessToken();
+    
+    if(!$user){
+      throw $this->createNotFoundException("User not found");
+    }
+    $accessToken = $user->getAccessToken();
+    $userInfoData = $user->getUserInfoData();
+    
+    $today = new \DateTime();
+    
+    $product = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getProduct($today);
+    if(!$product){
+      throw $this->createNotFoundException("User not found");
+    }
+    //$product->getSku();       
     $telenorClient = $this->get('service.telenor.client');
+    $transactionResponse = $telenorClient->getTransaction($accessToken,$product);
+    echo $transactionResponse;
     exit;
     
     
