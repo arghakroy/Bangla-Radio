@@ -26,18 +26,11 @@ class SubscriptionResourceController extends Controller {
     //if no `secret` send the client a 412 precondition failed error
   }
 
-  public function getAction($subscriptionId) {
-    /*$entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->find($subscriptionId);
-    if (!$entity) {
-      $this->get('logger')->debug("Subscription not found with id: " . $subscriptionId);
-      throw $this->createNotFoundException();
-    }
-
-    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    return $response;*/
+  public function getAction(Request $request) {
 
     //get the `secret` header with the request
+    //HTTP_X_SECRET
+    $secret = $request->headers->get('x-secret');
     
 
     //get the user info from server based on the secret provided by the client
