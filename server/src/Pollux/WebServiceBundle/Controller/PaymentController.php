@@ -20,8 +20,9 @@ class PaymentController extends Controller {
     return $response;
   }
 
-  public function getAction($subscriptionId) {
-    $entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->find($subscriptionId);
+  public function getAction($sharedSecret) {
+    //$entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->find($subscriptionId);
+    $entity = NULL;
     if (!$entity) {
       $this->get('logger')->debug("Subscription not found with id: " . $subscriptionId);
       throw $this->createNotFoundException();
