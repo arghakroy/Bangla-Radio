@@ -160,6 +160,8 @@ class TelenorClient {
     $output = curl_exec($curl);
     curl_close($curl);
 
+    var_dump($output);
+    exit;
     return json_decode($output);
   }
 
