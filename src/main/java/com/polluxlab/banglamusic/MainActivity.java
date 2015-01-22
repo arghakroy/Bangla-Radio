@@ -1,6 +1,7 @@
 package com.polluxlab.banglamusic;
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.polluxlab.banglamusic.model.Song;
 
@@ -26,6 +28,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         centerActionBarTitle();
+
         if (savedInstanceState == null) {
             // withholding the previously created fragment from being created again
             // On orientation change, it will prevent fragment recreation
