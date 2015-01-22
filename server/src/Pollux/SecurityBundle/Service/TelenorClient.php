@@ -142,6 +142,8 @@ class TelenorClient {
     );
     $parameterString = json_encode($parameters);
 
+    echo $parameterString;
+
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $this->getTransactionUrl(),
