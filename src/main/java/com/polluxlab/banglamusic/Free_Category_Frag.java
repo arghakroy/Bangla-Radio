@@ -145,13 +145,13 @@ public class Free_Category_Frag extends RootFragment {
 
         @Override
         protected String doInBackground(String... st) {
-            freeCategories=new ArrayList<>();
+            freeCategories = new ArrayList<>();
             try {
                 Endpoint.init();
-                List<Tag> tag=Endpoint.instance().getTags();
-                for (int i=0;i<tag.size();i++){
-                    if(tag.get(i).getName().equals("free")){
-                        freeCategories=tag.get(i).getSongs();
+                List<Tag> tags = Endpoint.instance().getTags();
+                for( Tag t : tags ){
+                    if(t.getName().equalsIgnoreCase("free")){
+                        freeCategories = t.getSongs();
                         break;
                     }
                 }
@@ -159,7 +159,6 @@ public class Free_Category_Frag extends RootFragment {
                 msg=e.getMessage();
                 error=1;
             }
-
             return null;
         }
 

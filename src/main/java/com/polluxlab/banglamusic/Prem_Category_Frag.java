@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -46,28 +47,46 @@ public class Prem_Category_Frag extends RootFragment {
 
         View rootView = inflater.inflate(R.layout.category_layout_frag, container,  false);
         categoryList= (GridView) rootView.findViewById(R.id.categoryList);
+        con = getActivity();
+        helper = (PlaySoundHelper) getActivity();
 
-        con=getActivity();
-        helper= (PlaySoundHelper) getActivity();
-
-        generateData();
-        categoryList.setAdapter(new MyListAdapter());
-        categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
-                Bundle bun=new Bundle();
-                bun.putInt("position",i);
-                Category_Sub_Frag subFragment = new Category_Sub_Frag();
-                subFragment.setArguments(bun);
-                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                // Store the Fragment in stack
-                transaction.addToBackStack(null);
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.replace(R.id.root_container, subFragment).commit();
-                //new GetStreamLink(i).execute();
-            }
-        });
+        if( isAllowed() ) {
+            generateData();
+            categoryList.setAdapter(new MyListAdapter());
+            categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Bundle bun = new Bundle();
+                    bun.putInt("position", i);
+                    Category_Sub_Frag subFragment = new Category_Sub_Frag();
+                    subFragment.setArguments(bun);
+                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                    // Store the Fragment in stack
+                    transaction.addToBackStack(null);
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    transaction.replace(R.id.root_container, subFragment).commit();
+                    //new GetStreamLink(i).execute();
+                }
+            });
+        }
         return rootView;
+    }
+
+    private boolean isAllowed() {
+        String secret = Util.getSecretKey();
+        if( secret == null || secret.isEmpty() ){
+            //TODO: show the login screen here
+        } else {
+            Endpoint.init();
+            Subscription s = Endpoint.instance().getSubscription();
+            if( s != null) {
+                return true;
+            } else {
+                //TODO: show the "Ekhoni kinun" screen
+                return false;
+            }
+        }
+        return false;
     }
 
     private void generateData() {
