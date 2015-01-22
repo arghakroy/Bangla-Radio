@@ -58,15 +58,21 @@ class PaymentController extends Controller {
   }
   
   public function successAction($uniqueId) {
-    $response = $this->render('WebServiceBundle:Payment:success.json.twig', array('uniqueId' => $uniqueId));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    return $response;
+    /*
+     *  save to subscription table need to do with uniqueId as orderId
+     */
+    
+    $url = "polluxmusic://purchase?status=success"; 
+    return $this->redirect($url);
   }
   
   public function cancelAction($uniqueId) {
-    $response = $this->render('WebServiceBundle:Payment:cancel.json.twig', array('uniqueId' => $uniqueId));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    return $response;
+    /*
+     *  save to subscription table need to do with uniqueId as orderId
+     */
+    
+    $url = "polluxmusic://purchase?status=cancelled"; 
+    return $this->redirect($url);
   }
 
 }
