@@ -143,9 +143,6 @@ class TelenorClient {
         "products" => [$productArray]
     );
     $parameterString = json_encode($parameters);
-    
-
-    echo $parameterString;
 
     $curl = curl_init();
     curl_setopt_array($curl, array(
@@ -164,9 +161,7 @@ class TelenorClient {
 
     $output = curl_exec($curl);
     curl_close($curl);
-
-    var_dump($output);
-    exit;
+    
     return json_decode($output);
   }
 
