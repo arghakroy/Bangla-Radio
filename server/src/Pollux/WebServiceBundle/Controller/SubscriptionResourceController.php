@@ -56,23 +56,34 @@ class SubscriptionResourceController extends Controller {
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
 
-    echo $content;
     
-    dump($this->container, $content);
-    exit;
-    
-
-
-
-
     if(is_null($content)) 
     {
       return new Response('', Response::HTTP_NO_CONTENT);
     }
 
-    #return new Response('');
 
-    //$entity['sku'] = $content->
+    $j = json_decode($content);
+    $sku = $j->right[0]->sku;
+    $timeInterval = $j->right[0]->timeInterval ;
+
+    $k = explode("/", $timeInterval );
+
+    $start_time = $k[0];
+    $end_time = $k[1];
+
+    
+
+    $entity['sku'] = $sku;
+    $entity['start_date'] = $start_date;
+    $entity['end_date'] = $end_date;
+    $entity['status'] = $j->right[0]->state;
+
+    $response = $this->render('WebServiceBundle:Subscription:entity.json.twig', array('entity' => $entity));
+    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+    return $response;
+
+
   }
 
   public function postAction() {
