@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.polluxlab.banglamusic.R;
 
+import java.util.List;
+
 public class UrlHandler extends Activity {
 
     PlaySoundHelper helper;
@@ -22,22 +24,33 @@ public class UrlHandler extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //helper= (PlaySoundHelper) this;
         getActionBar().hide();
 
         URIdata = getIntent().getData();
-         host = URIdata.getHost();  //=> success
-        String secret = String.valueOf(URIdata.getQueryParameters("sharedSecret")); // => should return the secret
-        Toast.makeText(this,host+" "+secret+" "+URIdata.toString(),Toast.LENGTH_SHORT).show();
-
-        if(URIdata != null) {
-            Log.d(getClass().getName(), "Received Url: " + URIdata.toString());
-            if(host.equals("success"))
-                setContentView(R.layout.buy_success_layout);
-            else
-                setContentView(R.layout.buy_fail_layout);
+        if(URIdata == null){
+            setContentView(R.layout.buy_fail_layout);
             return;
+        }
+        host = URIdata.getHost();
+        String secret;
+
+        if( host.equals("success")){
+            List<String> keys = URIdata.getQueryParameters("sharedSecret");
+            if(!keys.isEmpty())
+                secret = keys.get(0);
+            setContentView(R.layout.buy_success_layout);
+        } else if( host.equals("cancelled")) {
+            setContentView(R.layout.buy_fail_layout);
+        } else if( host.equals("purchase")) {
+            String purchaseStatus = null;
+            List<String> keys = URIdata.getQueryParameters("status");
+            if(!keys.isEmpty())
+                purchaseStatus = keys.get(0);
+            if(purchaseStatus.equals("success")){
+
+            } else if(purchaseStatus.equals("cancelled")){
+
+            }
         }
     }
 
