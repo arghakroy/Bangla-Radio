@@ -134,13 +134,15 @@ class TelenorClient {
     $parameters = array(
         "orderId" => uniqid(),
         "purchaseDescription" => "Product description",
-        "amount" => $product->getPricing(),
+        "amount" => "MYR".$product->getPricing(),
         'vatRate' => $product->getVatPercentage(),
         "successRedirect" => $transactionRedirectUrl,
         'cancelRedirect' => $transactionCancelUrl,
         "products" => json_encode($productArray)
     );
     $parameterString = json_encode($parameters);
+
+    echo $parameterString;
 
     $curl = curl_init();
     curl_setopt_array($curl, array(
