@@ -3,6 +3,13 @@ package com.polluxlab.banglamusic.model;
 import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
+import com.polluxlab.banglamusic.util.Util;
+
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by samiron on 1/17/2015.
@@ -47,7 +54,10 @@ public class Links extends ModelBase {
     }
 
     public Subscription getSubscription(){
-        String response = get(this.subscriptions);
+        List<Header> headers = new ArrayList<>();
+        headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), Util.getSecretKey()));
+        String response = get(this.subscriptions, headers);
+
         return gson.fromJson(response, Subscription.class);
     }
 
