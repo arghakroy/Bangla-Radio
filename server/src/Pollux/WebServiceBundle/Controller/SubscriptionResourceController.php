@@ -30,6 +30,8 @@ class SubscriptionResourceController extends Controller {
     //HTTP_X_SECRET
     $sharedSecret = $request->headers->get('x-secret');
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
+
+    var_dump($user);
     echo $user->getAccessToken();
     
 
