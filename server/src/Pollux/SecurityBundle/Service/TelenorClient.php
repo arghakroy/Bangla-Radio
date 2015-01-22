@@ -107,7 +107,7 @@ class TelenorClient {
     $output = curl_exec($curl);
     curl_close($curl);
 
-    return json_decode($output);
+    return $output;
   }
 
   private static function prepareQueryUrl(array $parameters) {
