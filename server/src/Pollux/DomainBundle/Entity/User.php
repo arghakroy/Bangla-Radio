@@ -3,7 +3,6 @@
 namespace Pollux\DomainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Intl\Exception\MethodNotImplementedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -12,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="unique_username", columns={"username"})})
  * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\UserRepository")
  */
-class User implements UserInterface {
+class User implements UserInterface, \Serializable {
   /**
    * @var string
    *
@@ -267,6 +266,22 @@ class User implements UserInterface {
 
   public function getSalt() {
     return "";
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function serialize() {
+    return serialize(array(
+        $this->id,
+    ));
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function unserialize($serialized) {
+    list ($this->id,) = unserialize($serialized);
   }
 
 }

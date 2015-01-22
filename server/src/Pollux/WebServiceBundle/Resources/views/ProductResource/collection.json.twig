@@ -1,0 +1,5 @@
+[
+{% for entity in entities %}
+    {{ include('WebServiceBundle:ProductResource:entity.json.twig', {'entity': entity}) }}{% if not loop.last %},{% endif %}
+{% endfor %}
+]
