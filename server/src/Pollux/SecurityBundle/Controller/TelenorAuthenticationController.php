@@ -107,6 +107,14 @@ class TelenorAuthenticationController extends Controller {
     return true;
   }
 
+
+  public function refreshToken(){
+    $telenorApp = $this->container->getParameter('telenor.client.id');
+    $telenorSecret = $this->container->getParameter('telenor.client.secret');
+
+    $basic = base64_encode($telenorApp.":".$telenorSecret);
+  }
+
   /**
    * @param $phoneNumber
    * @param $accessToken

@@ -31,6 +31,10 @@ class TelenorClient {
   public function getRightsUrl() {
     return $this->endpoint . "id/users/";
   }
+
+  public function getRefreshTokenUrl() {
+    return $this->endpoint . "oauth/token";
+  }
   
   public function getTransactionUrl() {
     return  "https://staging-payment-payment2.comoyo.com/transactions";
@@ -108,6 +112,34 @@ class TelenorClient {
     curl_close($curl);
 
     return json_decode($output);
+  }
+
+
+  public function refreshToken($refreshToken){
+    
+    $parameters = array(
+        "grant_type" => "refresh_token",
+        "refresh_token" => $refreshToken,
+    );
+
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $this->getRefreshTokenUrl(),
+        CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
+        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_POST => 1,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return json_decode($output);
+
   }
 
   private static function prepareQueryUrl(array $parameters) {
