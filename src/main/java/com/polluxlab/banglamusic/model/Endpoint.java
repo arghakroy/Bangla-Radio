@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.polluxlab.banglamusic.util.Util;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -56,9 +57,9 @@ public class Endpoint extends ModelBase {
         return this.links.getSubscription(con);
     }
 
-    public String getPurchase(){
+    public String getPurchase(Context con){
         String purchaseUrl = this.links.getPurchase();
-        String secret = "" ;//getSecretFromSharedPref()
+        String secret = Util.getSecretKey(con);
         if( purchaseUrl != null ){
             return String.format("%s?%s=%s", purchaseUrl, "sharedSecret", secret);
         }
