@@ -63,29 +63,36 @@ class SubscriptionResourceController extends Controller {
       return new Response('', Response::HTTP_NO_CONTENT);
     }
 
-    var_dump($content);
-    exit;
 
     $j = json_decode($content);
-    $sku = $j->right[0]->sku;
-    $timeInterval = $j->right[0]->timeInterval ;
 
-    $k = explode("/", $timeInterval );
+    if(!is_null($j))
+    {
+      $sku = $j->right[0]->sku;
+      $timeInterval = $j->right[0]->timeInterval ;
 
-    $start_time = $k[0];
-    $end_time = $k[1];
+      $k = explode("/", $timeInterval );
 
+      $start_time = $k[0];
+      $end_time = $k[1];
+
+      
+
+      $entity['sku'] = $sku;
+      $entity['start_date'] = $start_time;
+      $entity['end_date'] = $end_time;
+      $entity['status'] = $j->right[0]->state;
+
+      $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
+      $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+      return $response;
+
+    }
+    else
+    {
+      return new Response('json is not valid from telenor', 500);
+    }
     
-
-    $entity['sku'] = $sku;
-    $entity['start_date'] = $start_time;
-    $entity['end_date'] = $end_time;
-    $entity['status'] = $j->right[0]->state;
-
-    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    return $response;
-
 
   }
 
