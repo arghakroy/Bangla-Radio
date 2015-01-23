@@ -59,9 +59,9 @@ public class Links extends ModelBase {
         return tags;
     }
 
-    public Subscription getSubscription(Context con){
+    public Subscription getSubscription(String secret){
         List<Header> headers = new ArrayList<>();
-        headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), Util.getSecretKey(con)));
+        headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
         String response = get(this.subscriptions, headers);
 
         return gson.fromJson(response, Subscription.class);

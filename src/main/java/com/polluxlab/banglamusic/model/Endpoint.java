@@ -53,8 +53,8 @@ public class Endpoint extends ModelBase {
         return str;
     }
 
-    public Subscription getSubscription(Context con){
-        return this.links.getSubscription(con);
+    public Subscription getSubscription(String secret){
+        return this.links.getSubscription(secret);
     }
 
     public String getPurchase(Context con){

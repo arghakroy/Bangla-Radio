@@ -51,6 +51,7 @@ public class Prem_Category_Frag extends RootFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(getClass().getName(), "Premium content onCcreateView");
         con = getActivity();
         this.inflater=inflater;
         helper = (PlaySoundHelper) getActivity();
@@ -78,9 +79,11 @@ public class Prem_Category_Frag extends RootFragment {
         @Override
         protected String doInBackground(String... params) {
             Endpoint.init();
-            Subscription s = Endpoint.instance().getSubscription(getActivity());
-            if( s != null)subscribed=true;
-            else  subscribed=false;
+            Subscription s = Endpoint.instance().getSubscription(
+                    Util.getSecretKey(getActivity())
+            );
+            if( s != null) subscribed = true;
+            else  subscribed = false;
             return null;
         }
 

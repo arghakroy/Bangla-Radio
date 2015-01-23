@@ -39,15 +39,10 @@ public class UrlHandler extends Activity {
         host = URIdata.getHost();
         String secret;
 
-        if( host.equals("success")){
-            List<String> keys = URIdata.getQueryParameters("sharedSecret");
-            if(!keys.isEmpty()){
-                secret = keys.get(0);
-                SharedPreferences sh=getSharedPreferences("MUSIC_PREF",MODE_PRIVATE);
-                SharedPreferences.Editor edit=sh.edit();
-                edit.putString("sharedSecret",secret);
-                edit.commit();
-            }
+        if( host.equals("success") ){
+            String key = URIdata.getQueryParameter("sharedSecret");
+            Util.storeSecret(getApplicationContext(), key);
+
             setContentView(R.layout.buy_now_layout);
         } else if( host.equals("cancelled")) {
             setContentView(R.layout.buy_fail_layout);
