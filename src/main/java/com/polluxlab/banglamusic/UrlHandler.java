@@ -72,17 +72,22 @@ public class UrlHandler extends Activity {
         new DataLoader<Subscription>(getApplicationContext(), new DataLoader.Worker<Subscription>(){
             @Override
             public Subscription work() {
+                Log.d(getClass().getName(), "getting subscription");
                 return Endpoint.instance().getSubscription(Util.getSecretKey(getApplicationContext()));
             }
             @Override
             public void done(Subscription s) {
                 if( s == null){
+                    Log.d(getClass().getName(), "subscription not found");
                     hasSubscription = false;
                 } else {
+                    Log.d(getClass().getName(), "user has subscriptions");
                     hasSubscription = true;
                 }
             }
-        }).execute();
+        })
+                .turnOfDialog()
+                .execute();
 
         if( hasSubscription ){
             loadPremiumContent();

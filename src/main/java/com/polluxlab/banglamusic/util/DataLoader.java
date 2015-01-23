@@ -12,6 +12,7 @@ public class DataLoader<T> extends AsyncTask<Void, Void, T> {
     Worker<T> worker;
     Context context;
     ProgressDialog pDialog;
+    private boolean showDialog = true;
 
     public DataLoader(Context con, Worker worker){
         this.worker = worker;
@@ -22,10 +23,12 @@ public class DataLoader<T> extends AsyncTask<Void, Void, T> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        pDialog.setMessage("Loading. Please wait...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(true);
-        pDialog.show();
+        if(showDialog) {
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
     }
 
     @Override
@@ -38,6 +41,11 @@ public class DataLoader<T> extends AsyncTask<Void, Void, T> {
         super.onPostExecute(s);
         pDialog.dismiss();
         worker.done(s);
+    }
+
+    public DataLoader<T> turnOfDialog() {
+        this.showDialog = false;
+        return this;
     }
 
     public interface Worker<TYPE> {
