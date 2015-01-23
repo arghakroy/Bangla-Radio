@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.R;
+import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
 
@@ -66,18 +67,15 @@ public class UrlHandler extends Activity {
         switch (v.getId()){
             case R.id.buyNowBtn:
             case R.id.buyFailBtn:
-                TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-                final String number=tm.getLine1Number();
-                String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+number;
+                String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+ Util.getUserId(this);
                 Intent i = new Intent(this,LogInWebViewActivity.class);
-                i.putExtra("url",url);
-                i.setData(Uri.parse(url+number));
+                i.putExtra("url", url);
                 startActivity(i);
                 break;
             case R.id.buySuccessBtn:
             default:
-                finish();
                 break;
         }
+        finish();
     }
 }

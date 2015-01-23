@@ -86,10 +86,9 @@ public class Prem_Category_Frag extends RootFragment {
                 public void onClick(View arg0) {
                     TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
                     final String number=tm.getLine1Number();
-                    String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+number;
+                    String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+ Util.getUserId(con);
                     Intent i = new Intent(getActivity(),LogInWebViewActivity.class);
                     i.putExtra("url",url);
-                    i.setData(Uri.parse(url + number));
                     startActivity(i);
                 }
             });

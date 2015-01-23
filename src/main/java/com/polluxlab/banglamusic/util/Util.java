@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Patterns;
 import android.widget.Toast;
 
@@ -84,6 +85,11 @@ public class Util {
 		return Boolean.valueOf(((LocationManager)context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled("gps")).booleanValue();
 	}
 
+    public static String getUserId(Context context){
+        TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        final String number=tm.getDeviceId();
+        return number;
+    }
 
 
 	public static String getAmPm(int hour) {
