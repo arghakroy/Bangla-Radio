@@ -57,6 +57,10 @@ class SubscriptionResourceController extends Controller {
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
 
+    var_dump($content);
+
+    var_dump($token);
+   exit;
     
     if(is_null($content)) 
     {
@@ -65,6 +69,8 @@ class SubscriptionResourceController extends Controller {
 
 
     $j = json_decode($content);
+
+    var_dump($j);
 
     if(!is_null($j))
     {
@@ -90,7 +96,7 @@ class SubscriptionResourceController extends Controller {
     }
     else
     {
-      return new Response('json is not valid from telenor', 500);
+      return new Response('json is not valid from telenor', 403);
     }
     
 
