@@ -50,11 +50,14 @@ public class UrlHandler extends Activity {
         }
         host = URIdata.getHost();
         String secret;
+        Log.d("MUSIC","URI "+URIdata);
 
         if( host.equals(LOGIN_SUCCESS) ){
             String key = URIdata.getQueryParameter(KEY_SECRET);
-            Util.storeSecret(getApplicationContext(), key);
-            postLoginSuccessOperations();
+            if(key!=null){
+                Util.storeSecret(getApplicationContext(), key);
+                postLoginSuccessOperations();
+            }
         } else if( host.equals(LOGIN_CANCELLED)) {
             loadFreeContent();
         } else if( host.equals(PURCHASE)) {
@@ -85,14 +88,14 @@ public class UrlHandler extends Activity {
                     hasSubscription = true;
                 }
             }
-        })
-                .turnOfDialog()
+        }).turnOfDialog()
                 .execute();
 
         if( hasSubscription ){
             loadPremiumContent();
         } else {
             setContentView(R.layout.buy_now_layout);
+            sendBroadcast(new Intent("update-prem-ui"));
         }
     }
 
@@ -103,8 +106,9 @@ public class UrlHandler extends Activity {
 
     //TODO: Implement it
     private void loadPremiumContent() {
-
+        sendBroadcast(new Intent("update-prem-ui"));
     }
+
 
     public void btnClicked(View v){
         String url="";
@@ -113,7 +117,7 @@ public class UrlHandler extends Activity {
                 url=Endpoint.instance().getPurchase(this);
                 break;
             case R.id.buyFailBtn:
-                 url = Endpoint.instance().getAuthUrl();
+                url = Endpoint.instance().getAuthUrl();
                 break;
             case R.id.buySuccessBtn:
             default:

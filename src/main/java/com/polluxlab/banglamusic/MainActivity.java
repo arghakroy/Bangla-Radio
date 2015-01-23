@@ -1,5 +1,9 @@
 package com.polluxlab.banglamusic;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
 
@@ -40,6 +45,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
             // and getting the reference
             carouselFragment = (CarouselFragment) getSupportFragmentManager().getFragments().get(0);
         }
+
     }
 
     private void centerActionBarTitle()
@@ -131,9 +137,15 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         carousel.player(command,pos,songs);
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
-        play(0,0,null);
+        play(0, 0, null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

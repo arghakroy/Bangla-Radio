@@ -1,8 +1,10 @@
 package com.polluxlab.banglamusic;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class Prem_Category_Frag extends RootFragment {
     View rootView;
     LinearLayout dialogUi;
     LayoutInflater inflater;
+    BroadcastReceiver broadCastReceive;
 
     public Prem_Category_Frag(){
     }
@@ -54,12 +57,12 @@ public class Prem_Category_Frag extends RootFragment {
         Log.d(getClass().getName(), "Premium content onCcreateView");
         con = getActivity();
         this.inflater=inflater;
+        setupBroadCast();
         helper = (PlaySoundHelper) getActivity();
         rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
         categoryList= (GridView) rootView.findViewById(R.id.categoryList);
         dialogUi= (LinearLayout) rootView.findViewById(R.id.premView);
         checkAllowed();
-
         return rootView;
     }
 
@@ -96,9 +99,11 @@ public class Prem_Category_Frag extends RootFragment {
         }
     }
 
-    private void updateUi(boolean allowed) {
+    public void updateUi(boolean allowed) {
         if (allowed) {
             //Util.showToast(getActivity(),"inside ui");
+            dialogUi.setVisibility(View.GONE);
+            categoryList.setVisibility(View.VISIBLE);
             generateData();
             categoryList.setAdapter(new MyListAdapter());
             categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -171,6 +176,8 @@ public class Prem_Category_Frag extends RootFragment {
     }
 
 
+
+
     private void generateData() {
         premCategories=new ArrayList<>();
 
@@ -225,5 +232,23 @@ public class Prem_Category_Frag extends RootFragment {
             imageLay.setBackgroundResource(images[i]);
             return rowView;
         }
+    }
+
+    public void setupBroadCast(){
+        broadCastReceive=new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Util.showToast(context,"Received broadccast");
+                updateUi(true);
+            }
+        };
+        getActivity().registerReceiver(broadCastReceive, new IntentFilter("update-prem-ui"));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver( broadCastReceive);
     }
 }
