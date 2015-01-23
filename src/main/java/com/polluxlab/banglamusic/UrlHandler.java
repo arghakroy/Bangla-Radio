@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.R;
+import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
@@ -64,18 +65,23 @@ public class UrlHandler extends Activity {
     }
 
     public void btnClicked(View v){
+        String url="";
         switch (v.getId()){
             case R.id.buyNowBtn:
+                url=Endpoint.instance().getPurchase(this);
+                break;
             case R.id.buyFailBtn:
-                String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+ Util.getUserId(this);
-                Intent i = new Intent(this,LogInWebViewActivity.class);
-                i.putExtra("url", url);
-                startActivity(i);
+                 url = Endpoint.instance().getAuthUrl();
                 break;
             case R.id.buySuccessBtn:
             default:
-                break;
+                finish();
+                return;
         }
+        Util.showToast(this,url);
+        Intent i = new Intent(this,LogInWebViewActivity.class);
+        i.putExtra("url", url);
+        startActivity(i);
         finish();
     }
 }

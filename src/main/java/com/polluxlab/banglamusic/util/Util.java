@@ -128,4 +128,11 @@ public class Util {
         SharedPreferences sh=context.getSharedPreferences("MUSIC_PREF",Context.MODE_PRIVATE);
         return sh.getString("sharedSecret","");
     }
+
+    public static void setSecretKey(Context context,String key){
+        SharedPreferences sh=context.getSharedPreferences("MUSIC_PREF",Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit=sh.edit();
+        edit.putString("sharedSecret",key);
+        edit.commit();
+    }
 }

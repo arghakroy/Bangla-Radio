@@ -32,7 +32,7 @@ public class Free_Category_Frag extends RootFragment {
     ListView freeSongListView;
 
     Context con;
-    static List<Song> freeCategories;
+     List<Song> freeCategories;
     PlaySoundHelper helper;
 
     public Free_Category_Frag(){
@@ -61,41 +61,6 @@ public class Free_Category_Frag extends RootFragment {
         });
         return rootView;
     }
-
-    class GetStreamLink extends AsyncTask<String,String,String>{
-
-        ProgressDialog pDialog;
-        int pos;
-        String link="";
-        GetStreamLink(int i){
-            pos=i;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog=new ProgressDialog(con);
-            pDialog.setMessage("Loading. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            link=freeCategories.get(pos).getStreamLink();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            pDialog.dismiss();
-            Util.showToast(con,"Please wait...");
-            //helper.play(1,);
-        }
-    }
-
 
     class MyListAdapter extends BaseAdapter{
 

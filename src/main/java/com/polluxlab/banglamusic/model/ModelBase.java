@@ -61,7 +61,7 @@ public abstract class ModelBase {
     private static String readResponse(HttpResponse response){
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                    response.getEntity().getContent(), "iso-8859-1"), 8);
+                    response.getEntity().getContent(), "utf-8"), 8);
             String line = null;
             StringBuilder sb = new StringBuilder();
             while ((line = in.readLine()) != null) {

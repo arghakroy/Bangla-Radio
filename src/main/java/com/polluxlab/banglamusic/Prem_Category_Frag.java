@@ -1,21 +1,17 @@
 package com.polluxlab.banglamusic;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -23,7 +19,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
@@ -46,19 +41,61 @@ public class Prem_Category_Frag extends RootFragment {
     static List<Song> premCategories;
     static List<Tag> tags;
     PlaySoundHelper helper;
+    boolean subscribed;
+    View rootView;
+    LinearLayout dialogUi;
+    LayoutInflater inflater;
 
     public Prem_Category_Frag(){
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.category_layout_frag, container,  false);
-        categoryList= (GridView) rootView.findViewById(R.id.categoryList);
         con = getActivity();
+        this.inflater=inflater;
         helper = (PlaySoundHelper) getActivity();
+        rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
+        categoryList= (GridView) rootView.findViewById(R.id.categoryList);
+        dialogUi= (LinearLayout) rootView.findViewById(R.id.premView);
+        checkAllowed();
 
-        if( isAllowed() ) {
+        return rootView;
+    }
+
+    class LoadSubscription extends AsyncTask<String,String,String>{
+        ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog=new ProgressDialog(con);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Endpoint.init();
+            Subscription s = Endpoint.instance().getSubscription(getActivity());
+            if( s != null)subscribed=true;
+            else  subscribed=false;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pDialog.dismiss();
+            //Util.showToast(getActivity(), "Suscribed : " + subscribed);
+            updateUi(subscribed);
+        }
+    }
+
+    private void updateUi(boolean allowed) {
+        if (allowed) {
+            //Util.showToast(getActivity(),"inside ui");
             generateData();
             categoryList.setAdapter(new MyListAdapter());
             categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,11 +113,13 @@ public class Prem_Category_Frag extends RootFragment {
                     //new GetStreamLink(i).execute();
                 }
             });
-        }else{
-            rootView=inflater.inflate(R.layout.dialog_layout, container,  false);
-            ImageView im=(ImageView) rootView.findViewById(R.id.dialogImageView);
+        } else {
+            View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_layout, null);
+            dialogUi.addView(v);
+            categoryList.setVisibility(View.GONE);
+            ImageView im = (ImageView) v.findViewById(R.id.dialogImageView);
             im.setImageResource(R.drawable.log_in_logo);
-            Button loginSubmitBtn=(Button) rootView.findViewById(R.id.dialogBtn);
+            Button loginSubmitBtn = (Button) rootView.findViewById(R.id.dialogBtn);
             loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -89,14 +128,14 @@ public class Prem_Category_Frag extends RootFragment {
                     final String url = Endpoint.instance().getAuthUrl();
                     Log.d(getClass().getName(), "Url: " + url);
 
-                    Intent i = new Intent(getActivity(),LogInWebViewActivity.class);
-                    i.putExtra("url",url);
+                    Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
+                    i.putExtra("url", url);
                     startActivity(i);
                 }
             });
         }
-        return rootView;
     }
+
 /*
     private void showLoginDialog() {
         Dialog dialog=new Dialog(getActivity());
@@ -117,20 +156,17 @@ public class Prem_Category_Frag extends RootFragment {
         dialog.show();
     }*/
 
-    private boolean isAllowed() {
+    private void checkAllowed() {
         String secret = Util.getSecretKey(getActivity());
-        if( secret == null || secret.isEmpty() ){
-            return false;
+        //Util.showToast(getActivity(),secret);
+        if( secret == null || secret.length()==0 ){
+            updateUi(false);
         } else {
-            Endpoint.init();
-            Subscription s = Endpoint.instance().getSubscription(getActivity());
-            if( s != null) {
-                return true;
-            } else {
-                return false;
-            }
+            new LoadSubscription().execute();
+            //updateUi(true);
         }
     }
+
 
     private void generateData() {
         premCategories=new ArrayList<>();

@@ -39,4 +39,5 @@ public class SplashActivity extends Activity{
                 finish();
             }
         }, SPLASH_TIME_OUT);
-    }}
+    }
+}

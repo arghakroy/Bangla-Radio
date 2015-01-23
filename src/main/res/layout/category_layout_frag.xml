@@ -3,6 +3,10 @@
              android:id="@+id/root_container"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+    <LinearLayout
+      android:id="@+id/premView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"></LinearLayout>
 
     <GridView
       android:layout_width="match_parent"
@@ -13,4 +17,6 @@
       android:verticalSpacing="10dp"
       android:background="#fff"
       android:numColumns="2"/>
+
+
 </FrameLayout>

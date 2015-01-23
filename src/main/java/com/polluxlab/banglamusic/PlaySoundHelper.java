@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface PlaySoundHelper {
     public void play(int command,int pos,List<Song> songList);
+
 }
