@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.polluxlab.banglamusic.R;
 import com.polluxlab.banglamusic.model.Endpoint;
+import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.model.Subscription;
+import com.polluxlab.banglamusic.util.DataLoader;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
@@ -25,6 +28,15 @@ public class UrlHandler extends Activity {
     PlaySoundHelper helper;
     Uri URIdata;
     String host;
+    boolean hasSubscription;
+    private final static String LOGIN_SUCCESS="success";
+    private final static String LOGIN_CANCELLED="cancelled";
+    private final static String PURCHASE="purchase";
+    private final static String PURCHASE_STATUS="status";
+    private final static String PURCHASE_SUCCESS="success";
+    private final static String PURCHASE_CANCELLED="cancelled";
+    private final static String KEY_SECRET="sharedSecret";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,24 +51,54 @@ public class UrlHandler extends Activity {
         host = URIdata.getHost();
         String secret;
 
-        if( host.equals("success") ){
-            String key = URIdata.getQueryParameter("sharedSecret");
+        if( host.equals(LOGIN_SUCCESS) ){
+            String key = URIdata.getQueryParameter(KEY_SECRET);
             Util.storeSecret(getApplicationContext(), key);
-
-            setContentView(R.layout.buy_now_layout);
-        } else if( host.equals("cancelled")) {
-            setContentView(R.layout.buy_fail_layout);
-        } else if( host.equals("purchase")) {
-            String purchaseStatus = null;
-            List<String> keys = URIdata.getQueryParameters("status");
-            if(!keys.isEmpty())
-                purchaseStatus = keys.get(0);
-            if(purchaseStatus.equals("success")){
+            postLoginSuccessOperations();
+        } else if( host.equals(LOGIN_CANCELLED)) {
+            loadFreeContent();
+        } else if( host.equals(PURCHASE)) {
+            String purchaseStatus = URIdata.getQueryParameter(PURCHASE_STATUS);
+            if(purchaseStatus.equals(PURCHASE_SUCCESS)){
                 setContentView(R.layout.buy_success_layout);
-            } else if(purchaseStatus.equals("cancelled")){
+            } else if(purchaseStatus.equals(PURCHASE_CANCELLED)){
                 setContentView(R.layout.buy_fail_layout);
             }
         }
+    }
+
+    private void postLoginSuccessOperations() {
+        final Subscription subs;
+        new DataLoader<Subscription>(getApplicationContext(), new DataLoader.Worker<Subscription>(){
+            @Override
+            public Subscription work() {
+                return Endpoint.instance().getSubscription(Util.getSecretKey(getApplicationContext()));
+            }
+            @Override
+            public void done(Subscription s) {
+                if( s == null){
+                    hasSubscription = false;
+                } else {
+                    hasSubscription = true;
+                }
+            }
+        }).execute();
+
+        if( hasSubscription ){
+            loadPremiumContent();
+        } else {
+            setContentView(R.layout.buy_now_layout);
+        }
+    }
+
+    //TODO: Implement it
+    private void loadFreeContent(){
+
+    }
+
+    //TODO: Implement it
+    private void loadPremiumContent() {
+
     }
 
     public void btnClicked(View v){
@@ -73,7 +115,7 @@ public class UrlHandler extends Activity {
                 finish();
                 return;
         }
-        Util.showToast(this,url);
+//        Util.showToast(this,url);
         Intent i = new Intent(this,LogInWebViewActivity.class);
         i.putExtra("url", url);
         startActivity(i);
