@@ -43,6 +43,8 @@ public abstract class ModelBase {
         } catch (IOException e) {
             e.printStackTrace();
             return new String();
+        } finally {
+
         }
         String response = readResponse(httpResponse);
         Log.i("WEB-RESPONSE", response);
@@ -70,13 +72,17 @@ public abstract class ModelBase {
 
     private static String readResponse(HttpResponse response){
         try {
+            HttpEntity he = response.getEntity();
+            if ( he == null)
+                return new String();
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                    response.getEntity().getContent(), "utf-8"), 8);
+                    he.getContent(), "utf-8"), 8);
             String line = null;
             StringBuilder sb = new StringBuilder();
             while ((line = in.readLine()) != null) {
                 sb.append(line);
             }
+            he.consumeContent();
             return sb.toString();
         } catch (IOException e) {
             e.printStackTrace();
