@@ -46,3 +46,4 @@ public class Setting_Frag extends RootFragment {
         return rootView;
     }
 }
+

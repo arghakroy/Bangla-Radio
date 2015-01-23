@@ -178,8 +178,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         this.currentSongs=songs;
         currentState=command;
         this.pos=pos;
-        playerLay.setVisibility(View.VISIBLE);
         if(command==1){
+            playerLay.setVisibility(View.VISIBLE);
             songName.setText(songs.get(pos).getTitle());
             artistName.setText(songs.get(pos).getAlbum());
             PlayAudio.songs=songs;
