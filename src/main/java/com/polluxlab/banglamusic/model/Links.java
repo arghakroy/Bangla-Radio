@@ -25,6 +25,11 @@ public class Links extends ModelBase {
     private String media;
     private String purchase;
     private String subscriptions;
+    private String login;
+
+    public String getLogin() {
+        return login;
+    }
 
     public String getPreview() {
         return preview;
@@ -66,3 +71,4 @@ public class Links extends ModelBase {
         return this.purchase;
     }
 }
+
