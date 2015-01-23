@@ -46,7 +46,7 @@ public class Endpoint extends ModelBase {
     }
 
     public String getAuthUrl(){
-        String str = String.format("%s%s", getBaseUrl(), "auth/login/", String.valueOf(java.util.UUID.randomUUID()));
+        String str = String.format("%s%s%s", getBaseUrl(), "auth/login/", String.valueOf(java.util.UUID.randomUUID()));
         Log.d(getClass().getName(), str);
         return str;
     }
