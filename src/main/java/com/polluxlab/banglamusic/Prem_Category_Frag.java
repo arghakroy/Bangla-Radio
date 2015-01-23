@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,9 +85,10 @@ public class Prem_Category_Frag extends RootFragment {
 
                 @Override
                 public void onClick(View arg0) {
-                    TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-                    final String number=tm.getLine1Number();
-                    String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+ Util.getUserId(con);
+                    Endpoint.init();
+                    final String url = Endpoint.instance().getAuthUrl();
+                    Log.d(getClass().getName(), "Url: " + url);
+
                     Intent i = new Intent(getActivity(),LogInWebViewActivity.class);
                     i.putExtra("url",url);
                     startActivity(i);
