@@ -49,6 +49,7 @@ class SubscriptionResourceController extends Controller {
     {
       throw $this->createNotFoundException("User not found");
     }
+
     $userInfoData = json_decode($user->getUserInfoData());
 
     
@@ -59,11 +60,6 @@ class SubscriptionResourceController extends Controller {
 
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
-
-    var_dump($content);
-
-    var_dump($token);
-   exit;
     
     if(is_null($content)) 
     {
@@ -73,7 +69,6 @@ class SubscriptionResourceController extends Controller {
 
     $j = json_decode($content);
 
-    var_dump($j);
 
     if(!is_null($j))
     {
