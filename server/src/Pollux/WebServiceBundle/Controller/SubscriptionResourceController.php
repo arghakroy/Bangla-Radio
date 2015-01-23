@@ -62,7 +62,9 @@ class SubscriptionResourceController extends Controller {
       return new Response('', Response::HTTP_NO_CONTENT);
     }
 
-
+    var_dump($content);
+    exit;
+    
     $j = json_decode($content);
     $sku = $j->right[0]->sku;
     $timeInterval = $j->right[0]->timeInterval ;
