@@ -100,19 +100,7 @@ class TelenorAuthenticationController extends Controller {
    * @return bool
    */
   public function isValidUserInfo($userInfo) {
-    /*return property_exists($userInfo, 'phone_number_verified')
-        && $userInfo->phone_number_verified
-        && property_exists($userInfo, 'phone_number')
-        && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);*/
     return true;
-  }
-
-
-  public function refreshToken(){
-    $telenorApp = $this->container->getParameter('telenor.client.id');
-    $telenorSecret = $this->container->getParameter('telenor.client.secret');
-
-    $basic = base64_encode($telenorApp.":".$telenorSecret);
   }
 
   /**
