@@ -63,7 +63,7 @@ public class Links extends ModelBase {
         List<Header> headers = new ArrayList<>();
         headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
         String response = get(this.subscriptions, headers);
-
+        if(response.isEmpty()) return null;
         return gson.fromJson(response, Subscription.class);
     }
 
