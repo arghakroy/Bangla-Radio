@@ -17,8 +17,12 @@ import java.util.UUID;
  * Created by samiron on 1/17/2015.
  */
 public class Endpoint extends ModelBase {
+
     private Links links;
+
     public static Endpoint instance(){
+        if(self == null)
+            init();
         return self;
     }
 
@@ -77,6 +81,7 @@ public class Endpoint extends ModelBase {
                 self = gson.fromJson( response, Endpoint.class );
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
         return true;
