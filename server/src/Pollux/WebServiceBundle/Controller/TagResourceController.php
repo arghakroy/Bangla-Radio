@@ -41,7 +41,6 @@ class TagResourceController extends Controller {
         'entities' => $entities
     ));
     $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    $response->header->set("charset", "UTF-8");
 
     return $response;
   }
