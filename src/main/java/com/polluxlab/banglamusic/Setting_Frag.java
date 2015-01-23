@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
+import com.polluxlab.banglamusic.model.Endpoint;
 
 /**
  * Created by ARGHA K ROY on 11/21/2014.
@@ -28,15 +30,19 @@ public class Setting_Frag extends RootFragment {
         numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
 
         TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        final String number=tm.getLine1Number();
+        final String number = String.valueOf(java.util.UUID.randomUUID());
+
+        Log.d(getClass().getName(), "phone number : " + number);
+        Endpoint.init();
+        final String loginUrl = Endpoint.instance().getBaseUrl() + number;
 
         numberSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://162.248.162.2/musicapp/server/web/app_dev.php/webservice/auth/login/"+number;
+
                 Intent i = new Intent(getActivity(),LogInWebViewActivity.class);
-                i.putExtra("url",url);
-                i.setData(Uri.parse(url+number));
+                i.putExtra("url", loginUrl);
+                i.setData(Uri.parse(loginUrl));
                 startActivity(i);
             }
         });
