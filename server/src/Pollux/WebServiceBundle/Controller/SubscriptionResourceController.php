@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Pollux\DomainBundle\Entity\User;
+use Pollux\DomainBundle\Entity\Subscription;
+
 
 class SubscriptionResourceController extends Controller {
 
@@ -96,7 +99,7 @@ class SubscriptionResourceController extends Controller {
     }
     else
     {
-      return new Response('json is not valid from telenor', 403);
+      return new Response('', Response::HTTP_NO_CONTENT);
     }
     
 
