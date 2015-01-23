@@ -28,13 +28,10 @@ public class Setting_Frag extends RootFragment {
         View rootView = inflater.inflate(R.layout.setting_layout, container,  false);
         numberSubmitBtn= (Button) rootView.findViewById(R.id.buyBtn);
         numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
-
-        TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        final String number = String.valueOf(java.util.UUID.randomUUID());
-
-        Log.d(getClass().getName(), "phone number : " + number);
+        //TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         Endpoint.init();
-        final String loginUrl = Endpoint.instance().getBaseUrl() + number;
+        final String loginUrl = Endpoint.instance().getAuthUrl();
+        Log.d(getClass().getName(), "Url: " + loginUrl);
 
         numberSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.polluxlab.banglamusic.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -8,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by samiron on 1/17/2015.
@@ -37,6 +39,16 @@ public class Endpoint extends ModelBase {
             Type songCollectionType = new TypeToken<List<Tag>>(){}.getType();
             return gson.fromJson(response, songCollectionType);
         }
+    }
+
+    public String getBaseUrl(){
+        return this.links.getSelf();
+    }
+
+    public String getAuthUrl(){
+        String str = String.format("%s%s", getBaseUrl(), "auth/login/", String.valueOf(java.util.UUID.randomUUID()));
+        Log.d(getClass().getName(), str);
+        return str;
     }
 
     public Subscription getSubscription(Context con){
