@@ -46,12 +46,13 @@ class SubscriptionResourceController extends Controller {
     {
       throw $this->createNotFoundException("User not found");
     }
-    $accessToken = $user->getAccessToken();
     $userInfoData = json_decode($user->getUserInfoData());
 
     
     $id = $userInfoData->sub;
-    $token = $user->getAccessToken();
+    #$token = $user->getAccessToken();
+
+    $token = $this->validateAndReturnAccessToken($user,$telenorClient);
 
     //get the rights info
     $content = $telenorClient->getUsersRight($id, $token);
@@ -64,7 +65,7 @@ class SubscriptionResourceController extends Controller {
 
     var_dump($content);
     exit;
-    
+
     $j = json_decode($content);
     $sku = $j->right[0]->sku;
     $timeInterval = $j->right[0]->timeInterval ;
@@ -91,6 +92,35 @@ class SubscriptionResourceController extends Controller {
   public function postAction() {
 
 
+  }
+
+
+  private function validateAndReturnAccessToken($user,$telenorClient) {
+    
+
+    $currentTime = new \DateTime();
+
+    $em = $this->getDoctrine()->getManager();
+    
+    $accessToken = $user->getAccessToken();
+    if($currentTime >= $user->getExpireTime()) {
+      $accessTokenData = json_decode($user->getAccessTokenData());
+      $tokenResponse = $telenorClient->refreshToken($accessTokenData->refresh_token);
+      $accessToken = $tokenResponse->access_token;
+      
+      $user->setAccessToken($accessToken);
+      
+      $expireTime = new \DateTime();
+      $expireTime->add(new \DateInterval("PT3600S"));
+      $user->setExpireTime($expireTime);
+      
+      $user->setAccessTokenData(json_encode($tokenResponse));
+    
+      $em->merge($user);
+      $em->flush();
+      
+    } 
+    return $accessToken;
   }
 
 
