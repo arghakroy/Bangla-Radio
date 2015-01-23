@@ -1,5 +1,7 @@
 package com.polluxlab.banglamusic.model;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import org.apache.http.Header;
@@ -31,13 +33,21 @@ public abstract class ModelBase {
     private static String executeRequest(HttpUriRequest request){
         ensureHttpClient();
         HttpResponse httpResponse = null;
+        Log.i("", "============================================");
+        for( Header h : request.getAllHeaders()){
+            Log.i("WEB-HEADER", String.format("%s -> %s", h.getName(), h.getValue()));
+        }
+        Log.i("WEB-REQUEST", request.getURI().toString());
         try {
             httpResponse = httpClient.execute(request);
         } catch (IOException e) {
             e.printStackTrace();
             return new String();
         }
-        return readResponse(httpResponse);
+        String response = readResponse(httpResponse);
+        Log.i("WEB-RESPONSE", response);
+        Log.i("", "============================================");
+        return response;
     }
 
     protected static String get(String url, List<Header> headers){
