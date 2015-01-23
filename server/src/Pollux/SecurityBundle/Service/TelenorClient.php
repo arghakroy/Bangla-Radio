@@ -78,16 +78,12 @@ class TelenorClient {
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
         CURLOPT_TIMEOUT => 20,
-        CURLOPT_HEADER => true,
     ));
 
     $output = curl_exec($curl);
-    $status = curl_getinfo($curl);
-
-    $s = $status['http_code'];
     curl_close($curl);
 
-    return array($s, $output);
+    return $output;
 
   }
 

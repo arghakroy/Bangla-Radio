@@ -55,56 +55,36 @@ class SubscriptionResourceController extends Controller {
     $token = $this->validateAndReturnAccessToken($user,$telenorClient);
 
     //get the rights info
-    list($status, $content) = $telenorClient->getUsersRight($id, $token);
+    $content = $telenorClient->getUsersRight($id, $token);
 
-    var_dump($status);
+    
+    if(is_null($content)) 
+    {
+      return new Response('', Response::HTTP_NO_CONTENT);
+    }
 
     var_dump($content);
     exit;
 
-    if($status == 401)
-    {
-      if(is_null($content)) 
-      {
-        return new Response('', 401);
-      }
-    }
+    $j = json_decode($content);
+    $sku = $j->right[0]->sku;
+    $timeInterval = $j->right[0]->timeInterval ;
 
+    $k = explode("/", $timeInterval );
 
-    if($status == 200)
-    {
-      if(is_null($content)) 
-      {
-        return new Response('', Response::HTTP_NO_CONTENT);
-      }
-
-      $j = json_decode($content);
-
-      if(!is_null($j))
-      {
-        $sku = $j->right[0]->sku;
-        $timeInterval = $j->right[0]->timeInterval ;
-
-        $k = explode("/", $timeInterval );
-
-        $start_time = $k[0];
-        $end_time = $k[1];
-
-        
-
-        $entity['sku'] = $sku;
-        $entity['start_date'] = $start_time;
-        $entity['end_date'] = $end_time;
-        $entity['status'] = $j->right[0]->state;
-
-        $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
-        $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-        return $response;
-      }
-      
-    }
+    $start_time = $k[0];
+    $end_time = $k[1];
 
     
+
+    $entity['sku'] = $sku;
+    $entity['start_date'] = $start_time;
+    $entity['end_date'] = $end_time;
+    $entity['status'] = $j->right[0]->state;
+
+    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
+    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+    return $response;
 
 
   }
