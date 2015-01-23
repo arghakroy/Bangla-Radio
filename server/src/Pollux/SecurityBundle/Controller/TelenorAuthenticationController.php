@@ -136,7 +136,7 @@ class TelenorAuthenticationController extends Controller {
     $expireTime->add(new \DateInterval("PT3600S"));
     $user->setExpireTime($expireTime);
 
-    #$user->setSharedSecret(uniqid("", true));
+    $user->setSharedSecret(uniqid("", true));
     $user->setAccessToken($accessToken->access_token);
     $user->setAccessTokenData(json_encode($accessToken));
     $user->setUserInfoData(json_encode($userInfo));
