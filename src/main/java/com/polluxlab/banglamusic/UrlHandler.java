@@ -58,13 +58,17 @@ public class UrlHandler extends Activity {
                 Util.storeSecret(getApplicationContext(), key);
                 postLoginSuccessOperations();
             }
+            Log.d(getClass().getName(), "login successful");
         } else if( host.equals(LOGIN_CANCELLED)) {
+            Log.d(getClass().getName(), "login cancelled");
             loadFreeContent();
         } else if( host.equals(PURCHASE)) {
             String purchaseStatus = URIdata.getQueryParameter(PURCHASE_STATUS);
             if(purchaseStatus.equals(PURCHASE_SUCCESS)){
+                Log.d(getClass().getName(), "purchase successful");
                 setContentView(R.layout.buy_success_layout);
             } else if(purchaseStatus.equals(PURCHASE_CANCELLED)){
+                Log.d(getClass().getName(), "purchase cancelled");
                 setContentView(R.layout.buy_fail_layout);
             }
         }
@@ -80,20 +84,20 @@ public class UrlHandler extends Activity {
             }
             @Override
             public void done(Subscription s) {
-                if( s == null){
-                    Log.d(getClass().getName(), "subscription not found");
-                    hasSubscription = false;
-                } else {
-                    Log.d(getClass().getName(), "user has subscriptions");
-                    hasSubscription = true;
-                }
+                hasSubscription = (s != null);
+                performBasedOnSubscription();
             }
         }).turnOfDialog()
                 .execute();
+    }
 
-        if( hasSubscription ){
+    private void performBasedOnSubscription() {
+        if (hasSubscription) {
+            Log.d(getClass().getName(), "User has subscription. Showing premium conent");
             loadPremiumContent();
+            finish();
         } else {
+            Log.d(getClass().getName(), "User DOESNT have subscription. We should show buy now screen");
             setContentView(R.layout.buy_now_layout);
             sendBroadcast(new Intent("update-prem-ui"));
         }
@@ -108,7 +112,6 @@ public class UrlHandler extends Activity {
     private void loadPremiumContent() {
         sendBroadcast(new Intent("update-prem-ui"));
     }
-
 
     public void btnClicked(View v){
         String url="";
