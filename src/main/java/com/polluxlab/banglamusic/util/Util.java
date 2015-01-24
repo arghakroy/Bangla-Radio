@@ -17,6 +17,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
@@ -126,10 +127,13 @@ public class Util {
      */
     public static String getSecretKey(Context context){
         SharedPreferences sh=context.getSharedPreferences("MUSIC_PREF",Context.MODE_PRIVATE);
-        return sh.getString("sharedSecret","");
+        String s = sh.getString("sharedSecret","");
+        Log.d(Util.class.getName(), "~~secret fetched: " + s);
+        return s;
     }
 
     public static void storeSecret(Context context, String key){
+        Log.d(Util.class.getName(), "~~secret storing: " + key);
         SharedPreferences sh=context.getSharedPreferences("MUSIC_PREF",Context.MODE_PRIVATE);
         SharedPreferences.Editor edit=sh.edit();
         edit.putString("sharedSecret",key);

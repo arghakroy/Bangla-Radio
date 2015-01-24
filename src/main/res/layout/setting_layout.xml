@@ -16,7 +16,9 @@
           android:orientation="vertical"
           android:background="#447452"
           android:layout_margin="25dp"
-          android:padding="15dp">
+          android:padding="15dp"
+          android:id="@+id/account_status_container"
+          android:visibility="invisible">
 
             <LinearLayout
               android:orientation="horizontal"
@@ -32,7 +34,7 @@
                   android:textColor="#fff"
                   android:gravity="center_horizontal"
                   android:textSize="45sp"
-                  android:id="@+id/settings_remainning_days"/>
+                  android:id="@+id/account_remainning_days"/>
 
                 <com.polluxlab.banglamusic.helper.MyTextView
                   android:layout_width="wrap_content"
@@ -49,7 +51,7 @@
               android:textColor="#fff"
               android:gravity="center_horizontal"
               android:textSize="18sp"
-              android:id="@+id/settings_last_date"/>
+              android:id="@+id/account_last_date"/>
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +61,9 @@
           android:gravity="center"
           android:padding="10dp"
           android:layout_margin="20dp"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          android:visibility="invisible"
+          android:id="@+id/account_buy_container">
 
             <com.polluxlab.banglamusic.helper.MyTextView
               android:layout_width="wrap_content"
@@ -89,7 +93,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="@string/string_buy"
-              android:id="@+id/buyBtn"
+              android:id="@+id/account_buy_btn"
               android:background="#EAC416"
               android:layout_margin="15dp"
               android:textSize="20sp"

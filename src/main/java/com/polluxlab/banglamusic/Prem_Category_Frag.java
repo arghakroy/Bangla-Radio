@@ -144,39 +144,14 @@ public class Prem_Category_Frag extends RootFragment {
         }
     }
 
-/*
-    private void showLoginDialog() {
-        Dialog dialog=new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //regDialog.setTitle("Registration");
-        dialog.setContentView(R.layout.dialog_layout);
-        dialog.setCancelable(false);
-        ImageView im=(ImageView) dialog.findViewById(R.id.dialogImageView);
-
-        Button loginSubmitBtn=(Button) dialog.findViewById(R.id.dialogBtn);
-        loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-
-            }
-        });
-        dialog.show();
-    }*/
-
     private void checkAllowed() {
         String secret = Util.getSecretKey(getActivity());
-        //Util.showToast(getActivity(),secret);
         if( secret == null || secret.length()==0 ){
             updateUi(false);
         } else {
             new LoadSubscription().execute();
-            //updateUi(true);
         }
     }
-
-
-
 
     private void generateData() {
         premCategories=new ArrayList<>();
