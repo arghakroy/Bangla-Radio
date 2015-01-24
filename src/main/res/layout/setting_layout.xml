@@ -18,7 +18,7 @@
           android:layout_margin="25dp"
           android:padding="15dp"
           android:id="@+id/account_status_container"
-          android:visibility="invisible">
+          android:visibility="gone">
 
             <LinearLayout
               android:orientation="horizontal"
@@ -62,7 +62,7 @@
           android:padding="10dp"
           android:layout_margin="20dp"
           android:orientation="vertical"
-          android:visibility="invisible"
+          android:visibility="visible"
           android:id="@+id/account_buy_container">
 
             <com.polluxlab.banglamusic.helper.MyTextView

@@ -118,7 +118,7 @@ public class Category_List_Frag extends RootFragment {
         protected String doInBackground(String... st) {
             categoryItem=new ArrayList<>();
             try {
-                if(artist!=null){
+                if(position ==1 && artist!=null){
                     categoryItem=artist.getSongs();
                     return null;
                 }

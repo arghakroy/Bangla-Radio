@@ -51,7 +51,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
 
     public static List<Song> currentSongs;
 
-    static int pos;
+    static int currentPos;
     static int currentState;
 
     public CarouselFragment() {
@@ -141,20 +141,20 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 pager.setCurrentItem(2);
                 break;
             case R.id.pauseBtn:
-                if(currentState==0)player(1,pos,currentSongs);
-                else if(currentState==1)player(0,pos,currentSongs);
+                if(currentState==0)player(1,currentPos,currentSongs);
+                else if(currentState==1)player(0,currentPos,currentSongs);
                 break;
             case R.id.prevBtn:
                 if(currentSongs.size()==1)return;
-                else if(pos==0)pos=currentSongs.size()-1;
-                else pos--;
-                player(1,pos,currentSongs);
+                else if(currentPos==0)currentPos=currentSongs.size()-1;
+                else currentPos--;
+                player(1,currentPos,currentSongs);
                 break;
             case R.id.nextBtn:
                 if(currentSongs.size()==1)return;
-                else if(pos==currentSongs.size()-1)pos=0;
-                else pos++;
-                player(1,pos,currentSongs);
+                else if(currentPos==currentSongs.size()-1)currentPos=0;
+                else currentPos++;
+                player(1,currentPos,currentSongs);
                 break;
         }
     }
@@ -178,19 +178,21 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
 
 
     public void player(int command, int pos,List<Song> songs) {
-        this.currentSongs=songs;
+        if(songs!=null){
+            this.currentSongs=songs;
+            currentPos=pos;
+        }
         currentState=command;
-        this.pos=pos;
         if(command==1){
             playerLay.setVisibility(View.VISIBLE);
-            songName.setText(songs.get(pos).getTitle());
-            artistName.setText(songs.get(pos).getAlbum());
+            songName.setText(currentSongs.get(currentPos).getTitle());
+            artistName.setText(currentSongs.get(currentPos).getAlbum());
             PlayAudio.songs=songs;
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
             if(isMyServiceRunning(PlayAudio.class))
                 getActivity().stopService(objIntent);
 
-            objIntent.putExtra("pos",pos);
+            objIntent.putExtra("pos",currentPos);
             getActivity().startService(objIntent);
             pauseBtn.setImageResource(R.drawable.ic_pause);
         }else if(command==0){

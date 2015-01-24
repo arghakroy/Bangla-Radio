@@ -57,8 +57,7 @@ public class Category_Sub_Frag extends RootFragment {
 
         if (position == 1){
             new GetArtists().execute();
-        }
-        else{
+        }else{
             Category_List_Frag listFragment = new Category_List_Frag();
             listFragment.setArguments(getArguments());
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -80,18 +79,6 @@ public class Category_Sub_Frag extends RootFragment {
 
         return rootView;
     }
-
-/*    private void generate_data() {
-        categoryItem=new ArrayList<>();
-
-        for (int i=0;i<10;i++){
-            HashMap<String,String> map=new HashMap<String, String>();
-            map.put(Category.name,"SubCategory "+i);
-            map.put(Category.externalId,i+"");
-            categoryItem.add(map);
-        }
-    }*/
-
 
     class MyListAdapter extends BaseAdapter {
 

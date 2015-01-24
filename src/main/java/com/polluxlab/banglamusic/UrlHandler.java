@@ -18,6 +18,7 @@ import com.polluxlab.banglamusic.R;
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Subscription;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.DataLoader;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -61,7 +62,6 @@ public class UrlHandler extends Activity {
             Log.d(getClass().getName(), "login successful");
         } else if( host.equals(LOGIN_CANCELLED)) {
             Log.d(getClass().getName(), "login cancelled");
-            loadFreeContent();
         } else if( host.equals(PURCHASE)) {
             String purchaseStatus = URIdata.getQueryParameter(PURCHASE_STATUS);
             if(purchaseStatus.equals(PURCHASE_SUCCESS)){
@@ -93,24 +93,24 @@ public class UrlHandler extends Activity {
 
     private void performBasedOnSubscription() {
         if (hasSubscription) {
-            Log.d(getClass().getName(), "User has subscription. Showing premium conent");
-            loadPremiumContent();
+            Log.d("MUSIC", "User has subscription. Showing premium conent");
+            loadPremiumContent(AppConstant.SUBSCRIBED);
             finish();
         } else {
-            Log.d(getClass().getName(), "User DOESNT have subscription. We should show buy now screen");
+            loadPremiumContent(AppConstant.LOGGED_IN);
+            Log.d("MUSIC", "User DOESNT have subscription. We should show buy now screen");
             setContentView(R.layout.buy_now_layout);
-            sendBroadcast(new Intent("update-prem-ui"));
         }
     }
 
     //TODO: Implement it
-    private void loadFreeContent(){
+    private void loadPremiumContent(int status) {
+       if(status==AppConstant.SUBSCRIBED)
+            sendBroadcast(new Intent("update-prem-ui"));
 
-    }
-
-    //TODO: Implement it
-    private void loadPremiumContent() {
-        sendBroadcast(new Intent("update-prem-ui"));
+        Intent settingIntent=new Intent("update-setting-ui");
+        settingIntent.putExtra("status",status);
+        sendBroadcast(settingIntent);
     }
 
     public void btnClicked(View v){
