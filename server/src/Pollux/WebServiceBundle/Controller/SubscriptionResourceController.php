@@ -7,6 +7,7 @@ use Pollux\DomainBundle\Entity\User;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -23,11 +24,17 @@ class SubscriptionResourceController extends Controller {
     //if no `secret` send the client a 412 precondition failed error
   }
 
-  public function getAction() {
+  public function getAction(Request $request) {
     /**
      * @var User $user
      */
-    $user = $this->getUser();
+    $username = $request->query->get('user');
+    try {
+      $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->loadUserByUsername($username);
+    }
+    catch(\Exception $ex) {
+      throw $ex;
+    }
     $userRights = json_decode($user->getUserRightsData());
 
     if(!$userRights) {
