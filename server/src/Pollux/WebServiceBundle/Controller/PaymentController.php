@@ -2,11 +2,9 @@
 
 namespace Pollux\WebServiceBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
-use Pollux\DomainBundle\Entity\User;
-use Pollux\DomainBundle\Entity\Subscription;
+use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PaymentController extends Controller {
@@ -22,48 +20,20 @@ class PaymentController extends Controller {
     return $response;
   }
 
-  public function getAction(Request $request) {
-
-    $sharedSecret = $request->query->get('sharedSecret');
+  public function getAction() {
     $telenorClient = $this->get('service.telenor.client');
-    
-    /*
-     * Get user from sharedSecret
-     */
-    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
-    
-    if(!$user){
-      throw $this->createNotFoundException("User not found");
+    $currentProduct = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
+    if (!$currentProduct) {
+      throw new InvalidArgumentException("No current product found");
     }
-    
-    $currentTime = new \DateTime();
-    
-    $accessToken = $this->validateAndReturnAccessToken($currentTime, $user, $telenorClient);
-    
-    
-    
-    $userInfoData = json_decode($user->getUserInfoData());
-   
-    /*
-     * Get product from current Date
-     */
-    $product = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getProduct($currentTime);
-    if(!$product){
-      throw $this->createNotFoundException("User not found");
-    }
-    
-    /*
-     * Get telenor service for transaction
-     */
-    
-    $transactionResponse = $telenorClient->getTransaction($accessToken,$userInfoData->sub,$product);
+
+    $transactionResponse = $telenorClient->getTransaction($this->getUser(), $currentProduct);
     $locationLinks = $transactionResponse->links[0];
     $locationURL = $locationLinks->href;
-    
-    return $this->redirect($locationURL,303);
-    
+
+    return $this->redirect($locationURL);
   }
-  
+
   public function successAction($uniqueId) {
     /*
      *  save to subscription table need to do with uniqueId as orderId
@@ -73,43 +43,18 @@ class PaymentController extends Controller {
 //    $subscriptionObject->setStatus($status);
 //    $em->persist($subscriptionObject);
 //    $em->flush();
-    
-    $url = "polluxmusic://purchase?status=success"; 
+
+    $url = "polluxmusic://purchase?status=success";
     return $this->redirect($url);
   }
-  
+
   public function cancelAction($uniqueId) {
     /*
      *  save to subscription table need to do with uniqueId as orderId
      */
-    
-    $url = "polluxmusic://purchase?status=cancelled"; 
+
+    $url = "polluxmusic://purchase?status=cancelled";
     return $this->redirect($url);
-  }
-  
-  private function validateAndReturnAccessToken($currentTime,$user,$telenorClient) {
-    
-    $em = $this->getDoctrine()->getManager();
-    
-    $accessToken = $user->getAccessToken();
-    if($currentTime >= $user->getExpireTime()) {
-      $accessTokenData = json_decode($user->getAccessTokenData());
-      $tokenResponse = $telenorClient->refreshToken($accessTokenData->refresh_token);
-      $accessToken = $tokenResponse->access_token;
-      
-      $user->setAccessToken($accessToken);
-      
-      $expireTime = new \DateTime();
-      $expireTime->add(new \DateInterval("PT3600S"));
-      $user->setExpireTime($expireTime);
-      
-      $user->setAccessTokenData(json_encode($tokenResponse));
-    
-      $em->merge($user);
-      $em->flush();
-      
-    } 
-    return $accessToken;
   }
 
 }
