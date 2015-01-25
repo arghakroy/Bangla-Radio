@@ -5,6 +5,7 @@
     "placeformed": "{{ entity.placeformed }}",
     "links": {
         "self": "{{ url('webservice.artist', { artistId: entity.attributes.id }) }}",
+        "preview": "{{ entity.attributes.id|artistUri }}",
         "songs": "{{ url('webservice.artist.songs', { artistId: entity.attributes.id }) }}",
         "artists" : "{{ url('webservice.artist.albums', { artistId: entity.attributes.id }) }}"
     }
