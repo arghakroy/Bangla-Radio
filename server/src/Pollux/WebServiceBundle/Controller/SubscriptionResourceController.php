@@ -37,8 +37,8 @@ class SubscriptionResourceController extends Controller {
     list($startTime, $endTime) = explode("/", $timeInterval );
 
     $entity['sku'] = $sku;
-    $entity['start_date'] = $startTime;
-    $entity['end_date'] = $endTime;
+    $entity['start_date'] = date_format(date_create($startTime), 'Y-m-d');
+    $entity['end_date'] = date_format(date_create($endTime), 'Y-m-d');
     $entity['status'] = $userRights->right[0]->state;
 
     $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
