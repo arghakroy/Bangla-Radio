@@ -1,5 +1,7 @@
 package com.polluxlab.banglamusic.model;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -7,6 +9,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by samiron on 1/22/2015.
@@ -39,11 +43,26 @@ public class Subscription extends ModelBase {
     }
 
     public Date getStartDate() {
-        return Util.parseISO8601Date(this.startDate);
+        return parseDate(this.startDate);
     }
 
     public Date getEndDate() {
-        return Util.parseISO8601Date(this.endDate);
+        return parseDate(this.endDate);
+    }
+
+    private Date parseDate(String date){
+        if( !this.endDate.trim().isEmpty() ){
+            return null;
+        }
+        //"end_date": "2015-02-01"
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return formatter.parse("2014-12-10");
+        } catch (ParseException e) {
+            Log.d(getClass().getName(), "Failed to parse date");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String getStatus() {
@@ -52,7 +71,13 @@ public class Subscription extends ModelBase {
 
     @Override
     public boolean valid(){
-        if( this.getEndDate().before(new Date())){
+        if( this.endDate.trim().isEmpty())
+            return false;
+
+        Date d = this.getEndDate();
+        if ( d == null )
+            return false;
+        if( d.before(new Date())){
             return false;
         }
         return true;

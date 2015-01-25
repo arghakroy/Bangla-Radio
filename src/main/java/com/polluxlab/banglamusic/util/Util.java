@@ -113,14 +113,44 @@ public class Util {
 	}
 
     public static Date parseISO8601Date(String dateString){
-        DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        DateFormat df1 = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ");
+
         try {
             if (dateString != null)
                 return df1.parse(dateString);
         } catch (ParseException e) {
+            Log.d(Util.class.getName(), "Failed to parse datetime");
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Date parseISO8601Date_2( String input ) {
+
+        //NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
+        //things a bit.  Before we go on we have to repair this.
+        SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssz" );
+
+        //this is zero time so we need to add that TZ indicator for
+        if ( input.endsWith( "Z" ) ) {
+            input = input.substring( 0, input.length() - 1) + "GMT-00:00";
+        } else {
+            int inset = 6;
+
+            String s0 = input.substring( 0, input.length() - inset );
+            String s1 = input.substring( input.length() - inset, input.length() );
+
+            input = s0 + "GMT" + s1;
+        }
+
+        try {
+            return df.parse( input );
+        } catch (ParseException e) {
+            Log.d(Util.class.getName(), "Failed to parse datetime");
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     /**
