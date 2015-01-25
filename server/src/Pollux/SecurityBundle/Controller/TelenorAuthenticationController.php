@@ -38,16 +38,20 @@ class TelenorAuthenticationController extends Controller {
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
 
+    $logger->debug("User Info ". $userInfo);
+
     if($this->isValidUserInfo($userInfo)) {
+      $logger->debug("Came here ". $userInfo);
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
+      $logger->debug("Came here successfully". $sharedSecret);
       $url = "polluxmusic://success?sharedSecret=".$sharedSecret;
       return $this->redirect($url);
     }
     else {
-      
+      $logger->debug("Came here ". $userInfo);
       $url = "polluxmusic://cancelled";
       return $this->redirect($url);
     }
