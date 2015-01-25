@@ -79,7 +79,6 @@ class TelenorClient {
     return json_decode($output);
   }
 
-
   public function getUserRights(User $user) {
     $url = $this->getRightsUrl($user);
     $accessToken = $this->getAccessToken($user);
@@ -128,13 +127,11 @@ class TelenorClient {
     return json_decode($output);
   }
 
-
   public function refreshToken($refreshToken){
     $parameters = array(
         "grant_type" => "refresh_token",
         "refresh_token" => $refreshToken,
     );
-
 
     $curl = curl_init();
     curl_setopt_array($curl, array(
@@ -152,16 +149,6 @@ class TelenorClient {
     curl_close($curl);
 
     return json_decode($output);
-
-  }
-
-  private static function prepareQueryUrl(array $parameters) {
-    $query = '';
-    foreach ($parameters as $key => $value) {
-      $query .= $key . "=" . $value . "&";
-    }
-
-    return $query;
   }
 
   public function getTransaction($accessToken,$connectId,$product) {
@@ -234,6 +221,15 @@ class TelenorClient {
     }
 
     return $accessToken;
+  }
+
+  private static function prepareQueryUrl(array $parameters) {
+    $query = '';
+    foreach ($parameters as $key => $value) {
+      $query .= $key . "=" . $value . "&";
+    }
+
+    return $query;
   }
 
 }
