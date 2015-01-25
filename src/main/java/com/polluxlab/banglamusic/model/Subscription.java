@@ -20,7 +20,7 @@ import java.util.Date;
      }
  }
  */
-public class Subscription {
+public class Subscription extends ModelBase {
 
     @SerializedName("sku")
     private String packageName;
@@ -48,5 +48,13 @@ public class Subscription {
 
     public String getStatus() {
         return status;
+    }
+
+    @Override
+    public boolean valid(){
+        if( this.getEndDate().before(new Date())){
+            return false;
+        }
+        return true;
     }
 }

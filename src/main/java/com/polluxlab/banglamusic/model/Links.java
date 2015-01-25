@@ -4,11 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
+import com.polluxlab.banglamusic.util.GlobalContext;
+import com.polluxlab.banglamusic.util.InternalStorage;
+import com.polluxlab.banglamusic.util.StorageDataProvider;
 import com.polluxlab.banglamusic.util.Util;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +64,28 @@ public class Links extends ModelBase {
         return tags;
     }
 
-    public Subscription getSubscription(String secret){
-        List<Header> headers = new ArrayList<>();
-        headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
-        String response = get(this.subscriptions, headers);
-        if(response.isEmpty()) return null;
-        return gson.fromJson(response, Subscription.class);
+    public Subscription getSubscription(final String secret){
+        final String url = this.subscriptions;
+
+        Subscription s = (Subscription) InternalStorage.fetch(url, new StorageDataProvider<Subscription>() {
+            @Override
+            public Subscription getData() {
+                List<Header> headers = new ArrayList<>();
+                headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
+                String response = get(url, headers);
+                if( response.trim().isEmpty() ){
+                    return null;
+                }
+                Subscription s = gson.fromJson(response, Subscription.class);
+                return s;
+            }
+
+            @Override
+            public boolean validate(Subscription s) {
+                return s.valid();
+            }
+        });
+        return s;
     }
 
     public String getPurchase(){

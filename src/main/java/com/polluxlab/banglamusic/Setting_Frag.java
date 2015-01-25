@@ -22,6 +22,7 @@ import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.DataLoader;
+import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class Setting_Frag extends RootFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        GlobalContext.set(getActivity());
 
         View rootView = inflater.inflate(R.layout.setting_layout, container,  false);
         buyBtn= (Button) rootView.findViewById(R.id.account_buy_btn);

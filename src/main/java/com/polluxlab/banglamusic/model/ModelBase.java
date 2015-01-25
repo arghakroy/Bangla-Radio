@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by samiron on 1/17/2015.
  */
-public abstract class ModelBase {
+public abstract class ModelBase implements ModelVerifiable {
 
     private static HttpClient httpClient = null;
     protected static Gson gson = new Gson();
@@ -89,5 +89,8 @@ public abstract class ModelBase {
             return new String();
         }
     }
+
+    @Override
+    public boolean valid(){ return true; }
 }
 
