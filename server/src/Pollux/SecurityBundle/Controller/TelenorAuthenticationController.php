@@ -44,7 +44,7 @@ class TelenorAuthenticationController extends Controller {
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
 
-      $url = "polluxmusic://success?sharedSecret=$sharedSecret";
+      $url = "polluxmusic://success?sharedSecret={$userInfo->sub}";
     }
 
     return $this->redirect($url);
@@ -115,16 +115,16 @@ class TelenorAuthenticationController extends Controller {
     $em = $this->getDoctrine()->getManager();
     $user = null;
     try {
-      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($phoneNumber);
+      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($userInfo->sub);
     }
     catch(UsernameNotFoundException $ex) {
-      $this->get('logger')->debug("New user found with phoneNumber: $phoneNumber");
+      $this->get('logger')->debug("New user found with sub: $userInfo->sub");
     }
 
     if (!$user) {
       $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
       $user = new User();
-      $user->setUsername($phoneNumber);
+      $user->setUsername($userInfo->sub);
       $em->persist($user);
 
       $user->addRole($roleUser);
