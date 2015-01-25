@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.google.gson.annotations.SerializedName;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.InternalStorage;
+import com.polluxlab.banglamusic.util.InternalStorageSimple;
 import com.polluxlab.banglamusic.util.StorageDataProvider;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -65,26 +66,22 @@ public class Links extends ModelBase {
     }
 
     public Subscription getSubscription(final String secret){
-        final String url = this.subscriptions;
-
-        Subscription s = (Subscription) InternalStorage.fetch(url, new StorageDataProvider<Subscription>() {
-            @Override
-            public Subscription getData() {
-                List<Header> headers = new ArrayList<>();
-                headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
-                String response = get(url, headers);
-                if( response.trim().isEmpty() ){
-                    return null;
-                }
-                Subscription s = gson.fromJson(response, Subscription.class);
-                return s;
-            }
-
-            @Override
-            public boolean validate(Subscription s) {
-                return s.valid();
-            }
-        });
+        String url = this.subscriptions;
+        String key = "";
+        try {
+            key = URLEncoder.encode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String response = InternalStorageSimple.fetch(key);
+        Subscription s = null;
+        if( !response.isEmpty() ){
+            s = gson.fromJson(response, Subscription.class);
+        }
+        if( s != null && !s.valid() ){
+            response = get(url);
+            InternalStorageSimple.store(key, response);
+        }
         return s;
     }
 

@@ -60,18 +60,19 @@ public class InternalStorage {
             }
         } catch (FileNotFoundException | ClassNotFoundException e) {
             Log.d(LOG_KEY, "Cache miss. Exception: " + e.toString());
+            e.printStackTrace();
             try {
                 fis.close();
                 ois.close();
             } catch (IOException | NullPointerException e1 ) {
+                Log.d(LOG_KEY, "Exception to close streams: " + e.toString());
                 e1.printStackTrace();
             }
-            e.printStackTrace();
             return reloadDataAndSave(context, key, d);
         } catch( IOException e) {
-            Log.d(LOG_KEY, "Something bad happened: ");
+            Log.d(LOG_KEY, "Something bad happened: Cant save object");
             e.printStackTrace();
-            return null;
+            return d.getData();
         } finally {
             try {
                 fis.close();
