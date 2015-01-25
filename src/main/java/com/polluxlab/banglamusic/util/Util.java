@@ -21,6 +21,8 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
+import com.polluxlab.banglamusic.model.ModelBase;
+
 public class Util {
 
 
@@ -138,5 +140,6 @@ public class Util {
         SharedPreferences.Editor edit=sh.edit();
         edit.putString("sharedSecret",key);
         edit.commit();
+        ModelBase.setSharedSecret(key, key);
     }
 }

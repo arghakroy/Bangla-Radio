@@ -7,6 +7,9 @@ import com.google.gson.Gson;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -15,14 +18,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
 /**
  * Created by samiron on 1/17/2015.
  */
-public abstract class ModelBase implements ModelVerifiable {
+public abstract class ModelBase implements ModelVerifiable, Serializable {
 
-    private static HttpClient httpClient = null;
+    private static DefaultHttpClient httpClient = null;
     protected static Gson gson = new Gson();
 
     protected static String get(String url){
@@ -66,8 +71,19 @@ public abstract class ModelBase implements ModelVerifiable {
     }
 
     private static void ensureHttpClient(){
-        if( httpClient == null )
+        if( httpClient == null ) {
             httpClient = new DefaultHttpClient();
+        }
+    }
+
+    public static void setSharedSecret(String username, String password){
+        if ( httpClient != null){
+            URI u = URI.create(Endpoint.ENDPOINT_URL);
+            AuthScope authscope = new AuthScope(u.getHost(), u.getPort());
+            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
+            CredentialsProvider credentialsProvider = httpClient.getCredentialsProvider();
+            credentialsProvider.setCredentials(authscope, credentials);
+        }
     }
 
     private static String readResponse(HttpResponse response){
