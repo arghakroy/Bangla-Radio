@@ -155,8 +155,12 @@ class TelenorClient {
 
   public function getTransaction(User $user, Product $product) {
     $orderId = uniqid();
-    $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', array('uniqueId'=>$orderId),  UrlGeneratorInterface::ABSOLUTE_URL);
-    $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', array('uniqueId'=>$orderId), UrlGeneratorInterface::ABSOLUTE_URL);
+    $queryParameters = array(
+        'uniqueId' => $orderId,
+        'user' => $user->getUsername(),
+    );
+    $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters,  UrlGeneratorInterface::ABSOLUTE_URL);
+    $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
     $userInfo = json_decode($user->getUserInfoData());
 
     $productArray = array(
