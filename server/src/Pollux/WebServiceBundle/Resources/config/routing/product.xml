@@ -7,6 +7,9 @@
   <route id="webservice.products" path="/" methods="GET">
     <default key="_controller">WebServiceBundle:ProductResource:getCollection</default>
   </route>
+  <route id="webservice.product.current" path="/current" methods="GET">
+    <default key="_controller">WebServiceBundle:ProductResource:getCurrentProduct</default>
+  </route>
   <route id="webservice.product" path="/{productId}" methods="GET">
     <default key="_controller">WebServiceBundle:ProductResource:get</default>
   </route>
