@@ -7,4 +7,5 @@ public class AppConstant {
     public static int SUBSCRIBED=102;
     public static int LOGGED_IN=101;
     public static String DEBUG="MUSIC";
+    public static String PREF_NAME="MUSIC_PREF";
 }

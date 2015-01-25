@@ -3,12 +3,14 @@ package com.polluxlab.banglamusic.model;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,13 +53,14 @@ public class Subscription extends ModelBase {
     }
 
     private Date parseDate(String date){
+        Log.d(AppConstant.DEBUG,date);
         if( this.endDate.trim().isEmpty() ){
             return null;
         }
         //"end_date": "2015-02-01"
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat from = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            return formatter.parse(date);
+            return from.parse(date);
         } catch (ParseException e) {
             Log.d(getClass().getName(), "Failed to parse date");
             e.printStackTrace();

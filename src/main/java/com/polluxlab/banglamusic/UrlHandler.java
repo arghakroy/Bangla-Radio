@@ -23,6 +23,7 @@ import com.polluxlab.banglamusic.util.DataLoader;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class UrlHandler extends Activity {
@@ -114,9 +115,12 @@ public class UrlHandler extends Activity {
 
         Intent settingIntent=new Intent("update-setting-ui");
         settingIntent.putExtra("status",status);
-        if(status==AppConstant.SUBSCRIBED)
-            settingIntent.putExtra("enddate",subscription.getEndDate().toString());
-
+        if(status==AppConstant.SUBSCRIBED){
+            if(subscription.getEndDate()!=null) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                settingIntent.putExtra("enddate", formatter.format(subscription.getEndDate()));
+            }
+        }
         sendBroadcast(settingIntent);
     }
 

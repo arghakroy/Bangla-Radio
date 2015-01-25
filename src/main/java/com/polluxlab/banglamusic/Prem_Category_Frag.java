@@ -67,7 +67,7 @@ public class Prem_Category_Frag extends RootFragment {
         return rootView;
     }
 
-    class LoadSubscription extends AsyncTask<String,String,String>{
+    class LoadSubscription extends AsyncTask<String,Subscription,Subscription>{
         ProgressDialog pDialog;
 
         @Override
@@ -81,22 +81,30 @@ public class Prem_Category_Frag extends RootFragment {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Subscription doInBackground(String... params) {
             Endpoint.init();
             Subscription s = Endpoint.instance().getSubscription(
                     Util.getSecretKey(getActivity())
             );
-            if( s != null) subscribed = true;
+            if( s != null) {
+                subscribed = true;
+                return s;
+            }
             else  subscribed = false;
             return null;
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(Subscription s) {
             super.onPostExecute(s);
             pDialog.dismiss();
             //Util.showToast(getActivity(), "Suscribed : " + subscribed);
             updateUi(subscribed);
+/*            Intent settingIntent=new Intent("update-setting-ui");
+            settingIntent.putExtra("status",AppConstant.SUBSCRIBED);
+            settingIntent.putExtra("enddate",s.getEndDate().toString());
+            getActivity().sendBroadcast(settingIntent);*/
+            Setting_Frag.currentStatus=AppConstant.SUBSCRIBED;
         }
     }
 
