@@ -7,6 +7,7 @@ use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\BrowserKit\Response;
 
 class PaymentController extends Controller {
 
@@ -44,7 +45,7 @@ class PaymentController extends Controller {
     $user = $this->getUser();
     $userRights = $telenorClient->getUserRights($user);
 
-    $user->setUserRightsData($userRights);
+    $user->setUserRightsData(json_encode($userRights));
     $em->merge($user);
     $em->flush();
 
