@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 
+import com.polluxlab.banglamusic.util.GlobalContext;
+
 /**
  * Created by ARGHA K ROY on 11/23/2014.
  */
@@ -16,6 +18,7 @@ public class SplashActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalContext.set(getApplicationContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_layout);
         startNextActivity();
