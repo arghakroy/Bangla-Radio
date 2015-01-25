@@ -20,6 +20,7 @@ import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.DataLoader;
+import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class UrlHandler extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalContext.set(getApplicationContext());
         getActionBar().hide();
 
         URIdata = getIntent().getData();

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalContext.set(getApplicationContext());
         setContentView(R.layout.activity_main);
         centerActionBarTitle();
 
