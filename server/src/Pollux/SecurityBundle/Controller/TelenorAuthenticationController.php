@@ -5,11 +5,9 @@ namespace Pollux\SecurityBundle\Controller;
 
 use Pollux\DomainBundle\Entity\Role;
 use Pollux\DomainBundle\Entity\User;
-use Pollux\WebServiceBundle\Utils\Headers;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -37,25 +35,19 @@ class TelenorAuthenticationController extends Controller {
 
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
-
     $logger->debug("User Info $accessToken->access_token");
 
+    $url = "polluxmusic://cancelled";
     if($this->isValidUserInfo($userInfo)) {
-      $logger->debug("Came here ");
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      $logger->debug("Came here successfully". $sharedSecret);
 
-      $url = "polluxmusic://success?sharedSecret=".$sharedSecret;
-      return $this->redirect($url);
+      $url = "polluxmusic://success?sharedSecret=$sharedSecret";
     }
-    else {
-      $logger->debug("Came here failed");
-      $url = "polluxmusic://cancelled";
-      return $this->redirect($url);
-    }
+
+    return $this->redirect($url);
   }
 
   /**
@@ -107,6 +99,10 @@ class TelenorAuthenticationController extends Controller {
    */
   public function isValidUserInfo($userInfo) {
     return true;
+    return property_exists($userInfo, 'phone_number_verified')
+    && $userInfo->phone_number_verified
+    && property_exists($userInfo, 'phone_number')
+    && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
   }
 
   /**
