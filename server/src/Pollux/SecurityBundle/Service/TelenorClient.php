@@ -3,11 +3,22 @@
 namespace Pollux\SecurityBundle\Service;
 
 
+use Doctrine\ORM\EntityManager;
+use Pollux\DomainBundle\Entity\User;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TelenorClient {
 
+  /**
+   * @var LoggerInterface
+   */
+  private $logger;
+  /**
+   * @var EntityManager
+   */
+  private $entityManager;
   /**
    * @var Router
    */
@@ -28,23 +39,26 @@ class TelenorClient {
     return $this->endpoint . "oauth/token";
   }
 
-  public function getRightsUrl() {
-    return $this->endpoint . "id/users/";
+  public function getRightsUrl(User $user) {
+    $userInfo = json_decode($user->getUserInfoData());
+    return $this->endpoint . "id/users/". $userInfo->sub . "/rights";
   }
 
   public function getRefreshTokenUrl() {
     return $this->endpoint . "oauth/token";
   }
-  
+
   public function getTransactionUrl() {
     return  "https://staging-payment-payment2.comoyo.com/transactions";
   }
 
-  public function __construct(Router $router, $endpoint, $clientId, $clientSecret) {
+  public function __construct(EntityManager $entityManager, Router $router, LoggerInterface $logger, $endpoint, $clientId, $clientSecret) {
     $this->router = $router;
     $this->endpoint = $endpoint;
     $this->clientId = $clientId;
     $this->clientSecret = $clientSecret;
+    $this->entityManager = $entityManager;
+    $this->logger = $logger;
   }
 
   public function getUserInfo($accessToken) {
@@ -66,9 +80,9 @@ class TelenorClient {
   }
 
 
-  public function getUsersRight($id, $accessToken) {
-
-    $url = $this->getRightsUrl() . $id . "/rights";
+  public function getUserRights(User $user) {
+    $url = $this->getRightsUrl($user);
+    $accessToken = $this->getAccessToken($user);
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $url,
@@ -83,8 +97,8 @@ class TelenorClient {
     $output = curl_exec($curl);
     curl_close($curl);
 
-    return $output;
-
+    $userRights = json_decode($output);
+    return $userRights;
   }
 
   public function getToken($authorizationCode) {
@@ -116,7 +130,6 @@ class TelenorClient {
 
 
   public function refreshToken($refreshToken){
-    
     $parameters = array(
         "grant_type" => "refresh_token",
         "refresh_token" => $refreshToken,
@@ -150,14 +163,13 @@ class TelenorClient {
 
     return $query;
   }
-  
+
   public function getTransaction($accessToken,$connectId,$product) {
-    
     /*
      * Generate orderId as an unique number
      */
     $orderId = uniqid();
-            
+
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', array('uniqueId'=>$orderId),  UrlGeneratorInterface::ABSOLUTE_URL);
     $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', array('uniqueId'=>$orderId), UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -199,8 +211,29 @@ class TelenorClient {
 
     $output = curl_exec($curl);
     curl_close($curl);
-    
+
     return json_decode($output);
+  }
+
+  private function getAccessToken(User $user) {
+    $currentTime = new \DateTime();
+
+    $accessToken = $user->getAccessToken();
+    if($currentTime >= $user->getExpireTime()) {
+      $accessTokenData = json_decode($user->getAccessTokenData());
+      $tokenResponse = $this->refreshToken($accessTokenData->refresh_token);
+      $accessToken = $tokenResponse->access_token;
+
+      $currentTime->add(new \DateInterval("PT3600S"));
+      $user->setAccessToken($accessToken);
+      $user->setExpireTime($currentTime);
+      $user->setAccessTokenData(json_encode($tokenResponse));
+
+      $this->entityManager->merge($user);
+      $this->entityManager->flush();
+    }
+
+    return $accessToken;
   }
 
 }
