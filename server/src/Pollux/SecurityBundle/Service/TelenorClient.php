@@ -4,6 +4,7 @@ namespace Pollux\SecurityBundle\Service;
 
 
 use Doctrine\ORM\EntityManager;
+use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -95,6 +96,7 @@ class TelenorClient {
 
     $output = curl_exec($curl);
     curl_close($curl);
+    $this->logger->debug("User rights: " . $output);
 
     $userRights = json_decode($output);
     return $userRights;
@@ -151,14 +153,11 @@ class TelenorClient {
     return json_decode($output);
   }
 
-  public function getTransaction($accessToken,$connectId,$product) {
-    /*
-     * Generate orderId as an unique number
-     */
+  public function getTransaction(User $user, Product $product) {
     $orderId = uniqid();
-
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', array('uniqueId'=>$orderId),  UrlGeneratorInterface::ABSOLUTE_URL);
     $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', array('uniqueId'=>$orderId), UrlGeneratorInterface::ABSOLUTE_URL);
+    $userInfo = json_decode($user->getAccessTokenData());
 
     $productArray = array(
         'name' => $product->getProductName(),
@@ -172,8 +171,8 @@ class TelenorClient {
         "purchaseDescription" => "Product description",
         "amount" => "MYR ".$product->getPricing(),
         'vatRate' => $product->getVatPercentage(),
-        'merchantName' => 'lyltechnology-banglaradio-android',
-        'connectId' => $connectId,
+        'merchantName' => $this->clientId,
+        'connectId' => $userInfo->sub,
         "successRedirect" => $transactionRedirectUrl,
         'allowedPaymentMethods' => ['DOB'],
         'cancelRedirect' => $transactionCancelUrl,
@@ -187,7 +186,7 @@ class TelenorClient {
         CURLOPT_HTTPHEADER => array(
           'Content-Type: application/json',
           'Content-Length: ' . strlen($parameterString),
-          "Authorization: Bearer $accessToken"
+          "Authorization: Bearer " . $user->getAccessToken()
         ),
         CURLOPT_POSTFIELDS => $parameterString,
         CURLOPT_RETURNTRANSFER => true,
