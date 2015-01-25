@@ -51,7 +51,7 @@ public class Subscription extends ModelBase {
     }
 
     private Date parseDate(String date){
-        if( !this.endDate.trim().isEmpty() ){
+        if( this.endDate.trim().isEmpty() ){
             return null;
         }
         //"end_date": "2015-02-01"
