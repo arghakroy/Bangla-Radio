@@ -16,6 +16,7 @@ class AmpacheClient {
   private $password;
   private $tokenPath;
 
+  private $ampacheBaseUri;
   private $token;
 
   function __construct($endpoint, $username, $password, $tokenPath, LoggerInterface $logger) {
@@ -25,6 +26,11 @@ class AmpacheClient {
     $this->tokenPath = $tokenPath;
 
     $this->logger = $logger;
+    $this->ampacheBaseUri = str_replace("server/xml.server.php", "", $this->endpoint);
+  }
+
+  public function getArtistPreviewUrl($artistId) {
+    return $this->ampacheBaseUri . "image.php?object_id=" . $artistId . "&object_type=artist&auth=" . $this->token;
   }
 
   public function getSongs() {
@@ -170,7 +176,7 @@ class AmpacheClient {
    */
   private function executeInternal($action, array $parameters, $totalRetry) {
     $totalRetry++;
-    if($totalRetry == 3) {
+    if ($totalRetry == 3) {
       $this->logger->warning('Failed to authenticate with ampache. TotalRetry: ' . $totalRetry);
       throw new InvalidArgumentException('Failed to retrieve media information.');
     }
