@@ -57,7 +57,7 @@ public class Subscription extends ModelBase {
         //"end_date": "2015-02-01"
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            return formatter.parse("2014-12-10");
+            return formatter.parse(date);
         } catch (ParseException e) {
             Log.d(getClass().getName(), "Failed to parse date");
             e.printStackTrace();
