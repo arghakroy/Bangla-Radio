@@ -3,6 +3,7 @@
 namespace Pollux\WebServiceBundle\Controller;
 
 
+use Pollux\DomainBundle\Entity\User;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,9 +24,11 @@ class SubscriptionResourceController extends Controller {
   }
 
   public function getAction() {
-    $telenorClient = $this->get('service.telenor.client');
+    /**
+     * @var User $user
+     */
     $user = $this->getUser();
-    $userRights = $telenorClient->getUserRights($user);
+    $userRights = json_decode($user->getUserRightsData());
 
     if(!$userRights) {
       return new Response('', Response::HTTP_FORBIDDEN);
