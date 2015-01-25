@@ -61,6 +61,8 @@ public class InternalStorageSimple {
                 ois.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
         return data;
