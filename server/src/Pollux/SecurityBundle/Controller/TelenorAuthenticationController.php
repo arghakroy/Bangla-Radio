@@ -43,10 +43,11 @@ class TelenorAuthenticationController extends Controller {
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-
-      return new Response('', Response::HTTP_SEE_OTHER, array(
+      $url = "polluxmusic://success?sharedSecret=".$sharedSecret;
+      return $this->redirect($url);
+      /*return new Response('', Response::HTTP_SEE_OTHER, array(
           Headers::LOCATION => "polluxmusic://success?sharedSecret=$sharedSecret"
-      ));
+      ));*/
     }
     else {
       return new Response('', Response::HTTP_SEE_OTHER, array(
