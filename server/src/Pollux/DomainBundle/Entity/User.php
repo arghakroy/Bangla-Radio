@@ -255,7 +255,7 @@ class User implements UserInterface, \Serializable {
    * @inheritdoc
    */
   public function getPassword() {
-    return $this->sharedSecret;
+    return $this->username;
   }
 
   /**
