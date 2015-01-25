@@ -14,8 +14,7 @@
       <http-basic realm="Webservice"/>
     </firewall>
 
-    <rule path="^/webservice/auth" role="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    <rule path="^/webservice" role="ROLE_USER"/>
+    <rule path="^/webservice/subscriptions" role="ROLE_USER"/>
 
     <provider name="administrators">
       <entity class="Pollux\DomainBundle\Entity\User" property="username" />
