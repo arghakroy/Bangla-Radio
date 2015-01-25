@@ -27,6 +27,7 @@ import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.model.Tag;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.util.ArrayList;
@@ -218,18 +219,14 @@ public class Prem_Category_Frag extends RootFragment {
                 updateUi(true);
             }
         };
+        Log.d(AppConstant.DEBUG,"registerred premium ui");
         getActivity().registerReceiver(broadCastReceive, new IntentFilter("update-prem-ui"));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //getActivity().unregisterReceiver( broadCastReceive);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        Log.d(AppConstant.DEBUG,"unregisterred premium ui");
         getActivity().unregisterReceiver( broadCastReceive);
     }
 }

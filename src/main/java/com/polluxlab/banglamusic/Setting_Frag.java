@@ -99,17 +99,13 @@ public class Setting_Frag extends RootFragment {
             }
         };
         getActivity().registerReceiver(broadCastReceive, new IntentFilter("update-setting-ui"));
+        Log.d(AppConstant.DEBUG,"registerred setting ui");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-      //  getActivity().unregisterReceiver(broadCastReceive);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        Log.d(AppConstant.DEBUG, "UNregisterring setting ui");
         getActivity().unregisterReceiver(broadCastReceive);
     }
 }

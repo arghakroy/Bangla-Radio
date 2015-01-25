@@ -66,7 +66,7 @@ public class PlayAudio extends Service {
                     }
                 });
             }catch (Exception e){
-                Log.d(LOGCAT,e.getMessage());
+                Log.d(LOGCAT,"Error in onpost playaudio");
             }
             Log.d(LOGCAT, "Media Player started!");
             objPlayer.prepareAsync();
