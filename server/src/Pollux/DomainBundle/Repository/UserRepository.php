@@ -52,5 +52,26 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
   public function supportsClass($class) {
     return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
   }
+  
+  public function getUserFromSecret($secret) {
+    $query = $this->createQueryBuilder('u')
+        ->select('u')
+        ->where('u.sharedSecret = :sharedSecret')
+        ->setParameter('sharedSecret', $secret)
+        ->getQuery();
+
+    $user = NULL;
+    try {
+      if($query->getResult() != NULL) {
+        $user = $query->getSingleResult();
+      }
+    }
+    catch (NoResultException $e) {
+      $message = sprintf('User identified by "%s" is not found.', $secret);
+      throw new UsernameNotFoundException($message, 0, $e);
+    }
+
+    return $user;
+  }
 
 }

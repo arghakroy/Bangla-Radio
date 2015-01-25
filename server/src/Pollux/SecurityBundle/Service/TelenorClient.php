@@ -17,15 +17,27 @@ class TelenorClient {
   private $clientSecret;
 
   public function getAuthorizeUrl() {
-    return $this->endpoint . "/authorize";
+    return $this->endpoint . "oauth/authorize";
   }
 
   public function getUserInfoUrl() {
-    return $this->endpoint . "/userinfo";
+    return $this->endpoint . "oauth/userinfo";
   }
 
   public function getTokenUrl() {
-    return $this->endpoint . "/token";
+    return $this->endpoint . "oauth/token";
+  }
+
+  public function getRightsUrl() {
+    return $this->endpoint . "id/users/";
+  }
+
+  public function getRefreshTokenUrl() {
+    return $this->endpoint . "oauth/token";
+  }
+  
+  public function getTransactionUrl() {
+    return  "https://staging-payment-payment2.comoyo.com/transactions";
   }
 
   public function __construct(Router $router, $endpoint, $clientId, $clientSecret) {
@@ -51,6 +63,28 @@ class TelenorClient {
     curl_close($curl);
 
     return json_decode($output);
+  }
+
+
+  public function getUsersRight($id, $accessToken) {
+
+    $url = $this->getRightsUrl() . $id . "/rights";
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $url,
+        CURLOPT_HTTPHEADER => array(
+          "Authorization: Bearer $accessToken"
+        ),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return $output;
+
   }
 
   public function getToken($authorizationCode) {
@@ -80,6 +114,34 @@ class TelenorClient {
     return json_decode($output);
   }
 
+
+  public function refreshToken($refreshToken){
+    
+    $parameters = array(
+        "grant_type" => "refresh_token",
+        "refresh_token" => $refreshToken,
+    );
+
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $this->getRefreshTokenUrl(),
+        CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
+        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_POST => 1,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return json_decode($output);
+
+  }
+
   private static function prepareQueryUrl(array $parameters) {
     $query = '';
     foreach ($parameters as $key => $value) {
@@ -87,6 +149,58 @@ class TelenorClient {
     }
 
     return $query;
+  }
+  
+  public function getTransaction($accessToken,$connectId,$product) {
+    
+    /*
+     * Generate orderId as an unique number
+     */
+    $orderId = uniqid();
+            
+    $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', array('uniqueId'=>$orderId),  UrlGeneratorInterface::ABSOLUTE_URL);
+    $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', array('uniqueId'=>$orderId), UrlGeneratorInterface::ABSOLUTE_URL);
+
+    $productArray = array(
+        'name' => $product->getProductName(),
+        'price' => "MYR ".$product->getPricing(),
+        'vatRate' => $product->getVatPercentage(),
+        'sku' => $product->getSku(),
+        'timeSpec' => $product->getTimeSpec()
+    );
+    $parameters = array(
+        "orderId" => $orderId,
+        "purchaseDescription" => "Product description",
+        "amount" => "MYR ".$product->getPricing(),
+        'vatRate' => $product->getVatPercentage(),
+        'merchantName' => 'lyltechnology-banglaradio-android',
+        'connectId' => $connectId,
+        "successRedirect" => $transactionRedirectUrl,
+        'allowedPaymentMethods' => ['DOB'],
+        'cancelRedirect' => $transactionCancelUrl,
+        "products" => [$productArray]
+    );
+    $parameterString = json_encode($parameters);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $this->getTransactionUrl(),
+        CURLOPT_HTTPHEADER => array(
+          'Content-Type: application/json',
+          'Content-Length: ' . strlen($parameterString),
+          "Authorization: Bearer $accessToken"
+        ),
+        CURLOPT_POSTFIELDS => $parameterString,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_POST => 1,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+    
+    return json_decode($output);
   }
 
 }
