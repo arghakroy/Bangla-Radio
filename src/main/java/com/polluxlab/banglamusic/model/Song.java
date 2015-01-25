@@ -1,6 +1,12 @@
 package com.polluxlab.banglamusic.model;
 
+import android.text.Html;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * Created by ARGHA K ROY on 1/17/2015.
@@ -56,5 +62,9 @@ public class Song extends ModelBase  {
 
     public void setTitile(String title){
         this.title=title;
+    }
+
+    public String getPreview(){
+        return Html.fromHtml(links.getPreview()).toString();
     }
 }

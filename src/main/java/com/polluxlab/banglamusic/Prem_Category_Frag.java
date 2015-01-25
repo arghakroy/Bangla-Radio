@@ -224,6 +224,12 @@ public class Prem_Category_Frag extends RootFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //getActivity().unregisterReceiver( broadCastReceive);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         getActivity().unregisterReceiver( broadCastReceive);
     }
 }

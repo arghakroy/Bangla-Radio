@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
@@ -33,12 +34,14 @@ import java.io.Serializable;
 public class Setting_Frag extends RootFragment {
 
     EditText numberEt;
+    TextView remainDays,lastDate;
     Button buyBtn;
     LinearLayout accountStatusContainer;
     LinearLayout accountBuyContainer;
 
     BroadcastReceiver broadCastReceive;
     public int currentStatus=0;
+    public String endDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class Setting_Frag extends RootFragment {
         buyBtn= (Button) rootView.findViewById(R.id.account_buy_btn);
         accountStatusContainer = (LinearLayout) rootView.findViewById(R.id.account_status_container);
         accountBuyContainer = (LinearLayout) rootView.findViewById(R.id.account_buy_container);
+        remainDays= (TextView) rootView.findViewById(R.id.account_remainning_days);
+        lastDate= (TextView) rootView.findViewById(R.id.account_last_date);
         numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
         setupBroadCast();
         updateUI(currentStatus);
@@ -58,6 +63,7 @@ public class Setting_Frag extends RootFragment {
     public void showSubscribeUI(){
         accountStatusContainer.setVisibility(View.VISIBLE);
         accountBuyContainer.setVisibility(View.GONE);
+        lastDate.setText(endDate);
     }
 
     public void setBuyBtn(final String URL){
@@ -88,6 +94,7 @@ public class Setting_Frag extends RootFragment {
             public void onReceive(Context context, Intent intent) {
                 int status=intent.getIntExtra("status",0);
                 currentStatus=status;
+                endDate=intent.getStringExtra("enddate");
                 updateUI(status);
             }
         };
@@ -97,6 +104,12 @@ public class Setting_Frag extends RootFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+      //  getActivity().unregisterReceiver(broadCastReceive);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         getActivity().unregisterReceiver(broadCastReceive);
     }
 }

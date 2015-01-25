@@ -6,7 +6,9 @@
               android:layout_height="wrap_content">
 
     <ImageView
-      android:layout_width="80dp"
+      android:id="@+id/singleListItemImage"
+      android:layout_width="50dp"
+      android:minWidth="50dp"
       android:layout_height="wrap_content"
       android:adjustViewBounds="true"
       android:layout_margin="6dp"
@@ -30,7 +32,7 @@
           android:id="@+id/singleListItemArtist"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:visibility="gone"
+          android:visibility="visible"
           android:text="@string/dami_text2"
           android:textSize="16sp"/>
     </LinearLayout>

@@ -30,6 +30,7 @@ public class UrlHandler extends Activity {
     Uri URIdata;
     String host;
     boolean hasSubscription;
+    Subscription subscription;
     private final static String LOGIN_SUCCESS="success";
     private final static String LOGIN_CANCELLED="cancelled";
     private final static String PURCHASE="purchase";
@@ -85,6 +86,7 @@ public class UrlHandler extends Activity {
             @Override
             public void done(Subscription s) {
                 hasSubscription = (s != null);
+                subscription=s;
                 performBasedOnSubscription();
             }
         }).turnOfDialog()
@@ -105,11 +107,14 @@ public class UrlHandler extends Activity {
 
     //TODO: Implement it
     private void loadPremiumContent(int status) {
-       if(status==AppConstant.SUBSCRIBED)
+        if(status==AppConstant.SUBSCRIBED)
             sendBroadcast(new Intent("update-prem-ui"));
 
         Intent settingIntent=new Intent("update-setting-ui");
         settingIntent.putExtra("status",status);
+        if(status==AppConstant.SUBSCRIBED)
+            settingIntent.putExtra("enddate",subscription.getEndDate().toString());
+
         sendBroadcast(settingIntent);
     }
 

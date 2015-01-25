@@ -8,17 +8,21 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
@@ -27,12 +31,17 @@ import java.util.List;
 public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
     private CarouselFragment carouselFragment;
+    PowerManager.WakeLock wl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         centerActionBarTitle();
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        // PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        // wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        //  wl.acquire();
 
         if (savedInstanceState == null) {
             // withholding the previously created fragment from being created again
@@ -142,6 +151,8 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     protected void onStop() {
         super.onStop();
         play(0, 0, null);
+        Log.d(AppConstant.DEBUG,"OnStop");
+//        wl.release();
     }
 
     @Override

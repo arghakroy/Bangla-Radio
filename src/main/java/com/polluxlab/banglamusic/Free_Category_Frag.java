@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class Free_Category_Frag extends RootFragment {
     ListView freeSongListView;
 
     Context con;
-     List<Song> freeCategories;
+    List<Song> freeCategories;
     PlaySoundHelper helper;
 
     public Free_Category_Frag(){
@@ -87,7 +89,12 @@ public class Free_Category_Frag extends RootFragment {
                 rowView = inflater.inflate(R.layout.single_list_item, null);
             }
             TextView songTitle= (TextView) rowView.findViewById(R.id.singleListItemTitle);
+            TextView songAlbum= (TextView) rowView.findViewById(R.id.singleListItemArtist);
+            ImageView im= (ImageView) rowView.findViewById(R.id.singleListItemImage);
             songTitle.setText(freeCategories.get(i).getTitle());
+
+            Picasso.with(getActivity()).load(freeCategories.get(i).getPreview()).error(R.drawable.music_icon).into(im);
+            songAlbum.setText(freeCategories.get(i).getAlbum());
             return rowView;
         }
     }

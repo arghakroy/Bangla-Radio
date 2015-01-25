@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
@@ -93,7 +95,11 @@ public class Category_List_Frag extends RootFragment {
             }
 
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleListItemTitle);
+            TextView categoryAlbum= (TextView) rowView.findViewById(R.id.singleListItemArtist);
+            ImageView im= (ImageView) rowView.findViewById(R.id.singleListItemImage);
             categoryName.setText(categoryItem.get(i).getTitle());
+            categoryAlbum.setText(categoryItem.get(i).getAlbum());
+            Picasso.with(getActivity()).load(categoryItem.get(i).getPreview()).error(R.drawable.music_icon).into(im);
             return rowView;
         }
     }

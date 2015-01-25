@@ -134,7 +134,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 pager.setCurrentItem(0);
                 break;
             case R.id.mainPremBtn:
-                onBackPressed();
+                returnHome();
                 pager.setCurrentItem(1);
                 break;
             case R.id.mainAccBtn:
@@ -175,6 +175,17 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         // this Fragment couldn't handle the onBackPressed call
         return false;
     }
+
+    public void returnHome() {
+        OnBackPressListener currentFragment = (OnBackPressListener) adapter.getRegisteredFragment(pager.getCurrentItem());
+
+        if (currentFragment != null) {
+            // lets see if the currentFragment or any of its childFragment can handle onBackPressed
+            currentFragment.onBackPressed();
+            currentFragment.onBackPressed();
+        }
+    }
+
 
 
     public void player(int command, int pos,List<Song> songs) {
