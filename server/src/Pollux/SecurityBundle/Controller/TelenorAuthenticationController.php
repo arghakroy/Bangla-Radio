@@ -38,7 +38,7 @@ class TelenorAuthenticationController extends Controller {
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
 
-    $logger->debug("User Info ". $userInfo);
+    $logger->debug("User Info $accessToken->access_token");
 
     if($this->isValidUserInfo($userInfo)) {
       $logger->debug("Came here ". $userInfo);
