@@ -2,6 +2,7 @@
 
 namespace Pollux\WebServiceBundle\Controller;
 
+use Pollux\DomainBundle\Entity\User;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Psr\Log\InvalidArgumentException;
@@ -35,24 +36,23 @@ class PaymentController extends Controller {
   }
 
   public function successAction($uniqueId) {
-    /*
-     *  save to subscription table need to do with uniqueId as orderId
+    /**
+     * @var User $user
      */
-//    $em = $this->getDoctrine()->getManager();
-//    $subscriptionObject = new Subscription();
-//    $subscriptionObject->setStatus($status);
-//    $em->persist($subscriptionObject);
-//    $em->flush();
+    $em = $this->getDoctrine()->getManager();
+    $telenorClient = $this->get('service.telenor.client');
+    $user = $this->getUser();
+    $userRights = $telenorClient->getUserRights($user);
+
+    $user->setUserRightsData($userRights);
+    $em->merge($user);
+    $em->flush();
 
     $url = "polluxmusic://purchase?status=success";
     return $this->redirect($url);
   }
 
   public function cancelAction($uniqueId) {
-    /*
-     *  save to subscription table need to do with uniqueId as orderId
-     */
-
     $url = "polluxmusic://purchase?status=cancelled";
     return $this->redirect($url);
   }
