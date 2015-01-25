@@ -65,27 +65,29 @@ public class Links extends ModelBase {
     }
 
     public Subscription getSubscription(final String secret){
-        final String url = this.subscriptions;
+        String response = get(this.subscriptions);
+        if( response.isEmpty() )
+            return null;
+        return gson.fromJson(response, Subscription.class);
 
-        Subscription s = (Subscription) InternalStorage.fetch(url, new StorageDataProvider<Subscription>() {
-            @Override
-            public Subscription getData() {
-                List<Header> headers = new ArrayList<>();
-                headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
-                String response = get(url, headers);
-                if( response.trim().isEmpty() ){
-                    return null;
-                }
-                Subscription s = gson.fromJson(response, Subscription.class);
-                return s;
-            }
-
-            @Override
-            public boolean validate(Subscription s) {
-                return s.valid();
-            }
-        });
-        return s;
+//        Subscription s = (Subscription) InternalStorage.fetch(url, new StorageDataProvider<Subscription>() {
+//            @Override
+//            public Subscription getData() {
+//                List<Header> headers = new ArrayList<>();
+//                headers.add(new BasicHeader(HTTP_HEADER.HTTP_X_SECRET.name(), secret));
+//                String response = get(url, headers);
+//                if( response.trim().isEmpty() ){
+//                    return null;
+//                }
+//                Subscription s = gson.fromJson(response, Subscription.class);
+//                return s;
+//            }
+//
+//            @Override
+//            public boolean validate(Subscription s) {
+//                return s.valid();
+//            }
+//        });
     }
 
     public String getPurchase(){
