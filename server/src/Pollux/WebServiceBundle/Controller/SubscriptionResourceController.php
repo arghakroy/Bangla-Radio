@@ -32,7 +32,7 @@ class SubscriptionResourceController extends Controller {
     $userRights = json_decode($user->getUserRightsData());
 
     if(!$userRights) {
-      return new Response('', Response::HTTP_FORBIDDEN);
+      return new Response('No subscription available.', Response::HTTP_FORBIDDEN);
     }
 
     $sku = $userRights->right[0]->sku;
