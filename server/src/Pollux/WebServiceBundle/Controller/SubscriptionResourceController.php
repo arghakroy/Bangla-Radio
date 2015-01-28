@@ -28,13 +28,7 @@ class SubscriptionResourceController extends Controller {
     /**
      * @var User $user
      */
-    $username = $request->query->get('user');
-    try {
-      $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->loadUserByUsername($username);
-    }
-    catch(\Exception $ex) {
-      throw $ex;
-    }
+    $user = $this->getUser();
     $userRights = json_decode($user->getUserRightsData());
 
     if(!$userRights) {
