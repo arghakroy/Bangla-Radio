@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.util.Log;
+import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.polluxlab.banglamusic.util.Util;
 
 /**
  * Created by ARGHA K ROY on 1/23/2015.
@@ -37,6 +41,13 @@ public class LogInWebViewActivity extends Activity {
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             handler.proceed(); // Ignore SSL certificate errors
         }
+
+         @Override
+         public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
+             super.onReceivedHttpAuthRequest(view, handler, host, realm);
+             String secret=Util.getSecretKey(LogInWebViewActivity.this);
+             handler.proceed(secret, secret);
+         }
 
          public boolean shouldOverrideUrlLoading(WebView view, String url) {
              //called for any redirect to stay inside the WebView

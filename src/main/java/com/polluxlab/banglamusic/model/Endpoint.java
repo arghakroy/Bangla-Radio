@@ -88,7 +88,7 @@ public class Endpoint extends ModelBase {
     }
 
     private transient static Endpoint self = null;
-    public transient static final String ENDPOINT_URL = "http://162.248.162.2/musicapp/server/web/app_dev.php/webservice/";
+    public transient static final String ENDPOINT_URL = "http://128.199.142.142/musicapp/server/web/app_dev.php/webservice/";
     private Endpoint(){
         super();
     }

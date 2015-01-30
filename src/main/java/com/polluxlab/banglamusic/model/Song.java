@@ -58,13 +58,13 @@ public class Song extends ModelBase  {
 
     public String getStreamLink(){
         return get(this.links.getMedia());
-    }
+   }
 
     public void setTitile(String title){
         this.title=title;
     }
 
-    public String getPreview(){
-        return Html.fromHtml(links.getPreview()).toString();
+  public String getPreview(){
+       return Html.fromHtml(links.getPreview()).toString();
     }
 }

@@ -93,7 +93,7 @@ public class Free_Category_Frag extends RootFragment {
             ImageView im= (ImageView) rowView.findViewById(R.id.singleListItemImage);
             songTitle.setText(freeCategories.get(i).getTitle());
 
-            Picasso.with(getActivity()).load(freeCategories.get(i).getPreview()).error(R.drawable.music_icon).into(im);
+            //Picasso.with(getActivity()).load(freeCategories.get(i).getPreview()).error(R.drawable.music_icon).into(im);
             songAlbum.setText(freeCategories.get(i).getAlbum());
             return rowView;
         }
@@ -128,7 +128,6 @@ public class Free_Category_Frag extends RootFragment {
                     }
                 }
             }catch(Exception e){
-                msg=e.getMessage();
                 error=1;
             }
             return null;

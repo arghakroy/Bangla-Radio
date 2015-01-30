@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:gravity="center"
               android:background="#EFEFEF">
 
 
@@ -37,6 +38,13 @@
       android:layout_gravity="center_horizontal"
       android:textAppearance="?android:attr/textAppearanceMedium"
       android:text="বাংলা রেডিও অনুষ্ঠান শুনুন "/>
+
+    <ImageView
+      android:layout_width="100dp"
+      android:layout_height="wrap_content"
+      android:adjustViewBounds="true"
+      android:layout_marginTop="20dp"
+      android:src="@drawable/digi_logo"/>
 
     <LinearLayout
       android:orientation="horizontal"

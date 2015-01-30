@@ -104,6 +104,7 @@ public class Setting_Frag extends RootFragment {
     }
 
     public void updateUI(int status){
+        Log.d(AppConstant.DEBUG,status+"");
         if(status== AppConstant.SUBSCRIBED)
             showSubscribeUI();
         else if(status==AppConstant.LOGGED_IN){
