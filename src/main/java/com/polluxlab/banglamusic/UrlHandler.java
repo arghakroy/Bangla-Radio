@@ -110,8 +110,9 @@ public class UrlHandler extends Activity {
 
     //TODO: Implement it
     private void loadPremiumContent(int status) {
-        if(status==AppConstant.SUBSCRIBED)
-            sendBroadcast(new Intent("update-prem-ui"));
+        Intent premIntent=new Intent("update-prem-ui");
+        premIntent.putExtra("status",status);
+        sendBroadcast(premIntent);
 
         Intent settingIntent=new Intent("update-setting-ui");
         settingIntent.putExtra("status",status);

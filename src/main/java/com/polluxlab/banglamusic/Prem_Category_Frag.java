@@ -99,38 +99,63 @@ public class Prem_Category_Frag extends RootFragment {
             super.onPostExecute(s);
             pDialog.dismiss();
             //Util.showToast(getActivity(), "Suscribed : " + subscribed);
-            updateUi(subscribed);
+            if(subscribed)
+                updateUi(subscribed,AppConstant.SUBSCRIBED);
+            else if(!Util.getSecretKey(getActivity()).isEmpty())
+                updateUi(true,AppConstant.LOGGED_IN);
 /*            Intent settingIntent=new Intent("update-setting-ui");
             settingIntent.putExtra("status",AppConstant.SUBSCRIBED);
             settingIntent.putExtra("enddate",s.getEndDate().toString());
             getActivity().sendBroadcast(settingIntent);*/
             if(subscribed)
-            Setting_Frag.currentStatus=AppConstant.SUBSCRIBED;
+                Setting_Frag.currentStatus=AppConstant.SUBSCRIBED;
         }
     }
 
-    public void updateUi(boolean allowed) {
+    public void updateUi(boolean allowed,int status) {
         if (allowed) {
             //Util.showToast(getActivity(),"inside ui");
-            dialogUi.setVisibility(View.GONE);
-            categoryList.setVisibility(View.VISIBLE);
-            generateData();
-            categoryList.setAdapter(new MyListAdapter());
-            categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Bundle bun = new Bundle();
-                    bun.putInt("position", i);
-                    Category_Sub_Frag subFragment = new Category_Sub_Frag();
-                    subFragment.setArguments(bun);
-                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                    // Store the Fragment in stack
-                    transaction.addToBackStack(null);
-                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    transaction.replace(R.id.root_container, subFragment).commit();
-                    //new GetStreamLink(i).execute();
-                }
-            });
+            if(status==AppConstant.SUBSCRIBED) {
+                dialogUi.setVisibility(View.GONE);
+                categoryList.setVisibility(View.VISIBLE);
+                generateData();
+                categoryList.setAdapter(new MyListAdapter());
+                categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Bundle bun = new Bundle();
+                        bun.putInt("position", i);
+                        Category_Sub_Frag subFragment = new Category_Sub_Frag();
+                        subFragment.setArguments(bun);
+                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                        // Store the Fragment in stack
+                        transaction.addToBackStack(null);
+                        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                        transaction.replace(R.id.root_container, subFragment).commit();
+                        //new GetStreamLink(i).execute();
+                    }
+                });
+            }else if(status==AppConstant.LOGGED_IN){
+                categoryList.setVisibility(View.GONE);
+                dialogUi.removeAllViews();
+                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_layout, null);
+                ImageView im = (ImageView) v.findViewById(R.id.dialogImageView);
+                im.setImageResource(R.drawable.buy_dialog_logo);
+                dialogUi.addView(v);
+                Button loginSubmitBtn = (Button) rootView.findViewById(R.id.dialogBtn);
+                loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View arg0) {
+                        Endpoint.init();
+                        final String url = Endpoint.instance().getPurchase(getActivity());
+                        Log.d(getClass().getName(), "Url: " + url);
+                        Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
+                        i.putExtra("url", url);
+                        startActivity(i);
+                    }
+                });
+            }
         } else {
             View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_layout, null);
             dialogUi.addView(v);
@@ -157,9 +182,9 @@ public class Prem_Category_Frag extends RootFragment {
     private void checkAllowed() {
         String secret = Util.getSecretKey(getActivity());
         if( secret == null || secret.length()==0 ){
-            updateUi(false);
+            updateUi(false,0);
         } else {
-           new LoadSubscription().execute();
+            new LoadSubscription().execute();
         }
     }
 
@@ -225,7 +250,8 @@ public class Prem_Category_Frag extends RootFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Util.showToast(context,"Received broadccast");
-                updateUi(true);
+                int status=intent.getIntExtra("status", 0);
+                updateUi(true,status);
             }
         };
         Log.d(AppConstant.DEBUG,"registerred premium ui");

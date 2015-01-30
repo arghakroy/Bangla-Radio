@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +48,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
 
     private ViewPagerAdapter adapter;
     Button freeCatBtn,prermCatBtn,settingCatBtn;
-    ImageButton pauseBtn,prevBtn,nextBtn;
+    ImageButton pauseBtn,prevBtn,nextBtn,closeBtn;
     LinearLayout playerLay;
     TextView songName,artistName;
     ImageView songImage;
@@ -73,7 +74,11 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         pauseBtn= (ImageButton) rootView.findViewById(R.id.pauseBtn);
         prevBtn= (ImageButton) rootView.findViewById(R.id.prevBtn);
         nextBtn= (ImageButton) rootView.findViewById(R.id.nextBtn);
+        closeBtn= (ImageButton) rootView.findViewById(R.id.playerUiClose);
         songImage= (ImageView) rootView.findViewById(R.id.playerUiImage);
+
+        closeBtn.bringToFront();
+
 
         freeCatBtn= (Button) rootView.findViewById(R.id.mainFreeBtn);
         prermCatBtn= (Button) rootView.findViewById(R.id.mainPremBtn);
@@ -113,6 +118,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         pauseBtn.setOnClickListener(this);
         prevBtn.setOnClickListener(this);
         nextBtn.setOnClickListener(this);
+        closeBtn.setOnClickListener(this);
 
         Typeface tf=Typeface.createFromAsset(getActivity().getAssets(), "fonts/solaiman-bold.ttf");
         freeCatBtn.setTypeface(tf);
@@ -159,6 +165,10 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 else if(currentPos==currentSongs.size()-1)currentPos=0;
                 else currentPos++;
                 player(1,currentPos,currentSongs);
+                break;
+            case R.id.playerUiClose:
+                if(currentState==1)player(0,currentPos,currentSongs);
+                playerLay.setVisibility(View.GONE);
                 break;
         }
     }
