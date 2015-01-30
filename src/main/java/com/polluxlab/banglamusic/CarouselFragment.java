@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.polluxlab.banglamusic.helper.OnBackPressListener;
 import com.polluxlab.banglamusic.helper.ViewPagerAdapter;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     ImageButton pauseBtn,prevBtn,nextBtn;
     LinearLayout playerLay;
     TextView songName,artistName;
+    ImageView songImage;
 
     public static List<Song> currentSongs;
 
@@ -70,6 +73,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         pauseBtn= (ImageButton) rootView.findViewById(R.id.pauseBtn);
         prevBtn= (ImageButton) rootView.findViewById(R.id.prevBtn);
         nextBtn= (ImageButton) rootView.findViewById(R.id.nextBtn);
+        songImage= (ImageView) rootView.findViewById(R.id.playerUiImage);
 
         freeCatBtn= (Button) rootView.findViewById(R.id.mainFreeBtn);
         prermCatBtn= (Button) rootView.findViewById(R.id.mainPremBtn);
@@ -198,6 +202,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             playerLay.setVisibility(View.VISIBLE);
             songName.setText(currentSongs.get(currentPos).getTitle());
             artistName.setText(currentSongs.get(currentPos).getAlbum());
+            Picasso.with(getActivity()).load(currentSongs.get(currentPos).getPreview()).error(R.drawable.music_icon).into(songImage);
+
             PlayAudio.songs=songs;
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
             if(isMyServiceRunning(PlayAudio.class))

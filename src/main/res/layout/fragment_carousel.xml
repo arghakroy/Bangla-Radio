@@ -22,6 +22,7 @@
       android:background="#000">
 
         <ImageView
+          android:id="@+id/playerUiImage"
           android:layout_width="50dp"
           android:layout_margin="10dp"
           android:adjustViewBounds="true"

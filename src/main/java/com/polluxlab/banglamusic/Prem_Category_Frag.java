@@ -104,6 +104,7 @@ public class Prem_Category_Frag extends RootFragment {
             settingIntent.putExtra("status",AppConstant.SUBSCRIBED);
             settingIntent.putExtra("enddate",s.getEndDate().toString());
             getActivity().sendBroadcast(settingIntent);*/
+            if(subscribed)
             Setting_Frag.currentStatus=AppConstant.SUBSCRIBED;
         }
     }
@@ -158,7 +159,7 @@ public class Prem_Category_Frag extends RootFragment {
         if( secret == null || secret.length()==0 ){
             updateUi(false);
         } else {
-           // new LoadSubscription().execute();
+           new LoadSubscription().execute();
         }
     }
 
