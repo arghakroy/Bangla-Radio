@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -51,7 +52,10 @@ public abstract class ModelBase implements ModelVerifiable, Serializable {
         } finally {
 
         }
-        String response = readResponse(httpResponse);
+        String response = "";
+        if( httpResponse.getStatusLine().getStatusCode() == 200 ){
+            response = readResponse(httpResponse);
+        }
         Log.i("WEB-RESPONSE", response);
         Log.i("", "============================================");
         return response;
