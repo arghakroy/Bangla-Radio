@@ -1,11 +1,6 @@
 package com.polluxlab.banglamusic;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,13 +9,12 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.util.GlobalContext;
-import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
 
@@ -35,6 +29,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         GlobalContext.set(getApplicationContext());
         setContentView(R.layout.activity_main);
         centerActionBarTitle();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (savedInstanceState == null) {
             // withholding the previously created fragment from being created again
@@ -69,7 +64,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         if (titleId > 0)
         {
             TextView titleTextView = (TextView) findViewById(titleId);
-            titleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/solaiman-bold.ttf"));
+            titleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/solaiman_bold.ttf"));
 
             DisplayMetrics metrics = getResources().getDisplayMetrics();
 

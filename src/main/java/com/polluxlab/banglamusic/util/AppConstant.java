@@ -8,4 +8,5 @@ public class AppConstant {
     public static int LOGGED_IN=101;
     public static String DEBUG="MUSIC";
     public static String PREF_NAME="MUSIC_PREF";
+    public static String FONT= "fonts/solaiman_bold.ttf";
 }

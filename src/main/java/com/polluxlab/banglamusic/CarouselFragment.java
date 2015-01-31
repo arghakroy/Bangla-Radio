@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +48,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     private ViewPagerAdapter adapter;
     Button freeCatBtn,prermCatBtn,settingCatBtn;
     ImageButton pauseBtn,prevBtn,nextBtn,closeBtn;
-    LinearLayout playerLay;
+    FrameLayout playerLay;
     TextView songName,artistName;
     ImageView songImage;
 
@@ -70,7 +69,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_carousel, container, false);
 
-        playerLay= (LinearLayout) rootView.findViewById(R.id.playerLayout);
+        playerLay= (FrameLayout) rootView.findViewById(R.id.playerLayout);
         pauseBtn= (ImageButton) rootView.findViewById(R.id.pauseBtn);
         prevBtn= (ImageButton) rootView.findViewById(R.id.prevBtn);
         nextBtn= (ImageButton) rootView.findViewById(R.id.nextBtn);
@@ -120,7 +119,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         nextBtn.setOnClickListener(this);
         closeBtn.setOnClickListener(this);
 
-        Typeface tf=Typeface.createFromAsset(getActivity().getAssets(), "fonts/solaiman-bold.ttf");
+        Typeface tf=Typeface.createFromAsset(getActivity().getAssets(), "fonts/solaiman_bold.ttf");
         freeCatBtn.setTypeface(tf);
         prermCatBtn.setTypeface(tf);
         settingCatBtn.setTypeface(tf);

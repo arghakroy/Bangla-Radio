@@ -9,6 +9,8 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.polluxlab.banglamusic.util.AppConstant;
+
 public class MyTextView extends TextView {
 
     public MyTextView(Context context, AttributeSet attrs, int defStyle) {
@@ -27,7 +29,7 @@ public class MyTextView extends TextView {
     }
 
     private void setType(Context context){
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/solaiman-bold.ttf"));
+        this.setTypeface(Typeface.createFromAsset(context.getAssets(), AppConstant.FONT));
         this.setShadowLayer(1.5f, 5, 5, android.R.color.black);
     }
 }

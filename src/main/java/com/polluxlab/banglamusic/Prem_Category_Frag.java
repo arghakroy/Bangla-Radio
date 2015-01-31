@@ -138,12 +138,11 @@ public class Prem_Category_Frag extends RootFragment {
             }else if(status==AppConstant.LOGGED_IN){
                 categoryList.setVisibility(View.GONE);
                 dialogUi.removeAllViews();
-                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_layout, null);
-                ImageView im = (ImageView) v.findViewById(R.id.dialogImageView);
-                im.setImageResource(R.drawable.buy_dialog_logo);
+                View v = getActivity().getLayoutInflater().inflate(R.layout.buy_now_layout, null);
                 dialogUi.addView(v);
-                Button loginSubmitBtn = (Button) rootView.findViewById(R.id.dialogBtn);
-                loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
+                Button buyBtn = (Button) rootView.findViewById(R.id.buyNowBtn);
+                buyBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
+                buyBtn.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View arg0) {
@@ -157,12 +156,13 @@ public class Prem_Category_Frag extends RootFragment {
                 });
             }
         } else {
-            View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_layout, null);
+            View v = getActivity().getLayoutInflater().inflate(R.layout.buy_now_layout, null);
             dialogUi.addView(v);
             categoryList.setVisibility(View.GONE);
-            ImageView im = (ImageView) v.findViewById(R.id.dialogImageView);
+            ImageView im = (ImageView) v.findViewById(R.id.buyNowImage);
             im.setImageResource(R.drawable.log_in_logo);
-            Button loginSubmitBtn = (Button) rootView.findViewById(R.id.dialogBtn);
+            Button loginSubmitBtn = (Button) rootView.findViewById(R.id.buyNowBtn);
+            loginSubmitBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
             loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -235,7 +235,7 @@ public class Prem_Category_Frag extends RootFragment {
                 rowView = inflater.inflate(R.layout.single_category_item, null);
             }
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleCategoryName);
-            categoryName.setTypeface(Typeface.createFromAsset(con.getAssets(), "fonts/solaiman-bold.ttf") );
+            categoryName.setTypeface(Typeface.createFromAsset(con.getAssets(), "fonts/solaiman_bold.ttf") );
             categoryName.setText(premCategories.get(i).getTitle());
 
             LinearLayout imageLay= (LinearLayout) rowView.findViewById(R.id.singleCategoryImageLayout);

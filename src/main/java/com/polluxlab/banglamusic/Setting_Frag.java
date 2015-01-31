@@ -6,6 +6,7 @@ import android.content.Entity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -59,6 +60,9 @@ public class Setting_Frag extends RootFragment {
         remainDays= (TextView) rootView.findViewById(R.id.account_remainning_days);
         lastDate= (TextView) rootView.findViewById(R.id.account_last_date);
         numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
+
+        buyBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
+
         setupBroadCast();
         updateUI(currentStatus);
         return rootView;

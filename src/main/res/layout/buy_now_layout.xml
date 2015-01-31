@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:gravity="center"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:id="@+id/imageView4"
+      android:id="@+id/buyNowImage"
+      android:adjustViewBounds="true"
       android:src="@drawable/buy_dialog_logo"
       android:layout_gravity="center_horizontal"/>
     <Button
       android:layout_width="200dp"
       android:layout_height="wrap_content"
-      android:text="OK"
-      android:background="@drawable/dialog_btn"
+      android:text="@string/string_buy"
+      android:textStyle="bold"
+      android:background="@drawable/ok_btn"
       android:textSize="25sp"
+      android:padding="10dp"
       android:id="@+id/buyNowBtn"
-      android:layout_marginTop="50dp"
       android:onClick="btnClicked"
+      android:layout_marginTop="15dp"
       android:layout_gravity="center_horizontal"/>
 </LinearLayout>
