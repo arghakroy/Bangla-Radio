@@ -58,7 +58,6 @@ public class Free_Category_Frag extends RootFragment {
         freeSongListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Util.showToast(con,"Loading. Please wait ...");
                 helper.play(1,i,freeCategories);
             }
         });

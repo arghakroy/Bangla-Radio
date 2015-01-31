@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class PlayAudio extends Service {
     private static final String LOGCAT = "MUSIC";
     MediaPlayer objPlayer;
     static List<Song> songs;
-    int pos;
+    static int pos;
 
     public void onCreate(){
         super.onCreate();
@@ -41,15 +42,16 @@ public class PlayAudio extends Service {
     }
 
     class GetStreamLink extends AsyncTask<String,String,String> {
-        int pos;
+        int currentPos;
         String link="";
         GetStreamLink(int i){
-            pos=i;
+            currentPos=i;
+            Log.d(AppConstant.DEBUG,currentPos+"");
         }
 
         @Override
         protected String doInBackground(String... params) {
-            link=songs.get(pos).getStreamLink();
+            link=songs.get(currentPos).getStreamLink();
             return null;
         }
 
@@ -57,35 +59,43 @@ public class PlayAudio extends Service {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
+                objPlayer = new MediaPlayer();
+                objPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 objPlayer.setDataSource(link);
-                objPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.start();
-                    }
-                });
             }catch (Exception e){
                 Log.d(LOGCAT,"Error in onpost playaudio");
             }
+            objPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            objPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    if(currentPos==songs.size()-1)currentPos=0;
+                    else currentPos++;
+                    new GetStreamLink(++currentPos).execute();
+                }
+            });
             Log.d(LOGCAT, "Media Player started!");
             objPlayer.prepareAsync();
+            objPlayer.setScreenOnWhilePlaying(true);
         }
     }
 
-    public void onStop(){
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(objPlayer.isPlaying())
         objPlayer.stop();
+
         objPlayer.release();
     }
 
-    public void onPause(){
-        objPlayer.stop();
-        objPlayer.release();
-    }
-    public void onDestroy(){
-        objPlayer.stop();
-        objPlayer.release();
-    }
     @Override
     public IBinder onBind(Intent objIndent) {
         return null;

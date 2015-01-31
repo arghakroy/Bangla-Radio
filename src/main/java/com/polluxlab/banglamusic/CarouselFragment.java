@@ -155,14 +155,12 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 else if(currentState==1)player(0,currentPos,currentSongs);
                 break;
             case R.id.prevBtn:
-                if(currentSongs.size()==1)return;
-                else if(currentPos==0)currentPos=currentSongs.size()-1;
+                if(currentPos==0)currentPos=currentSongs.size()-1;
                 else currentPos--;
                 player(1,currentPos,currentSongs);
                 break;
             case R.id.nextBtn:
-                if(currentSongs.size()==1)return;
-                else if(currentPos==currentSongs.size()-1)currentPos=0;
+                if(currentPos==currentSongs.size()-1)currentPos=0;
                 else currentPos++;
                 player(1,currentPos,currentSongs);
                 break;
@@ -209,6 +207,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         }
         currentState=command;
         if(command==1){
+            Util.showToast(getActivity(),"Loading. Please wait ...");
             playerLay.setVisibility(View.VISIBLE);
             songName.setText(currentSongs.get(currentPos).getTitle());
             artistName.setText(currentSongs.get(currentPos).getAlbum());
