@@ -34,6 +34,17 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
     return $user;
   }
 
+  public function findUserByUsername($username) {
+    $query = $this->createQueryBuilder('u')
+        ->select('u, r')
+        ->leftJoin('u.roles', 'r')
+        ->where('u.username = :username')
+        ->setParameter('username', $username)
+        ->getQuery();
+
+    return $query->getOneOrNullResult();
+  }
+
   /**
    * @inheritdoc
    */
@@ -52,7 +63,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
   public function supportsClass($class) {
     return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
   }
-  
+
   public function getUserFromSecret($secret) {
     $query = $this->createQueryBuilder('u')
         ->select('u')

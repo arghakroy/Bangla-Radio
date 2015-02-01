@@ -34,7 +34,7 @@ class PaymentController extends Controller {
     /**
      * @var User $user
      */
-    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->loadUserByUsername($userId);
+    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userId);
 //    var_dump($user->getUserInfoData());
     $transactionResponse = $telenorClient->getTransaction($user, $currentProduct);
 //    var_dump($transactionResponse);
@@ -54,7 +54,7 @@ class PaymentController extends Controller {
     $em = $this->getDoctrine()->getManager();
     $telenorClient = $this->get('service.telenor.client');
     $userId = $request->query->get('user');
-    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->loadUserByUsername($userId);
+    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userId);
 
     $userRights = $telenorClient->getUserRights($user);
     $this->get('logger')->debug(json_encode($userRights));
