@@ -167,16 +167,16 @@ class TelenorClient {
 
     $productArray = array(
         'name' => $product->getProductName(),
-        'price' => "MYR " . $product->getPricing(),
-        'vatRate' => $product->getVatPercentage(),
+        'price' => "MYR ".$product->getPricing(),
+        'vatRate' => (string) $product->getVatPercentage(),
         'sku' => $product->getSku(),
         'timeSpec' => $product->getTimeSpec()
     );
     $parameters = array(
         "orderId" => $orderId,
         "purchaseDescription" => "Product description",
-        "amount" => "MYR " . $product->getPricing(),
-        'vatRate' => $product->getVatPercentage(),
+        "amount" => "MYR ".$product->getPricing(),
+        'vatRate' => (string) $product->getVatPercentage(),
         'merchantName' => $this->clientId,
         'connectId' => $userInfo->sub,
         "successRedirect" => $transactionRedirectUrl,
