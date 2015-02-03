@@ -28,17 +28,11 @@ class SubscriptionResourceController extends Controller {
     /**
      * @var User $user
      */
-    $username = $request->query->get('user');
-    try {
-      $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->loadUserByUsername($username);
-    }
-    catch(\Exception $ex) {
-      throw $ex;
-    }
+    $user = $this->getUser();
     $userRights = json_decode($user->getUserRightsData());
 
     if(!$userRights) {
-      return new Response('', Response::HTTP_FORBIDDEN);
+      return new Response('No subscription available.', Response::HTTP_FORBIDDEN);
     }
 
     $sku = $userRights->right[0]->sku;

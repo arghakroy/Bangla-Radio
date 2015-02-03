@@ -6,6 +6,8 @@ namespace Pollux\SecurityBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\User;
+use Pollux\WebServiceBundle\Utils\Headers;
+use Pollux\WebServiceBundle\Utils\MimeType;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -42,7 +44,7 @@ class TelenorClient {
 
   public function getRightsUrl(User $user) {
     $userInfo = json_decode($user->getUserInfoData());
-    return $this->endpoint . "id/users/". $userInfo->sub . "/rights";
+    return $this->endpoint . "id/users/" . $userInfo->sub . "/rights";
   }
 
   public function getRefreshTokenUrl() {
@@ -50,7 +52,7 @@ class TelenorClient {
   }
 
   public function getTransactionUrl() {
-    return  "https://staging-payment-payment2.comoyo.com/transactions";
+    return "https://staging-payment-payment2.comoyo.com/transactions";
   }
 
   public function __construct(EntityManager $entityManager, Router $router, LoggerInterface $logger, $endpoint, $clientId, $clientSecret) {
@@ -67,7 +69,7 @@ class TelenorClient {
     curl_setopt_array($curl, array(
         CURLOPT_URL => $this->getUserInfoUrl(),
         CURLOPT_HTTPHEADER => array(
-          "Authorization: Bearer $accessToken"
+            "Authorization: Bearer $accessToken"
         ),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
@@ -87,7 +89,7 @@ class TelenorClient {
     curl_setopt_array($curl, array(
         CURLOPT_URL => $url,
         CURLOPT_HTTPHEADER => array(
-          "Authorization: Bearer $accessToken"
+            "Authorization: Bearer $accessToken"
         ),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
@@ -129,7 +131,7 @@ class TelenorClient {
     return json_decode($output);
   }
 
-  public function refreshToken($refreshToken){
+  public function refreshToken($refreshToken) {
     $parameters = array(
         "grant_type" => "refresh_token",
         "refresh_token" => $refreshToken,
@@ -159,14 +161,14 @@ class TelenorClient {
         'uniqueId' => $orderId,
         'user' => $user->getUsername(),
     );
-    $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters,  UrlGeneratorInterface::ABSOLUTE_URL);
+    $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
     $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
     $userInfo = json_decode($user->getUserInfoData());
 
     $productArray = array(
         'name' => $product->getProductName(),
         'price' => "MYR ".$product->getPricing(),
-        'vatRate' => $product->getVatPercentage(),
+        'vatRate' => (string) $product->getVatPercentage(),
         'sku' => $product->getSku(),
         'timeSpec' => $product->getTimeSpec()
     );
@@ -174,7 +176,7 @@ class TelenorClient {
         "orderId" => $orderId,
         "purchaseDescription" => "Product description",
         "amount" => "MYR ".$product->getPricing(),
-        'vatRate' => $product->getVatPercentage(),
+        'vatRate' => (string) $product->getVatPercentage(),
         'merchantName' => $this->clientId,
         'connectId' => $userInfo->sub,
         "successRedirect" => $transactionRedirectUrl,
@@ -187,11 +189,12 @@ class TelenorClient {
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $this->getTransactionUrl(),
-        CURLOPT_HTTPHEADER => array(
-          'Content-Type: application/json',
-          'Content-Length: ' . strlen($parameterString),
-          "Authorization: Bearer " . $user->getAccessToken()
-        ),
+        CURLOPT_HTTPHEADER => $this->prepareHeaders(array(
+            Headers::CONTENT_TYPE => MimeType::APPLICATION_JSON,
+            Headers::ACCEPT => MimeType::APPLICATION_JSON,
+            Headers::Content_Length => strlen($parameterString),
+            Headers::AUTHORIZATION => "Bearer " . $this->getAccessToken($user)
+        )),
         CURLOPT_POSTFIELDS => $parameterString,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CONNECTTIMEOUT => 3,
@@ -209,7 +212,7 @@ class TelenorClient {
     $currentTime = new \DateTime();
 
     $accessToken = $user->getAccessToken();
-    if($currentTime >= $user->getExpireTime()) {
+    if ($currentTime >= $user->getExpireTime()) {
       $accessTokenData = json_decode($user->getAccessTokenData());
       $tokenResponse = $this->refreshToken($accessTokenData->refresh_token);
       $accessToken = $tokenResponse->access_token;
@@ -233,6 +236,15 @@ class TelenorClient {
     }
 
     return $query;
+  }
+
+  private function prepareHeaders(array $parameters) {
+    $headers = array();
+    foreach ($parameters as $key => $value) {
+      $headers[] = $key . ": " . $value;
+    }
+
+    return $headers;
   }
 
 }
