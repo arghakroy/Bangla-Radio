@@ -58,14 +58,14 @@
           android:text="@string/string_only"
           android:textSize="18sp"/>
 
-        <TextView
+        <com.polluxlab.banglamusic.helper.MyTextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="18sp"
+          android:textSize="20sp"
           android:padding="5dp"
           android:textColor="#188FC9"
           android:textStyle="bold"
-          android:text="DiGi"/>
+          android:text="ডিজি"/>
 
         <com.polluxlab.banglamusic.helper.MyTextView
           android:layout_width="wrap_content"

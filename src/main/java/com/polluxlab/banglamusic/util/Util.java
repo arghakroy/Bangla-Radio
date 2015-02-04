@@ -6,21 +6,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.polluxlab.banglamusic.R;
 import com.polluxlab.banglamusic.model.ModelBase;
 
 public class Util {
@@ -171,5 +179,47 @@ public class Util {
         edit.putString("sharedSecret",key);
         edit.commit();
         ModelBase.setSharedSecret(key, key);
+    }
+
+    public static String toBangla(String word){
+        String out="";
+        for (int i=0;i<word.length();i++){
+            switch (word.charAt(i)){
+                case '0':
+                    out+="০";
+                    break;
+                case '1':
+                    out+="১";
+                    break;
+                case '2':
+                    out+="২";
+                    break;
+                case '3':
+                    out+="৩";
+                    break;
+                case '4':
+                    out+="৪";
+                    break;
+                case '5':
+                    out+="৫";
+                    break;
+                case '6':
+                    out+="৬";
+                    break;
+                case '7':
+                    out+="৭";
+                    break;
+                case '8':
+                    out+="৮";
+                    break;
+                case '9':
+                    out+="৯";
+                    break;
+                default:
+                    out+=word.charAt(i);
+                    break;
+            }
+        }
+        return out;
     }
 }

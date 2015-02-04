@@ -86,8 +86,8 @@ public class Setting_Frag extends RootFragment {
             Date d2= null;
             try {
                 d2 = from.parse(endDate);
-                remainDays.setText((d2.getTime()-d1.getTime())/(1000*60*60*24)+" ");
-                lastDate.setText("আপনার মেয়াদ শেষ হবে  "+to.format(d2));
+                remainDays.setText(Util.toBangla((d2.getTime()-d1.getTime())/(1000*60*60*24)+1+" "));
+                lastDate.setText("আপনার মেয়াদ শেষ হবে  "+Util.toBangla(to.format(d2)));
             } catch (ParseException e) {
                 Log.d(AppConstant.DEBUG,"Error in setting");
                 e.printStackTrace();

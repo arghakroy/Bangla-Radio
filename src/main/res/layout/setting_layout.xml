@@ -89,7 +89,7 @@
           android:layout_height="wrap_content"
           android:text="@string/string_buy"
           android:id="@+id/account_buy_btn"
-          android:background="@drawable/buy_now"
+          android:background="@drawable/buy_now2"
           android:layout_margin="25dp"
           android:textSize="30sp"
           android:padding="10dp"

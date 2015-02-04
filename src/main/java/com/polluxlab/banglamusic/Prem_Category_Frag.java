@@ -99,14 +99,13 @@ public class Prem_Category_Frag extends RootFragment {
             super.onPostExecute(s);
             pDialog.dismiss();
             //Util.showToast(getActivity(), "Suscribed : " + subscribed);
+            Log.d(AppConstant.DEBUG,"Subscribed: "+subscribed);
             if(subscribed)
                 updateUi(subscribed,AppConstant.SUBSCRIBED);
-            else if(!Util.getSecretKey(getActivity()).isEmpty())
+            else if(!Util.getSecretKey(getActivity()).isEmpty()){
+                Log.d(AppConstant.DEBUG,"Logged in");
                 updateUi(true,AppConstant.LOGGED_IN);
-/*            Intent settingIntent=new Intent("update-setting-ui");
-            settingIntent.putExtra("status",AppConstant.SUBSCRIBED);
-            settingIntent.putExtra("enddate",s.getEndDate().toString());
-            getActivity().sendBroadcast(settingIntent);*/
+            }
             if(subscribed)
                 Setting_Frag.currentStatus=AppConstant.SUBSCRIBED;
         }
@@ -183,7 +182,9 @@ public class Prem_Category_Frag extends RootFragment {
         String secret = Util.getSecretKey(getActivity());
         if( secret == null || secret.length()==0 ){
             updateUi(false,0);
+            Log.d(AppConstant.DEBUG,"No secret key");
         } else {
+            Log.d(AppConstant.DEBUG,"Secret key: "+secret);
             new LoadSubscription().execute();
         }
     }
@@ -210,7 +211,7 @@ public class Prem_Category_Frag extends RootFragment {
 
 
     class MyListAdapter extends BaseAdapter{
-        int images[]={R.drawable.pic0,R.drawable.pic_test_1,R.drawable.pic_test_2,R.drawable.pic5};
+        int images[]={R.drawable.pic0,R.drawable.pic_test_2,R.drawable.pic_test_1,R.drawable.pic5};
 
         @Override
         public int getCount() {

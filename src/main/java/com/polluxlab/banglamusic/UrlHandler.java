@@ -56,6 +56,7 @@ public class UrlHandler extends Activity {
         host = URIdata.getHost();
         String secret;
         Log.d("MUSIC","URI "+URIdata);
+        Log.d("MUSIC","HOST "+host);
 
         if( host.equals(LOGIN_SUCCESS) ){
             String key = URIdata.getQueryParameter(KEY_SECRET);
@@ -63,16 +64,19 @@ public class UrlHandler extends Activity {
                 Util.storeSecret(getApplicationContext(), key);
                 postLoginSuccessOperations();
             }
-            Log.d(getClass().getName(), "login successful");
+            Log.d(AppConstant.DEBUG,"Secret key: "+Util.getSecretKey(this));
+            Log.d(AppConstant.DEBUG, "login successful");
         } else if( host.equals(LOGIN_CANCELLED)) {
-            Log.d(getClass().getName(), "login cancelled");
+            Log.d(AppConstant.DEBUG, "login cancelled");
         } else if( host.equals(PURCHASE)) {
+            Log.d(AppConstant.DEBUG, "purchase successful");
             String purchaseStatus = URIdata.getQueryParameter(PURCHASE_STATUS);
             if(purchaseStatus.equals(PURCHASE_SUCCESS)){
-                Log.d(getClass().getName(), "purchase successful");
+                Log.d(AppConstant.DEBUG, "purchase successful");
                 setContentView(R.layout.buy_success_layout);
+                postLoginSuccessOperations();
             } else if(purchaseStatus.equals(PURCHASE_CANCELLED)){
-                Log.d(getClass().getName(), "purchase cancelled");
+                Log.d(AppConstant.DEBUG, "purchase cancelled");
                 setContentView(R.layout.buy_fail_layout);
             }
         }

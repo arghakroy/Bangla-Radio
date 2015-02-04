@@ -65,6 +65,6 @@ public class Song extends ModelBase  {
     }
 
   public String getPreview(){
-       return Html.fromHtml(links.getPreview()).toString();
+       return links.getPreview().toString();
     }
 }

@@ -1,11 +1,15 @@
 package com.polluxlab.banglamusic;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.GlobalContext;
 
 import java.util.List;
@@ -29,7 +34,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         GlobalContext.set(getApplicationContext());
         setContentView(R.layout.activity_main);
         centerActionBarTitle();
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+       // getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (savedInstanceState == null) {
             // withholding the previously created fragment from being created again
@@ -97,6 +102,11 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home) onBackPressed();
+        switch (item.getItemId()){
+            case R.id.notificationMenu:
+                startActivity(new Intent(this,NotificationsActivity.class));
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -132,13 +142,6 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         FragmentManager mgr=getSupportFragmentManager();
         CarouselFragment carousel= (CarouselFragment) mgr.findFragmentById(R.id.container);
         carousel.player(command,pos,songs);
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        play(0, 0, null);
     }
 
     @Override

@@ -2,14 +2,20 @@ package com.polluxlab.banglamusic;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.polluxlab.banglamusic.util.Util;
 
@@ -24,6 +30,8 @@ public class LogInWebViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_layout);
+        centerActionBarTitle();
+
         webView= (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
@@ -64,5 +72,38 @@ public class LogInWebViewActivity extends Activity {
              view.loadUrl(url); //handling non-customschemed redirects inside the WebView
              return false; // then it is not handled by default action
          }
+    }
+
+    private void centerActionBarTitle()
+    {
+
+        int titleId = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
+            titleId = getResources().getIdentifier("action_bar_title", "id", "android");
+        }
+        else
+        {
+            // This is the id is from your app's generated R class when ActionBarActivity is used
+            // for SupportActionBar
+            titleId = R.id.action_bar_title;
+        }
+
+        // Final check for non-zero invalid id
+        if (titleId > 0)
+        {
+            TextView titleTextView = (TextView) findViewById(titleId);
+            titleTextView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/solaiman_bold.ttf"));
+
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+            // Fetch layout parameters of titleTextView (LinearLayout.LayoutParams : Info from HierarchyViewer)
+            LinearLayout.LayoutParams txvPars = (LinearLayout.LayoutParams) titleTextView.getLayoutParams();
+            txvPars.gravity = Gravity.CENTER_HORIZONTAL;
+            txvPars.width = metrics.widthPixels;
+            titleTextView.setLayoutParams(txvPars);
+
+            titleTextView.setGravity(Gravity.CENTER);
+        }
     }
 }

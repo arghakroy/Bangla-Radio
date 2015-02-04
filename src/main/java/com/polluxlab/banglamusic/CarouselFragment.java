@@ -6,6 +6,9 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -23,10 +26,14 @@ import android.widget.TextView;
 import com.polluxlab.banglamusic.helper.OnBackPressListener;
 import com.polluxlab.banglamusic.helper.ViewPagerAdapter;
 import com.polluxlab.banglamusic.model.Song;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.jar.Attributes;
 
 
 /**
@@ -46,12 +53,14 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     protected ViewPager pager;
 
     private ViewPagerAdapter adapter;
-    Button freeCatBtn,prermCatBtn,settingCatBtn;
-    ImageButton pauseBtn,prevBtn,nextBtn,closeBtn;
+    Button freeCatBtn,prermCatBtn,settingCatBtn,closeBtn;
+    ImageButton pauseBtn,prevBtn,nextBtn;
     FrameLayout playerLay;
     TextView songName,artistName;
     ImageView songImage;
 
+    public MusicManager mManager=new MusicManager();
+    public static MediaPlayer mPlayer;
     public static List<Song> currentSongs;
 
     static int currentPos;
@@ -73,11 +82,10 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         pauseBtn= (ImageButton) rootView.findViewById(R.id.pauseBtn);
         prevBtn= (ImageButton) rootView.findViewById(R.id.prevBtn);
         nextBtn= (ImageButton) rootView.findViewById(R.id.nextBtn);
-        closeBtn= (ImageButton) rootView.findViewById(R.id.playerUiClose);
+        closeBtn= (Button) rootView.findViewById(R.id.playerUiClose);
         songImage= (ImageView) rootView.findViewById(R.id.playerUiImage);
 
         closeBtn.bringToFront();
-
 
         freeCatBtn= (Button) rootView.findViewById(R.id.mainFreeBtn);
         prermCatBtn= (Button) rootView.findViewById(R.id.mainPremBtn);
@@ -165,7 +173,6 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.playerUiClose:
                 if(currentState==1)player(0,currentPos,currentSongs);
-                playerLay.setVisibility(View.GONE);
                 break;
         }
     }
@@ -208,24 +215,37 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         if(command==1){
             Util.showToast(getActivity(),"Loading. Please wait ...");
             playerLay.setVisibility(View.VISIBLE);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) pager.getLayoutParams();
+            params.bottomMargin = playerLay.getHeight()-closeBtn.getHeight();
+            pager.setLayoutParams(params);
             songName.setText(currentSongs.get(currentPos).getTitle());
             artistName.setText(currentSongs.get(currentPos).getAlbum());
             Picasso.with(getActivity()).load(currentSongs.get(currentPos).getPreview()).error(R.drawable.music_icon).into(songImage);
+            pauseBtn.setImageResource(R.drawable.ic_pause);
 
-            PlayAudio.songs=songs;
+            mManager.init();
+
+/*            PlayAudio.songs=songs;
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
             if(isMyServiceRunning(PlayAudio.class))
                 getActivity().stopService(objIntent);
 
             objIntent.putExtra("pos",currentPos);
-            getActivity().startService(objIntent);
-            pauseBtn.setImageResource(R.drawable.ic_pause);
+            getActivity().startService(objIntent);*/
+
+
         }else if(command==0){
-            if(isMyServiceRunning(PlayAudio.class)) {
+            mManager.stop();
+            pauseBtn.setImageResource(R.drawable.ic_play);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) pager.getLayoutParams();
+            params.bottomMargin =0;
+            pager.setLayoutParams(params);
+            playerLay.setVisibility(View.GONE);
+/*            if(isMyServiceRunning(PlayAudio.class)) {
                 Intent objIntent = new Intent(getActivity(), PlayAudio.class);
                 getActivity().stopService(objIntent);
-                pauseBtn.setImageResource(R.drawable.ic_play);
-            }
+            }*/
+
         }
     }
 
@@ -237,5 +257,75 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             }
         }
         return false;
+    }
+
+    class MusicManager {
+        final String LOGCAT = AppConstant.DEBUG;
+        String link="";
+
+        public void init(){
+            new GetStreamLink().execute();
+        }
+
+        public void play(){
+            if(mPlayer!=null){
+                if(mPlayer.isPlaying())
+                    mPlayer.stop();
+            }
+            mPlayer = new MediaPlayer();
+            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                mPlayer.setDataSource(link);
+            }catch (Exception e){
+                Log.d(LOGCAT,"Error in onpost playaudio");
+            }
+            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    nextBtn.performClick();
+                }
+            });
+            Log.d(LOGCAT, "Media Player started!");
+            mPlayer.prepareAsync();
+            mPlayer.setScreenOnWhilePlaying(true);
+        }
+
+        public void stop(){
+            if(mPlayer!=null && mPlayer.isPlaying()){
+                mPlayer.stop();
+            }
+        }
+
+        class GetStreamLink extends AsyncTask<String,String,String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+                link=currentSongs.get(currentPos).getStreamLink();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                play();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mPlayer!=null){
+            mPlayer.stop();
+        }
+
     }
 }

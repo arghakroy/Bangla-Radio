@@ -5,15 +5,6 @@
               android:orientation="horizontal"
               android:layout_height="wrap_content">
 
-    <ImageView
-      android:id="@+id/singleListItemImage"
-      android:layout_width="50dp"
-      android:minWidth="50dp"
-      android:layout_height="wrap_content"
-      android:adjustViewBounds="true"
-      android:layout_margin="6dp"
-      android:src="@drawable/pic_test_3"/>
-
     <LinearLayout
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -25,23 +16,33 @@
           android:id="@+id/singleListItemTitle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/dami_text1"
-          android:textSize="18sp"/>
+          android:text="@string/noti_dami_text1"
+          android:maxLines="1"
+          android:ellipsize="marquee"
+          android:textSize="20sp"/>
 
         <com.polluxlab.banglamusic.helper.MyTextView
-          android:id="@+id/singleListItemArtist"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:visibility="visible"
-          android:text="@string/dami_text2"
-          android:textSize="16sp"/>
+          android:text="@string/noti_dami_text2"
+          android:maxLines="1"
+          android:ellipsize="marquee"
+          android:textSize="17sp"/>
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:visibility="visible"
+          android:text="@string/noti_dami_text3"
+          android:textSize="14sp"/>
     </LinearLayout>
     <ImageView
       android:layout_gravity="center"
       android:layout_width="40dp"
       android:layout_height="wrap_content"
       android:padding="5dp"
-      android:id="@+id/playBtn"
+      android:visibility="gone"
       android:background="@android:color/transparent"
       android:src="@drawable/ic_play"/>
 </LinearLayout>

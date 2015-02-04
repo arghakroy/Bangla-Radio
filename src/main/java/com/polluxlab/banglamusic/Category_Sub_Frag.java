@@ -2,6 +2,9 @@ package com.polluxlab.banglamusic;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +26,8 @@ import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
@@ -51,6 +57,8 @@ public class Category_Sub_Frag extends RootFragment {
 
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getActivity().getActionBar().setTitle("শিল্পীদের লিস্ট");
 
         position = getArguments().getInt("position");
         categoryItemList = (GridView) rootView.findViewById(R.id.categoryList);
@@ -106,6 +114,26 @@ public class Category_Sub_Frag extends RootFragment {
             }
             TextView categoryName= (TextView) rowView.findViewById(R.id.singleSubCategoryName);
             categoryName.setText(categoryItem.get(i).getName());
+            final LinearLayout imageLayout= (LinearLayout) rowView.findViewById(R.id.singleSubCategoryImageLay);
+
+            Picasso.with(getActivity()).load(categoryItem.get(i).getPreview())
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                            imageLayout.setBackgroundDrawable(new BitmapDrawable(bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable drawable) {
+                            imageLayout.setBackgroundResource(R.drawable.music_icon);
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable drawable) {
+                            //imageLayout.setBackgroundDrawable(drawable);
+                        }
+                    });
+
             return rowView;
         }
     }

@@ -34,7 +34,7 @@
       android:layout_height="wrap_content"
       android:text="OK"
       android:textStyle="bold"
-      android:background="@drawable/ok_btn"
+      android:background="@drawable/buy_now"
       android:textSize="30sp"
       android:id="@+id/buySuccessBtn"
       android:layout_marginTop="50dp"

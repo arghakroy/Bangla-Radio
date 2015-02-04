@@ -56,6 +56,8 @@ public class Category_List_Frag extends RootFragment {
         helper = (PlaySoundHelper) getActivity();
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
 
+        getActivity().getActionBar().setTitle("গানের লিস্ট");
+
         position=getArguments().getInt("position");
 
         new GetSongs().execute();

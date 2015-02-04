@@ -37,5 +37,8 @@ public class Artist extends ModelBase  {
         return links.getSongs();
     }
 
+    public String getPreview(){
+        return links.getPreview();
+    }
 
 }
