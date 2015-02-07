@@ -122,6 +122,7 @@ public class Prem_Category_Frag extends RootFragment {
                 categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        getActivity().getActionBar().setTitle(premCategories.get(i).getTitle());
                         Bundle bun = new Bundle();
                         bun.putInt("position", i);
                         Category_Sub_Frag subFragment = new Category_Sub_Frag();

@@ -56,7 +56,7 @@ public class Category_List_Frag extends RootFragment {
         helper = (PlaySoundHelper) getActivity();
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
 
-        getActivity().getActionBar().setTitle("গানের লিস্ট");
+        //getActivity().getActionBar().setTitle("গানের লিস্ট");
 
         position=getArguments().getInt("position");
 
@@ -133,11 +133,11 @@ public class Category_List_Frag extends RootFragment {
                 Endpoint.init();
                 List<Tag> tag=Endpoint.instance().getTags();
                 if(position==0)
-                    categoryItem=tag.get(3).getSongs();
+                    categoryItem=tag.get(7).getSongs();
                 else if(position==2)
                     categoryItem=tag.get(1).getSongs();
                 else if(position==3)
-                    categoryItem=tag.get(4).getSongs();
+                    categoryItem=tag.get(2).getSongs();
             }catch(Exception e){
                 error=1;
             }

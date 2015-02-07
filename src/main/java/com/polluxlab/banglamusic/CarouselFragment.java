@@ -158,8 +158,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 pager.setCurrentItem(2);
                 break;
             case R.id.pauseBtn:
-                if(currentState==0)player(1,currentPos,currentSongs);
-                else if(currentState==1)player(0,currentPos,currentSongs);
+                if(currentState==2)player(1,currentPos,currentSongs);
+                else if(currentState==1)player(2,currentPos,currentSongs);
                 break;
             case R.id.prevBtn:
                 if(currentPos==0)currentPos=currentSongs.size()-1;
@@ -172,7 +172,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 player(1,currentPos,currentSongs);
                 break;
             case R.id.playerUiClose:
-                if(currentState==1)player(0,currentPos,currentSongs);
+                player(0,currentPos,currentSongs);
                 break;
         }
     }
@@ -204,9 +204,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
-
     public void player(int command, int pos,List<Song> songs) {
+        Log.d(AppConstant.DEBUG,"Command: "+command+", Pos: "+pos);
         if(songs!=null){
             this.currentSongs=songs;
             currentPos=pos;
@@ -222,9 +221,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             artistName.setText(currentSongs.get(currentPos).getAlbum());
             Picasso.with(getActivity()).load(currentSongs.get(currentPos).getPreview()).error(R.drawable.music_icon).into(songImage);
             pauseBtn.setImageResource(R.drawable.ic_pause);
-
             mManager.init();
-
 /*            PlayAudio.songs=songs;
             Intent objIntent = new Intent(getActivity(), PlayAudio.class);
             if(isMyServiceRunning(PlayAudio.class))
@@ -232,8 +229,6 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
 
             objIntent.putExtra("pos",currentPos);
             getActivity().startService(objIntent);*/
-
-
         }else if(command==0){
             mManager.stop();
             pauseBtn.setImageResource(R.drawable.ic_play);
@@ -246,6 +241,9 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 getActivity().stopService(objIntent);
             }*/
 
+        }else if(command==2){
+            mManager.stop();
+            pauseBtn.setImageResource(R.drawable.ic_play);
         }
     }
 
@@ -289,13 +287,15 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    mp.stop();
-                    nextBtn.performClick();
+                    Log.d(AppConstant.DEBUG,"Music finished, current pos: "+mp.getCurrentPosition());
+                    if(mp.getCurrentPosition()!=0){
+                        mp.stop();
+                        nextBtn.performClick();
+                    }
                 }
             });
             Log.d(LOGCAT, "Media Player started!");
             mPlayer.prepareAsync();
-            mPlayer.setScreenOnWhilePlaying(true);
         }
 
         public void stop(){

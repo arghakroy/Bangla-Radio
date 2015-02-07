@@ -58,7 +58,7 @@ public class Category_Sub_Frag extends RootFragment {
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getActivity().getActionBar().setTitle("শিল্পীদের লিস্ট");
+        //getActivity().getActionBar().setTitle("শিল্পীদের লিস্ট");
 
         position = getArguments().getInt("position");
         categoryItemList = (GridView) rootView.findViewById(R.id.categoryList);
@@ -74,6 +74,7 @@ public class Category_Sub_Frag extends RootFragment {
         categoryItemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                getActivity().getActionBar().setTitle(categoryItem.get(i).getName());
                 Category_List_Frag.artist=categoryItem.get(i);
                 Category_List_Frag listFragment = new Category_List_Frag();
                 listFragment.setArguments(getArguments());

@@ -99,11 +99,12 @@ public class LogInWebViewActivity extends Activity {
 
             // Fetch layout parameters of titleTextView (LinearLayout.LayoutParams : Info from HierarchyViewer)
             LinearLayout.LayoutParams txvPars = (LinearLayout.LayoutParams) titleTextView.getLayoutParams();
-            txvPars.gravity = Gravity.CENTER_HORIZONTAL;
+            txvPars.gravity = Gravity.LEFT;
             txvPars.width = metrics.widthPixels;
+            txvPars.leftMargin=15;
             titleTextView.setLayoutParams(txvPars);
 
-            titleTextView.setGravity(Gravity.CENTER);
+            titleTextView.setGravity(Gravity.LEFT);
         }
     }
 }

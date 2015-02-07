@@ -3,6 +3,8 @@
               android:id="@+id/singleCategoryLayout"
               android:layout_width="match_parent"
               android:orientation="horizontal"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp"
               android:layout_height="wrap_content">
 
     <LinearLayout

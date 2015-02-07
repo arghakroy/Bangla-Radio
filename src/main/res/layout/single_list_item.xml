@@ -40,6 +40,7 @@
       android:layout_gravity="center"
       android:layout_width="40dp"
       android:layout_height="wrap_content"
+      android:layout_marginRight="8dp"
       android:padding="5dp"
       android:id="@+id/playBtn"
       android:background="@android:color/transparent"

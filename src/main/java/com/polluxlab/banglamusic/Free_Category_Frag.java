@@ -20,6 +20,7 @@ import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Tag;
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -58,6 +59,7 @@ public class Free_Category_Frag extends RootFragment {
         freeSongListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(AppConstant.DEBUG,"Free song list clicked "+i);
                 helper.play(1,i,freeCategories);
             }
         });
