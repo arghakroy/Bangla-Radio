@@ -12,17 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller {
 
-  public function getCollectionAction() {
-    $entities = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->findAll();
-
-    $response = $this->render('WebServiceBundle:SubscriptionResource:collection.json.twig', array(
-        'entities' => $entities,
-    ));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-
-    return $response;
-  }
-
   public function getAction(Request $request) {
     $userId = $request->query->get('sharedSecret');
     $telenorClient = $this->get('service.telenor.client');
