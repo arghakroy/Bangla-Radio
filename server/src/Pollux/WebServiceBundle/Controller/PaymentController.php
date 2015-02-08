@@ -28,7 +28,7 @@ class PaymentController extends Controller {
     $telenorClient = $this->get('service.telenor.client');
     $currentProduct = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
     if (!$currentProduct) {
-      throw new InvalidArgumentException("No current product found");
+      throw new \InvalidArgumentException("No current product found");
     }
 
     /**
