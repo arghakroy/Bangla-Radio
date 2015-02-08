@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:background="#EFEFEF">
+
+
+
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView"
+      android:src="@drawable/logo"
+      android:padding="50dp"
+      android:layout_gravity="center_horizontal"/>
+    <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView2"
+      android:src="@drawable/logo_text"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:paddingBottom="30dp"
+      android:layout_gravity="center_vertical"/>
+
+    <com.polluxlab.banglamusic.helper.MyTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:text="ইন্টারনেট সংযোগ ছাড়াই, "
+      android:id="@+id/textView"/>
+    <com.polluxlab.banglamusic.helper.MyTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:text="বাংলা রেডিও অনুষ্ঠান শুনুন "/>
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_weight="1"></LinearLayout>
+    <ImageView
+      android:layout_width="100dp"
+      android:layout_height="wrap_content"
+      android:adjustViewBounds="true"
+      android:src="@drawable/digi_logo"/>
+
+    <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:layout_margin="20dp">
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/string_only"
+          android:textSize="18sp"/>
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="20sp"
+          android:padding="5dp"
+          android:textColor="#188FC9"
+          android:textStyle="bold"
+          android:text="ডিজি"/>
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="18sp"
+          android:text="@string/string_customer"/>
+    </LinearLayout>
+</LinearLayout>
