@@ -11,8 +11,7 @@ class ProductRepository extends EntityRepository {
   public function getCurrentProduct() {
     $query = $this->createQueryBuilder('p')
         ->select('p')
-        ->where('p.startDate < :currentDate')
-        ->andWhere('p.endDate > :currentDate')
+        ->where(':currentDate BETWEEN p.start_date AND p.end_date')
         ->setParameter('currentDate', new \DateTime())
         ->getQuery();
 
