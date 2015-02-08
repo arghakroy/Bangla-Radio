@@ -172,7 +172,9 @@ class AmpacheClient {
   /**
    * @param $action
    * @param array $parameters
+   * @param $totalRetry
    * @return \SimpleXMLElement
+   * @throws InvalidArgumentException
    */
   private function executeInternal($action, array $parameters, $totalRetry) {
     $totalRetry++;
@@ -199,12 +201,18 @@ class AmpacheClient {
     $output = curl_exec($curl);
     curl_close($curl);
 
-    $xml = simplexml_load_string($output);
-    if (isset($xml->error) && $xml->error->attributes()['code'] = Response::HTTP_UNAUTHORIZED) {
-      $this->getTokenFromServer();
-      return $this->executeInternal($action, $parameters, $totalRetry);
+    try {
+      $xml = simplexml_load_string($output);
+      if (isset($xml->error) && $xml->error->attributes()['code'] = Response::HTTP_UNAUTHORIZED) {
+        $this->getTokenFromServer();
+        return $this->executeInternal($action, $parameters, $totalRetry);
+      }
+      return $xml;
     }
-    return $xml;
+    catch(\Exception $ex) {
+      $this->logger->debug("Failed ampache request for action=$action, parameters=" . json_encode($parameters));
+      throw new AmpacheResourceException($action, $parameters, $ex);
+    }
   }
 
 }
