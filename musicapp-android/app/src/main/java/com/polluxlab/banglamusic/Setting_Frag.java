@@ -37,11 +37,11 @@ import java.util.TimeZone;
 /**
  * Created by ARGHA K ROY on 11/21/2014.
  */
-public class Setting_Frag extends RootFragment {
+public class Setting_Frag extends RootFragment implements View.OnClickListener{
 
     EditText numberEt;
     TextView remainDays,lastDate;
-    Button buyBtn;
+    Button buyBtn,helpBtn,exitBtn;
     LinearLayout accountStatusContainer;
     LinearLayout accountBuyContainer;
 
@@ -60,6 +60,11 @@ public class Setting_Frag extends RootFragment {
         remainDays= (TextView) rootView.findViewById(R.id.account_remainning_days);
         lastDate= (TextView) rootView.findViewById(R.id.account_last_date);
         numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
+        helpBtn= (Button) rootView.findViewById(R.id.helpLineBtn);
+        exitBtn= (Button) rootView.findViewById(R.id.accountExitButton);
+
+        exitBtn.setOnClickListener(this);
+        helpBtn.setOnClickListener(this);
 
         buyBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
 
@@ -71,6 +76,7 @@ public class Setting_Frag extends RootFragment {
 
     public void showSubscribeUI(){
         accountStatusContainer.setVisibility(View.VISIBLE);
+        exitBtn.setVisibility(View.VISIBLE);
         accountBuyContainer.setVisibility(View.GONE);
         SharedPreferences sh=getActivity().getSharedPreferences(AppConstant.PREF_NAME,Context.MODE_PRIVATE);
         if(!endDate.isEmpty()){
@@ -113,7 +119,9 @@ public class Setting_Frag extends RootFragment {
             showSubscribeUI();
         else if(status==AppConstant.LOGGED_IN){
             setBuyBtn(Endpoint.instance().getPurchase(getActivity()));
+            exitBtn.setVisibility(View.VISIBLE);
         }else{
+            exitBtn.setVisibility(View.GONE);
             setBuyBtn(Endpoint.instance().getAuthUrl());
         }
     }
@@ -138,6 +146,23 @@ public class Setting_Frag extends RootFragment {
         super.onDestroy();
         Log.d(AppConstant.DEBUG, "UNregisterring setting ui");
         getActivity().unregisterReceiver(broadCastReceive);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.accountExitButton:
+                currentStatus=0;
+                Util.storeSecret(getActivity(),"");
+                getActivity().finish();
+                break;
+            case R.id.helpLineBtn:
+                String uri = "tel:0162211800" ;
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+                break;
+        }
     }
 }
 

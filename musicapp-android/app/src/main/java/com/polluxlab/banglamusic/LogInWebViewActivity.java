@@ -1,7 +1,9 @@
 package com.polluxlab.banglamusic;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -10,6 +12,9 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -45,7 +50,28 @@ public class LogInWebViewActivity extends Activity {
 
      class SSLTolerentWebViewClient extends WebViewClient {
 
-        @Override
+         ProgressDialog pDialog=new ProgressDialog(LogInWebViewActivity.this);
+
+         @Override
+         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+             super.onPageStarted(view, url, favicon);
+             if(!pDialog.isShowing()) {
+                 LayoutInflater inflater = getLayoutInflater();
+                 View layout = inflater.inflate(R.layout.progress_layout,null);
+                 pDialog.setIndeterminate(true);
+                 pDialog.setCancelable(true);
+                 pDialog.show();
+                 pDialog.setContentView(layout);
+             }
+         }
+
+         @Override
+         public void onPageFinished(WebView view, String url) {
+             super.onPageFinished(view, url);
+             pDialog.dismiss();
+         }
+
+         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             handler.proceed(); // Ignore SSL certificate errors
         }

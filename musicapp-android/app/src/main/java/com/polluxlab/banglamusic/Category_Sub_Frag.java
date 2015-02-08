@@ -43,6 +43,7 @@ import java.util.List;
 public class Category_Sub_Frag extends RootFragment {
 
 
+    public static String title="";
     GridView categoryItemList;
     List<Artist> categoryItem;
     Context con;
@@ -58,6 +59,7 @@ public class Category_Sub_Frag extends RootFragment {
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Prem_Category_Frag.currentTitle=getActivity().getActionBar().getTitle()+"";
         //getActivity().getActionBar().setTitle("শিল্পীদের লিস্ট");
 
         position = getArguments().getInt("position");
@@ -66,6 +68,7 @@ public class Category_Sub_Frag extends RootFragment {
         if (position == 1){
             new GetArtists().execute();
         }else{
+            Category_Sub_Frag.title=getResources().getString(R.string.category_title);
             Category_List_Frag listFragment = new Category_List_Frag();
             listFragment.setArguments(getArguments());
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -189,5 +192,14 @@ public class Category_Sub_Frag extends RootFragment {
             }
             categoryItemList.setAdapter(new MyListAdapter());
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        Prem_Category_Frag.currentTitle=getResources().getString(R.string.category_title);
+        getActivity().getActionBar().setTitle(getResources().getString(R.string.category_title));
+        getActivity().getActionBar().setHomeButtonEnabled(false);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+        return super.onBackPressed();
     }
 }
