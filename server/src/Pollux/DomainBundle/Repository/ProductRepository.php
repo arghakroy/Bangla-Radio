@@ -3,7 +3,6 @@
 namespace Pollux\DomainBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 
 class ProductRepository extends EntityRepository {
@@ -11,7 +10,7 @@ class ProductRepository extends EntityRepository {
   public function getCurrentProduct() {
     $query = $this->createQueryBuilder('p')
         ->select('p')
-        ->where(':currentDate BETWEEN p.start_date AND p.end_date')
+        ->where(':currentDate BETWEEN p.startDate AND p.endDate')
         ->setParameter('currentDate', new \DateTime())
         ->getQuery();
 
