@@ -39,7 +39,7 @@ import java.util.List;
 public class Prem_Category_Frag extends RootFragment {
 
     GridView categoryList;
-
+    public static String currentTitle="";
     Context con;
     static List<Song> premCategories;
     static List<Tag> tags;
@@ -57,6 +57,7 @@ public class Prem_Category_Frag extends RootFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(getClass().getName(), "Premium content onCcreateView");
         con = getActivity();
+        currentTitle=getResources().getString(R.string.category_title);
         this.inflater=inflater;
         setupBroadCast();
         helper = (PlaySoundHelper) getActivity();
@@ -122,6 +123,7 @@ public class Prem_Category_Frag extends RootFragment {
                 categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Category_Sub_Frag.title=premCategories.get(i).getTitle();
                         getActivity().getActionBar().setTitle(premCategories.get(i).getTitle());
                         Bundle bun = new Bundle();
                         bun.putInt("position", i);

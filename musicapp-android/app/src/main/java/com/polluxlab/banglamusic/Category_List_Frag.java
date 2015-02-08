@@ -57,6 +57,7 @@ public class Category_List_Frag extends RootFragment {
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
 
         //getActivity().getActionBar().setTitle("গানের লিস্ট");
+        Prem_Category_Frag.currentTitle=getActivity().getActionBar().getTitle()+"";
 
         position=getArguments().getInt("position");
 
@@ -159,5 +160,14 @@ public class Category_List_Frag extends RootFragment {
             }
             itemList.setAdapter(new MyListAdapter());
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getActivity().getActionBar().setTitle(Category_Sub_Frag.title);
+        Prem_Category_Frag.currentTitle=Category_Sub_Frag.title;
+        getActivity().getActionBar().setHomeButtonEnabled(true);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        return super.onBackPressed();
     }
 }

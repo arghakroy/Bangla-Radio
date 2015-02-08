@@ -36,6 +36,7 @@ public class Links extends ModelBase {
     private String purchase;
     private String subscriptions;
     private String login;
+    private String currentProduct;
 
     public String getLogin() {
         return login;
@@ -111,6 +112,10 @@ public class Links extends ModelBase {
 
     public String getPurchase(){
         return this.purchase;
+    }
+
+    public String getCurrentProduct() {
+        return currentProduct;
     }
 }
 

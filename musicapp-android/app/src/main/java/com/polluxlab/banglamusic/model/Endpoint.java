@@ -62,6 +62,8 @@ public class Endpoint extends ModelBase {
     }
 
     public String getPurchase(Context con){
+       // String currentProductURL=links.getCurrentProduct();
+        //String productData=get(currentProductURL);
         String purchaseUrl = this.links.getPurchase();
         String secret = Util.getSecretKey(con);
         if( purchaseUrl != null ){

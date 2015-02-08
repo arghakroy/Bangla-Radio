@@ -6,6 +6,11 @@
                 android:orientation="vertical">
 
     <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_weight="1"></LinearLayout>
+
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -122,5 +127,37 @@
               android:id="@+id/settingPhnnuberBtn"/>
         </LinearLayout>
     </LinearLayout>
+    <com.polluxlab.banglamusic.helper.MyButton
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="বাহির"
+      android:visibility="gone"
+      android:textSize="25sp"
+      android:id="@+id/accountExitButton"
+      android:background="@drawable/ok_btn"
+      android:textColor="#fff"
+      android:padding="10dp"
+      android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_weight="1"></LinearLayout>
+    <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Digi HelpLine - 0162211800"
+      android:id="@+id/helpLineBtn"
+      android:background="@android:color/transparent"
+      android:layout_gravity="center_horizontal"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="App Version - 1.0.0"
+      android:textSize="15sp"
+      android:id="@+id/textView2"
+      android:layout_gravity="center_horizontal"
+      android:padding="10dp"/>
 
 </LinearLayout>

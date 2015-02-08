@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.OnBackPressListener;
 import com.polluxlab.banglamusic.helper.ViewPagerAdapter;
@@ -105,7 +107,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                 if(i==0){
                     title=getResources().getString(R.string.free_category_title);
                 }else if(i==1){
-                    title=getResources().getString(R.string.category_title);
+                    title=Prem_Category_Frag.currentTitle;
                 }else
                     title=getResources().getString(R.string.string_set);
 
@@ -212,7 +214,11 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         }
         currentState=command;
         if(command==1){
-            Util.showToast(getActivity(),"Loading. Please wait ...");
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View layout = inflater.inflate(R.layout.progress_layout,
+                    (ViewGroup) getActivity().findViewById(R.id.progressLayoutRoot));
+             Util.showCustomToast(getActivity(),layout);
+
             playerLay.setVisibility(View.VISIBLE);
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) pager.getLayoutParams();
             params.bottomMargin = playerLay.getHeight()-closeBtn.getHeight();

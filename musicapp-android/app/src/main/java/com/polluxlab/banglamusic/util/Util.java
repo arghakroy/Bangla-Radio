@@ -24,6 +24,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -221,5 +225,13 @@ public class Util {
             }
         }
         return out;
+    }
+
+    public static void showCustomToast(Context con,View v){
+        Toast toast = new Toast(con);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(v);
+        toast.show();
     }
 }
