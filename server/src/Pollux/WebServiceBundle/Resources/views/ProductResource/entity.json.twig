@@ -2,6 +2,7 @@
     "pricing": "{{ entity.pricing }}",
     "productName": "{{ entity.productName }}",
     "links" : {
-        "self": "{{ url('webservice.product', { productId: entity.id }) }}"
+        "self": "{{ url('webservice.product', { productId: entity.id }) }}",
+        "payment": "{{ url('webservice.purchase', { productId: entity.id }) }}"
     }
 }
