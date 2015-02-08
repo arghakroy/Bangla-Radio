@@ -3,6 +3,7 @@
 namespace Pollux\WebServiceBundle\Controller;
 
 use Pollux\DomainBundle\Entity\User;
+use Pollux\DomainBundle\Repository\ProductRepository;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Psr\Log\InvalidArgumentException;
@@ -12,26 +13,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller {
 
-  public function getAction(Request $request) {
-    $userId = $request->query->get('sharedSecret');
-    $telenorClient = $this->get('service.telenor.client');
-    $currentProduct = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
-    if (!$currentProduct) {
-      throw new \InvalidArgumentException("No current product found");
+  public function initiatePaymentAction(Request $request, $productId) {
+    $productRepository = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product');
+    $product = $productRepository->find($productId);
+    $currentProduct = $productRepository->getCurrentProduct();
+    if (!$currentProduct && $currentProduct->getId() != $product->getId()) {
+      $this->get('logger')->debug("No current product found with id: $productId");
+      throw $this->createNotFoundException("No current product found with id: $productId");
     }
 
-    /**
-     * @var User $user
-     */
+    $userId = $request->query->get('sharedSecret');
+    $telenorClient = $this->get('service.telenor.client');
+
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userId);
-//    var_dump($user->getUserInfoData());
     $transactionResponse = $telenorClient->getTransaction($user, $currentProduct);
-//    var_dump($transactionResponse);
     $locationLinks = $transactionResponse->links[0];
     $locationURL = $locationLinks->href;
-
-//    var_dump($locationURL);
-//    return new Response();
 
     return $this->redirect($locationURL);
   }
