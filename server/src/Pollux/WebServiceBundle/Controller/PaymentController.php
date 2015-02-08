@@ -22,11 +22,9 @@ class PaymentController extends Controller {
       throw $this->createNotFoundException("No current product found with id: $productId");
     }
 
-    $userId = $request->query->get('sharedSecret');
     $telenorClient = $this->get('service.telenor.client');
 
-    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userId);
-    $transactionResponse = $telenorClient->getTransaction($user, $currentProduct);
+    $transactionResponse = $telenorClient->getTransaction($this->getUser(), $currentProduct);
     $locationLinks = $transactionResponse->links[0];
     $locationURL = $locationLinks->href;
 
