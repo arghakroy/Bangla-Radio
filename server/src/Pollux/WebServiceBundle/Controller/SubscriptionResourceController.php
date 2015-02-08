@@ -9,8 +9,6 @@ use Pollux\WebServiceBundle\Utils\MimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\EventListener\RouterListener;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SubscriptionResourceController extends Controller {
 
@@ -35,19 +33,24 @@ class SubscriptionResourceController extends Controller {
       return new Response('No subscription available.', Response::HTTP_FORBIDDEN);
     }
 
-    $sku = $userRights->right[0]->sku;
-    $timeInterval = $userRights->right[0]->timeInterval ;
+    $userRight = $userRights->right[0];
 
-    list($startTime, $endTime) = explode("/", $timeInterval );
+    list($startTime, $endTime) = explode("/", $userRight->timeInterval);
+    $startTime = date_create($startTime);
+    $endTime = date_create($endTime);
+    $now = new \DateTime();
+    if($now >= $startTime && $now <= $endTime) {
+      $entity['sku'] = $userRight->sku;
+      $entity['start_date'] = $startTime->format('Y-m-d');
+      $entity['end_date'] = $endTime->format('Y-m-d');
+      $entity['status'] = $userRight->state;
 
-    $entity['sku'] = $sku;
-    $entity['start_date'] = date_format(date_create($startTime), 'Y-m-d');
-    $entity['end_date'] = date_format(date_create($endTime), 'Y-m-d');
-    $entity['status'] = $userRights->right[0]->state;
+      $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
+      $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+      return $response;
+    }
 
-    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    return $response;
+    throw $this->createNotFoundException("No active subscription available.");
   }
 
 }
