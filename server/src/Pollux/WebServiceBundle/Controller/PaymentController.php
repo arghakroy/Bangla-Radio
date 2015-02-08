@@ -26,7 +26,7 @@ class PaymentController extends Controller {
 
     $transactionResponse = $telenorClient->getTransaction($this->getUser(), $currentProduct);
     $locationLinks = $transactionResponse->links[0];
-    $locationURL = $locationLinks->href;
+    $locationURL = $locationLinks->href . "locale=" . $this->container->getParameter('telenor.client.locale');
 
     return $this->redirect($locationURL);
   }
