@@ -24,7 +24,9 @@
     </service>
 
     <service id="service.telenor.client" class="Pollux\SecurityBundle\Service\TelenorClient">
+      <argument type="service" id="doctrine.orm.entity_manager"/>
       <argument type="service" id="router"/>
+      <argument type="service" id="logger"/>
       <argument>%telenor.client.endpoint%</argument>
       <argument>%telenor.client.id%</argument>
       <argument>%telenor.client.secret%</argument>

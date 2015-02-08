@@ -8,7 +8,6 @@ use Pollux\DomainBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -36,16 +35,19 @@ class TelenorAuthenticationController extends Controller {
 
     $accessToken = $telenorClient->getToken($code);
     $userInfo = $telenorClient->getUserInfo($accessToken->access_token);
+    $logger->debug("User Info $accessToken->access_token");
+
+    $url = "polluxmusic://cancelled";
     if($this->isValidUserInfo($userInfo)) {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
       $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      return $this->redirectToRoute('webservice.endpoint', array('secret' => $sharedSecret));
+
+      $url = "polluxmusic://success?sharedSecret={$userInfo->sub}";
     }
-    else {
-      return new Response('', Response::HTTP_UNAUTHORIZED);
-    }
+
+    return $this->redirect($url);
   }
 
   /**
@@ -96,10 +98,11 @@ class TelenorAuthenticationController extends Controller {
    * @return bool
    */
   public function isValidUserInfo($userInfo) {
+    return true;
     return property_exists($userInfo, 'phone_number_verified')
-        && $userInfo->phone_number_verified
-        && property_exists($userInfo, 'phone_number')
-        && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
+    && $userInfo->phone_number_verified
+    && property_exists($userInfo, 'phone_number')
+    && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
   }
 
   /**
@@ -112,16 +115,16 @@ class TelenorAuthenticationController extends Controller {
     $em = $this->getDoctrine()->getManager();
     $user = null;
     try {
-      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($phoneNumber);
+      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($userInfo->sub);
     }
     catch(UsernameNotFoundException $ex) {
-      $this->get('logger')->debug("New user found with phoneNumber: $phoneNumber");
+      $this->get('logger')->debug("New user found with sub: $userInfo->sub");
     }
 
     if (!$user) {
       $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
       $user = new User();
-      $user->setUsername($phoneNumber);
+      $user->setUsername($userInfo->sub);
       $em->persist($user);
 
       $user->addRole($roleUser);

@@ -2,38 +2,59 @@
 
 namespace Pollux\WebServiceBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use Pollux\DomainBundle\Entity\User;
+use Pollux\DomainBundle\Repository\ProductRepository;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
+use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller {
 
-  public function getCollectionAction() {
-    $entities = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->findAll();
-
-    $response = $this->render('WebServiceBundle:SubscriptionResource:collection.json.twig', array(
-        'entities' => $entities,
-    ));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-
-    return $response;
-  }
-
-  public function getAction(Request $request) {
-    //$entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Subscription')->find($subscriptionId);
-    $sharedSecret = $request->headers->get('x-secret');
-    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->getUserFromSecret($sharedSecret);
-    echo $user->getAccessToken();
-    $entity = NULL;
-    if (!$entity) {
-      $this->get('logger')->debug("Subscription not found with id: " . $subscriptionId);
-      throw $this->createNotFoundException();
+  public function initiatePaymentAction(Request $request, $productId) {
+    $productRepository = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product');
+    $product = $productRepository->find($productId);
+    $currentProduct = $productRepository->getCurrentProduct();
+    if (!$currentProduct && $currentProduct->getId() != $product->getId()) {
+      $this->get('logger')->debug("No current product found with id: $productId");
+      throw $this->createNotFoundException("No current product found with id: $productId");
     }
 
-    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $entity));
-    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
-    return $response;
+    $telenorClient = $this->get('service.telenor.client');
+
+    $transactionResponse = $telenorClient->getTransaction($this->getUser(), $currentProduct);
+    $locationLinks = $transactionResponse->links[0];
+    $locationURL = $locationLinks->href;
+
+    return $this->redirect($locationURL);
+  }
+
+  public function successAction(Request $request, $uniqueId) {
+    /**
+     * @var User $user
+     */
+    $em = $this->getDoctrine()->getManager();
+    $telenorClient = $this->get('service.telenor.client');
+    $userId = $request->query->get('user');
+    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userId);
+
+    $userRights = $telenorClient->getUserRights($user);
+    $this->get('logger')->debug(json_encode($userRights));
+
+    $user->setUserRightsData(json_encode($userRights));
+    $em->merge($user);
+    $em->flush();
+
+    $url = "polluxmusic://purchase?status=success";
+    $this->get('logger')->debug("Redirecting to: " . $url);
+    return $this->redirect($url);
+  }
+
+  public function cancelAction($uniqueId) {
+    $url = "polluxmusic://purchase?status=cancelled";
+    return $this->redirect($url);
   }
 
 }

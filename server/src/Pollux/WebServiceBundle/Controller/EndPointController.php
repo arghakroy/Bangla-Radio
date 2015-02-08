@@ -10,7 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class EndPointController extends Controller {
 
   public function getAction() {
-    $response = $this->render('WebServiceBundle:EndPoint:index.json.twig');
+    $product = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
+
+    $response = $this->render('WebServiceBundle:EndPoint:index.json.twig', array(
+        'currentProduct' => $product
+    ));
     $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
     return $response;
   }

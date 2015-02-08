@@ -6,7 +6,10 @@
         "albums" : "{{ url('webservice.albums') }}",
         "playlists" : "{{ url('webservice.playlists') }}",
         "tags" : "{{ url('webservice.tags') }}",
-        "subscriptions" : "{{ url('webservice.products') }}"
-        "subscriptions" : "{{ url('webservice.subscriptions') }}"
+        "products" : "{{ url('webservice.products') }}",
+        "currentProduct" : "{{ url('webservice.product', {'productId': currentProduct.id}) }}",
+        "subscriptions" : "{{ url('webservice.subscriptions') }}",
+        "purchase": "{{ url('webservice.purchase') }}",
+        "login": "https://128.199.142.142/musicapp/server/web/app_dev.php/webservice/auth/login/"
     }
 }

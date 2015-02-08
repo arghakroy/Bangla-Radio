@@ -20,6 +20,18 @@ class ProductResourceController extends Controller {
     return $response;
   }
 
+  public function getCurrentProductAction() {
+    $entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
+    if (!$entity) {
+      $this->get('logger')->debug("Current product not found");
+      throw $this->createNotFoundException();
+    }
+
+    $response = $this->render('WebServiceBundle:ProductResource:entity.json.twig', array('entity' => $entity));
+    $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
+    return $response;
+  }
+
   public function getAction($productId) {
     $entity = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->find($productId);
     if (!$entity) {

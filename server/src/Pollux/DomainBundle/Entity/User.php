@@ -50,6 +50,13 @@ class User implements UserInterface, \Serializable {
   /**
    * @var string
    *
+   * @ORM\Column(name="user_rights_data", type="text", length=65535, nullable=true)
+   */
+  private $userRightsData;
+
+  /**
+   * @var string
+   *
    * @ORM\Column(name="shared_secret", type="string", length=512, nullable=true)
    */
   private $sharedSecret;
@@ -192,6 +199,24 @@ class User implements UserInterface, \Serializable {
   }
 
   /**
+   * @return string
+   */
+  public function getUserRightsData() {
+    return $this->userRightsData;
+  }
+
+  /**
+   * @param string $userRightsData
+   * @return User
+   */
+  public function setUserRightsData($userRightsData) {
+    $this->userRightsData = $userRightsData;
+
+    return $this;
+  }
+
+
+  /**
    * Set sharedSecret
    *
    * @param string $sharedSecret
@@ -255,7 +280,7 @@ class User implements UserInterface, \Serializable {
    * @inheritdoc
    */
   public function getPassword() {
-    return $this->sharedSecret;
+    return $this->username;
   }
 
   /**
