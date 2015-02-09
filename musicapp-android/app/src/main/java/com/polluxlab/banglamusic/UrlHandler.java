@@ -1,22 +1,12 @@
 package com.polluxlab.banglamusic;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
-import com.polluxlab.banglamusic.R;
+import android.app.*;
+import android.content.*;
+import android.net.*;
+import android.os.*;
+import android.util.*;
+import android.view.*;
 import com.polluxlab.banglamusic.model.Endpoint;
-import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.DataLoader;
@@ -24,15 +14,10 @@ import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 public class UrlHandler extends Activity {
 
-    PlaySoundHelper helper;
-    Uri URIdata;
-    String host;
-    boolean hasSubscription;
-    Subscription subscription;
+    private Subscription subscription;
     private final static String LOGIN_SUCCESS="success";
     private final static String LOGIN_CANCELLED="cancelled";
     private final static String PURCHASE="purchase";
@@ -48,13 +33,12 @@ public class UrlHandler extends Activity {
         GlobalContext.set(getApplicationContext());
         getActionBar().hide();
 
-        URIdata = getIntent().getData();
+        final Uri URIdata = getIntent().getData();
         if(URIdata == null){
             setContentView(R.layout.buy_fail_layout);
             return;
         }
-        host = URIdata.getHost();
-        String secret;
+        final String host = URIdata.getHost();
         Log.d("MUSIC","URI "+URIdata);
         Log.d("MUSIC","HOST "+host);
 
@@ -83,7 +67,6 @@ public class UrlHandler extends Activity {
     }
 
     private void postLoginSuccessOperations() {
-        final Subscription subs;
         new DataLoader<Subscription>(getApplicationContext(), new DataLoader.Worker<Subscription>(){
             @Override
             public Subscription work() {
@@ -92,7 +75,6 @@ public class UrlHandler extends Activity {
             }
             @Override
             public void done(Subscription s) {
-                hasSubscription = (s != null);
                 subscription=s;
                 performBasedOnSubscription();
             }
@@ -101,7 +83,7 @@ public class UrlHandler extends Activity {
     }
 
     private void performBasedOnSubscription() {
-        if (hasSubscription) {
+        if (subscription != null) {
             Log.d("MUSIC", "User has subscription. Showing premium conent");
             loadPremiumContent(AppConstant.SUBSCRIBED);
             finish();
