@@ -1,17 +1,12 @@
 package com.polluxlab.banglamusic.model;
 
-import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
-
-import com.google.gson.Gson;
+import android.content.*;
 import com.google.gson.reflect.TypeToken;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by samiron on 1/17/2015.
@@ -52,9 +47,7 @@ public class Endpoint extends ModelBase {
     }
 
     public String getAuthUrl(){
-        String str = String.format("%s%s", this.links.getLogin(), String.valueOf(java.util.UUID.randomUUID()));
-        Log.d(getClass().getName(), str);
-        return str;
+        return this.links.getLogin();
     }
 
     public Subscription getSubscription(String secret){
