@@ -9,6 +9,6 @@
         "products" : "{{ url('webservice.products') }}",
         "currentProduct" : "{{ url('webservice.product', {'productId': currentProduct.id}) }}",
         "subscriptions" : "{{ url('webservice.subscriptions') }}",
-        "login": "https://128.199.142.142/musicapp/server/web/app_dev.php/webservice/auth/login/"
+        "login" : "{{ url('telenor.authentication.login') }}"
     }
 }
