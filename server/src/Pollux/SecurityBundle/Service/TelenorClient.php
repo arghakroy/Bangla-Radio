@@ -83,11 +83,10 @@ class TelenorClient {
   }
 
   public function getUserRights(User $user) {
-    $url = $this->getRightsUrl($user);
     $accessToken = $this->getAccessToken($user);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
+        CURLOPT_URL => $this->getRightsUrl($user),
         CURLOPT_HTTPHEADER => array(
             "Authorization: Bearer $accessToken"
         ),
@@ -116,30 +115,6 @@ class TelenorClient {
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $this->getTokenUrl(),
-        CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
-        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CONNECTTIMEOUT => 3,
-        CURLOPT_TIMEOUT => 20,
-        CURLOPT_POST => 1,
-    ));
-
-    $output = curl_exec($curl);
-    curl_close($curl);
-
-    return json_decode($output);
-  }
-
-  public function refreshToken($refreshToken) {
-    $parameters = array(
-        "grant_type" => "refresh_token",
-        "refresh_token" => $refreshToken,
-    );
-
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => $this->getRefreshTokenUrl(),
         CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
         CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
         CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
@@ -227,6 +202,30 @@ class TelenorClient {
     }
 
     return $accessToken;
+  }
+
+  private function refreshToken($refreshToken) {
+    $parameters = array(
+        "grant_type" => "refresh_token",
+        "refresh_token" => $refreshToken,
+    );
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $this->getRefreshTokenUrl(),
+        CURLOPT_POSTFIELDS => $this->prepareQueryUrl($parameters),
+        CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+        CURLOPT_USERPWD => $this->clientId . ":" . $this->clientSecret,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_POST => 1,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return json_decode($output);
   }
 
   private static function prepareQueryUrl(array $parameters) {
