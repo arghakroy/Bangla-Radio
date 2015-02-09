@@ -2,7 +2,8 @@
                 android:id="@+id/searchProgressWrapper"
                 android:background="#477D39"
                 android:layout_width="1dp"
-                android:layout_height="30dp" >
+                android:layout_height="30dp"
+                android:orientation="vertical" >
 
 
 </LinearLayout>
