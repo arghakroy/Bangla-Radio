@@ -84,9 +84,15 @@ public class UrlHandler extends Activity {
 
     private void performBasedOnSubscription() {
         if (subscription != null) {
-            Log.d("MUSIC", "User has subscription. Showing premium conent");
-            loadPremiumContent(AppConstant.SUBSCRIBED);
-            finish();
+            if("MY-RADIO-RADIOBANGLA-FULL-W".equalsIgnoreCase(subscription.getPackageName())) {
+              Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
+              setContentView(R.layout.free_trial_layout);
+            }
+            else {
+              Log.d("MUSIC", "User has subscription. Showing premium content");
+              loadPremiumContent(AppConstant.SUBSCRIBED);
+              finish();
+            }
         } else {
             loadPremiumContent(AppConstant.LOGGED_IN);
             Log.d("MUSIC", "User DOESNT have subscription. We should show buy now screen");
@@ -117,6 +123,11 @@ public class UrlHandler extends Activity {
             case R.id.buyNowBtn:
                 url=Endpoint.instance().getPurchase(this);
                 break;
+            case R.id.freeTrialOk:
+                Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
+                loadPremiumContent(AppConstant.SUBSCRIBED);
+                finish();
+                return;
             case R.id.buyFailBtn:
                 url = Endpoint.instance().getAuthUrl();
                 break;
