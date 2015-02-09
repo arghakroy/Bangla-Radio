@@ -168,4 +168,8 @@ class TelenorAuthenticationController extends Controller {
       if($userRights) {
         $user->setUserRightsData(json_encode($userRights));
         $em->merge($user);
-        $em->flush()
+        $em->flush();
+      }
+    }
+  }
+}
