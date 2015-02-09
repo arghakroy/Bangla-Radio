@@ -127,18 +127,32 @@
               android:id="@+id/settingPhnnuberBtn"/>
         </LinearLayout>
     </LinearLayout>
-    <com.polluxlab.banglamusic.helper.MyButton
-      android:layout_width="wrap_content"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="বাহির"
-      android:visibility="gone"
-      android:textSize="25sp"
-      android:id="@+id/accountExitButton"
-      android:background="@drawable/ok_btn"
-      android:textColor="#fff"
-      android:padding="10dp"
-      android:layout_gravity="center_horizontal"/>
-
+      android:id="@+id/accExitLayout"
+      android:visibility="visible">
+        <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="0172358964"
+          android:background="#959595"
+          android:padding="10dp"
+          android:textSize="25sp"
+          android:layout_marginRight="2dp"/>
+        <com.polluxlab.banglamusic.helper.MyButton
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:text="বাহির"
+          android:textSize="25sp"
+          android:id="@+id/accountExitButton"
+          android:background="#434343"
+          android:textColor="#fff"
+          android:paddingLeft="25dp"
+          android:paddingRight="25dp"
+          android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
     <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="0dp"

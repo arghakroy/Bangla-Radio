@@ -127,7 +127,7 @@ public class LogInWebViewActivity extends Activity {
             LinearLayout.LayoutParams txvPars = (LinearLayout.LayoutParams) titleTextView.getLayoutParams();
             txvPars.gravity = Gravity.LEFT;
             txvPars.width = metrics.widthPixels;
-            txvPars.leftMargin=15;
+            txvPars.leftMargin=5;
             titleTextView.setLayoutParams(txvPars);
 
             titleTextView.setGravity(Gravity.LEFT);

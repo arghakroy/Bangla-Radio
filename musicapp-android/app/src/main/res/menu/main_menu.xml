@@ -3,11 +3,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/notificationBorderMenu"
-          app:showAsAction="always"
+          android:showAsAction="always"
           android:title=""
           android:actionLayout="@layout/menu_layout"/>
     <item android:id="@+id/notificationMenu"
           android:title="Notifications"
-          app:showAsAction="always"
+          android:showAsAction="always"
       android:icon="@drawable/ic_action_noti_icon"/>
 </menu>

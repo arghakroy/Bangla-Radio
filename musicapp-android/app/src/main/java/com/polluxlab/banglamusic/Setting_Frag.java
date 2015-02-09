@@ -44,6 +44,7 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
     Button buyBtn,helpBtn,exitBtn;
     LinearLayout accountStatusContainer;
     LinearLayout accountBuyContainer;
+    LinearLayout exitLayout;
 
     BroadcastReceiver broadCastReceive;
     public static int currentStatus=0;
@@ -62,6 +63,7 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
         numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
         helpBtn= (Button) rootView.findViewById(R.id.helpLineBtn);
         exitBtn= (Button) rootView.findViewById(R.id.accountExitButton);
+        exitLayout= (LinearLayout) rootView.findViewById(R.id.accExitLayout);
 
         exitBtn.setOnClickListener(this);
         helpBtn.setOnClickListener(this);
@@ -76,7 +78,7 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
 
     public void showSubscribeUI(){
         accountStatusContainer.setVisibility(View.VISIBLE);
-        exitBtn.setVisibility(View.VISIBLE);
+        exitLayout.setVisibility(View.VISIBLE);
         accountBuyContainer.setVisibility(View.GONE);
         SharedPreferences sh=getActivity().getSharedPreferences(AppConstant.PREF_NAME,Context.MODE_PRIVATE);
         if(!endDate.isEmpty()){
@@ -119,9 +121,9 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
             showSubscribeUI();
         else if(status==AppConstant.LOGGED_IN){
             setBuyBtn(Endpoint.instance().getPurchase(getActivity()));
-            exitBtn.setVisibility(View.VISIBLE);
+            exitLayout.setVisibility(View.VISIBLE);
         }else{
-            exitBtn.setVisibility(View.GONE);
+            exitLayout.setVisibility(View.GONE);
             setBuyBtn(Endpoint.instance().getAuthUrl());
         }
     }
