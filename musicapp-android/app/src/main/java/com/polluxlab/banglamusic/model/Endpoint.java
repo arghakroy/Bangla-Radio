@@ -47,7 +47,7 @@ public class Endpoint extends ModelBase {
     }
 
     public String getAuthUrl(){
-        return this.links.getLogin();
+        return "https://128.199.142.142/musicapp/server/web/app_dev.php/webservice/auth/login";
     }
 
     public Subscription getSubscription(String secret){
