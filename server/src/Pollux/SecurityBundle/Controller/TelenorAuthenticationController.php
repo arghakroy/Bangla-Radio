@@ -8,6 +8,7 @@ use Pollux\DomainBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -42,7 +43,8 @@ class TelenorAuthenticationController extends Controller {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
-      $sharedSecret = $this->updateUser($phoneNumber, $accessToken, $userInfo);
+      $user = $this->updateUser($phoneNumber, $accessToken, $userInfo);
+      $this->addFreeTrial($user);
 
       $url = "polluxmusic://success?sharedSecret={$userInfo->sub}";
     }
@@ -110,7 +112,7 @@ class TelenorAuthenticationController extends Controller {
    * @param $phoneNumber
    * @param $accessToken
    * @param $userInfo
-   * @return null|string
+   * @return User
    */
   public function updateUser($phoneNumber, $accessToken, $userInfo) {
     $em = $this->getDoctrine()->getManager();
@@ -145,7 +147,28 @@ class TelenorAuthenticationController extends Controller {
     $em->merge($user);
     $em->flush();
 
-    return $user->getSharedSecret();
+    return $user;
+  }
+
+  private function addFreeTrial(User $user) {
+    $em = $this->getDoctrine()->getManager();
+    $currentProduct = $em->getRepository('DomainBundle:Product')->getCurrentProduct();
+    $now = new \DateTime();
+    if($currentProduct->getSku() === 'MY-RADIO-RADIOBANGLA-TRIAL-M'
+        && $now >= $currentProduct->getStartDate()
+        && $now <= $currentProduct->getEndDate()) {
+      $startTime = new \DateTime();
+      $endTime = clone $startTime;
+      $endTime->add(new \DateInterval("P30D"));
+      $userRights = $this->get('service.telenor.client')->addUserRight($user, $currentProduct, $startTime, $endTime);
+      $this->get('logger')->debug(json_encode($userRights));
+
+      if($userRights) {
+        $user->setUserRightsData(json_encode($userRights));
+        $em->merge($user);
+        $em->flush();
+      }
+    }
   }
 
 }
