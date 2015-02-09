@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-  <route id="telenor.authentication.login" pattern="/login/{phoneNumber}" methods="GET">
+  <route id="telenor.authentication.login" pattern="/login" methods="GET">
     <default key="_controller">PolluxSecurityBundle:TelenorAuthentication:login</default>
   </route>
   <route id="telenor.authentication.callback" pattern="/callback" methods="GET">

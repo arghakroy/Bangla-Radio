@@ -18,7 +18,8 @@ class TelenorAuthenticationController extends Controller {
   const TELENOR_OAUTH_STATE = 'telenor.oauth.state';
   const PHONE_NUMBER = 'internal.user.phone.number';
 
-  public function loginAction($phoneNumber) {
+  public function loginAction() {
+    $phoneNumber = "notimportant";
     $telenorAuthState = uniqid();
     $this->get('session')->set(self::PHONE_NUMBER, $phoneNumber);
     $this->get('session')->set(self::TELENOR_OAUTH_STATE, $telenorAuthState);
@@ -167,9 +168,4 @@ class TelenorAuthenticationController extends Controller {
       if($userRights) {
         $user->setUserRightsData(json_encode($userRights));
         $em->merge($user);
-        $em->flush();
-      }
-    }
-  }
-
-}
+        $em->flush()
