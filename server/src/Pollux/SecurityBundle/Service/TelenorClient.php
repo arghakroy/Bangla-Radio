@@ -183,6 +183,35 @@ class TelenorClient {
     return json_decode($output);
   }
 
+  public function addUserRight(User $user, Product $product, \DateTime $startTime, \DateTime $endTime) {
+    $parameterString = json_encode(array(
+        "sku" => $product->getSku(),
+        "grantorId" => $this->clientId,
+        "timeInterval" => $startTime->format('Y-m-d') . "/" . $endTime->format('Y-m-d'),
+    ));
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $this->getRightsUrl($user),
+        CURLOPT_HTTPHEADER => $this->prepareHeaders(array(
+            Headers::CONTENT_TYPE => MimeType::APPLICATION_JSON,
+            Headers::ACCEPT => MimeType::APPLICATION_JSON,
+            Headers::Content_Length => strlen($parameterString),
+            Headers::AUTHORIZATION => "Bearer " . $this->getAccessToken($user),
+        )),
+        CURLOPT_POSTFIELDS => $parameterString,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_POST => 1,
+    ));
+
+    $output = curl_exec($curl);
+    curl_close($curl);
+
+    return json_decode($output);
+  }
+
   private function getAccessToken(User $user) {
     $currentTime = new \DateTime();
 
