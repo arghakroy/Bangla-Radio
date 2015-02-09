@@ -39,7 +39,6 @@ import java.util.TimeZone;
  */
 public class Setting_Frag extends RootFragment implements View.OnClickListener{
 
-    EditText numberEt;
     TextView remainDays,lastDate;
     Button buyBtn,helpBtn,exitBtn;
     LinearLayout accountStatusContainer;
@@ -60,7 +59,6 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
         accountBuyContainer = (LinearLayout) rootView.findViewById(R.id.account_buy_container);
         remainDays= (TextView) rootView.findViewById(R.id.account_remainning_days);
         lastDate= (TextView) rootView.findViewById(R.id.account_last_date);
-        numberEt= (EditText) rootView.findViewById(R.id.settingPhnnuberEt);
         helpBtn= (Button) rootView.findViewById(R.id.helpLineBtn);
         exitBtn= (Button) rootView.findViewById(R.id.accountExitButton);
         exitLayout= (LinearLayout) rootView.findViewById(R.id.accExitLayout);

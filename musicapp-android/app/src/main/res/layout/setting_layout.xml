@@ -100,32 +100,6 @@
           android:padding="10dp"
           android:textStyle="bold"
           android:layout_gravity="center_horizontal"/>
-
-        <LinearLayout
-          android:orientation="horizontal"
-          android:layout_width="match_parent"
-          android:layout_marginTop="30dp"
-          android:visibility="gone"
-          android:layout_height="wrap_content">
-
-            <EditText
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:id="@+id/settingPhnnuberEt"
-              android:background="#959595"
-              android:textColor="#000"
-              android:padding="10dp"
-              android:layout_weight="1"/>
-
-            <Button
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Enter"
-              android:textColor="#fff"
-              android:background="#434343"
-              android:textSize="20sp"
-              android:id="@+id/settingPhnnuberBtn"/>
-        </LinearLayout>
     </LinearLayout>
     <LinearLayout
       android:layout_width="match_parent"
