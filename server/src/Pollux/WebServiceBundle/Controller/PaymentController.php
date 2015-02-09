@@ -39,6 +39,10 @@ class PaymentController extends Controller {
     $telenorClient = $this->get('service.telenor.client');
     $userId = $request->query->get('user');
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userId);
+    if(!$user) {
+      $this->get('logger')->debug("No user found with id: $userId");
+      $this->createNotFoundException("No user found with id: $userId");
+    }
 
     $userRights = $telenorClient->getUserRights($user);
     $this->get('logger')->debug(json_encode($userRights));
