@@ -5,6 +5,7 @@ namespace Pollux\DomainBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
+use Pollux\DomainBundle\Entity\User;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +35,11 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
     return $user;
   }
 
+  /**
+   * @param $username
+   * @return User|null
+   * @throws \Doctrine\ORM\NonUniqueResultException
+   */
   public function findUserByUsername($username) {
     $query = $this->createQueryBuilder('u')
         ->select('u, r')
