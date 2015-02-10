@@ -132,13 +132,31 @@ public class Category_List_Frag extends RootFragment {
                     return null;
                 }
                 Endpoint.init();
-                List<Tag> tag=Endpoint.instance().getTags();
-                if(position==0)
-                    categoryItem=tag.get(7).getSongs();
-                else if(position==2)
-                    categoryItem=tag.get(1).getSongs();
-                else if(position==3)
-                    categoryItem=tag.get(2).getSongs();
+                List<Tag> tags=Endpoint.instance().getTags();
+                if(position==0){
+                    for( Tag t : tags ){
+                        if(t.getName().equalsIgnoreCase("News")){
+                            categoryItem = t.getSongs();
+                            break;
+                        }
+                    }
+                }
+                else if(position==2){
+                    for( Tag t : tags ){
+                        if(t.getName().equalsIgnoreCase("Natok")){
+                            categoryItem = t.getSongs();
+                            break;
+                        }
+                    }
+                }
+                else if(position==3){
+                    for( Tag t : tags ){
+                        if(t.getName().equalsIgnoreCase("TalkShow")){
+                            categoryItem = t.getSongs();
+                            break;
+                        }
+                    }
+                }
             }catch(Exception e){
                 error=1;
             }
