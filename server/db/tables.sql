@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `subscription` (
   `id`                 INT(11)       NOT NULL AUTO_INCREMENT,
+  `user_id`            INT(11)       NOT NULL,
   `payment_id`         INT(11)       NOT NULL,
   `date_created`       DATETIME      NOT NULL,
   `amount`             DECIMAL(6, 2) NOT NULL,
@@ -100,9 +101,15 @@ CREATE TABLE IF NOT EXISTS `subscription` (
   `connect_status`     TINYINT(1)    NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_subscription_payment_idx` (`payment_id` ASC),
+  INDEX `fk_subscription_user_idx` (`user_id` ASC),
   CONSTRAINT `fk_subscription_payment`
   FOREIGN KEY (`payment_id`)
   REFERENCES `payment` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_subscription_user`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `musicapp_dev`.`user` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT
 )
