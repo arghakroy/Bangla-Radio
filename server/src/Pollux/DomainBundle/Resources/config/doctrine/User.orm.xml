@@ -16,6 +16,8 @@
     <field name="userInfoData" type="text" column="user_info_data" length="65535" nullable="true"/>
     <field name="userRightsData" type="text" column="user_rights_data" length="65535" nullable="true"/>
     <field name="sharedSecret" type="string" column="shared_secret" length="512" nullable="true"/>
+    <one-to-many target-entity="Pollux\DomainBundle\Entity\Payment" mapped-by="user" field="payments"/>
+    <one-to-many target-entity="Pollux\DomainBundle\Entity\Subscription" mapped-by="user" field="subscriptions"/>
     <many-to-many field="roles" target-entity="Pollux\DomainBundle\Entity\Role">
       <join-table name="user_role">
         <join-columns>

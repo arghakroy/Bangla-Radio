@@ -13,14 +13,15 @@
     <field name="initiatedAt" type="datetime" column="initiated_at" nullable="false"/>
     <field name="completedAt" type="datetime" column="completed_at" nullable="true"/>
     <field name="amount" type="decimal" column="amount" precision="10" scale="2" nullable="true"/>
-    <many-to-one field="user" target-entity="User">
-      <join-columns>
-        <join-column name="user_id" referenced-column-name="id"/>
-      </join-columns>
-    </many-to-one>
+    <one-to-one field="subscription" target-entity="Subscription" mapped-by="payment"/>
     <many-to-one field="product" target-entity="Product">
       <join-columns>
         <join-column name="product_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="user" target-entity="User">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
   </entity>
