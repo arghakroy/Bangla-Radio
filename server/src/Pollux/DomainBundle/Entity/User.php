@@ -199,6 +199,8 @@ class User implements UserInterface, \Serializable {
   }
 
   /**
+   * Get userRightsData
+   *
    * @return string
    */
   public function getUserRightsData() {
@@ -206,6 +208,8 @@ class User implements UserInterface, \Serializable {
   }
 
   /**
+   * Set userRightsData
+   *
    * @param string $userRightsData
    * @return User
    */
