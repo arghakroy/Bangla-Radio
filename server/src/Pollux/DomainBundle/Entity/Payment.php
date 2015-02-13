@@ -42,6 +42,13 @@ class Payment {
   private $id;
 
   /**
+   * @var \Pollux\DomainBundle\Entity\Subscription
+   *
+   * @ORM\OneToOne(targetEntity="Pollux\DomainBundle\Entity\Subscription", mappedBy="payment")
+   */
+  private $subscription;
+
+  /**
    * @var \Pollux\DomainBundle\Entity\Product
    *
    * @ORM\ManyToOne(targetEntity="Pollux\DomainBundle\Entity\Product")
@@ -132,6 +139,27 @@ class Payment {
    */
   public function getId() {
     return $this->id;
+  }
+
+  /**
+   * Set subscription
+   *
+   * @param \Pollux\DomainBundle\Entity\Subscription $subscription
+   * @return Payment
+   */
+  public function setSubscription(\Pollux\DomainBundle\Entity\Subscription $subscription = null) {
+    $this->subscription = $subscription;
+
+    return $this;
+  }
+
+  /**
+   * Get subscription
+   *
+   * @return \Pollux\DomainBundle\Entity\Subscription
+   */
+  public function getSubscription() {
+    return $this->subscription;
   }
 
   /**
