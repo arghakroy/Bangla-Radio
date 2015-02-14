@@ -24,9 +24,17 @@ class PaymentController extends Controller {
         ->setAmount($currentProduct->getPricing());
     $em->persist($payment);
     $em->flush();
+    $this->get('logger')->debug(sprintf('Initiated payment for user: %s with payment: %s', $this->getUser(), $payment->getId()));
+
     $transactionResponse = $this->get('service.telenor.client')->getTransaction($this->getUser(), $payment);
-    $locationLinks = $transactionResponse->links[0];
-    $locationURL = $locationLinks->href . "?locale=" . $this->container->getParameter('telenor.client.locale');
+    $transactionResponse_string = json_encode($transactionResponse);
+
+    $payment->setTransactionResponse($transactionResponse_string);
+    $em->persist($payment);
+    $em->flush();
+
+    $paymentLink = $this->getLink($transactionResponse->links, 'payment');
+    $locationURL = $paymentLink->href . "?locale=" . $this->container->getParameter('telenor.client.locale');
 
     return $this->redirect($locationURL);
   }
@@ -61,6 +69,21 @@ class PaymentController extends Controller {
 
     $url = "polluxmusic://purchase?status=cancelled";
     return $this->redirect($url);
+  }
+
+  /**
+   * @param array $links
+   * @param $string
+   * @return \stdClass|null
+   */
+  private function getLink(array $links, $string) {
+    foreach($links as $link) {
+      if($link->rel == $string) {
+        return $link;
+      }
+    }
+
+    return null;
   }
 
 }
