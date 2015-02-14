@@ -13,13 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller {
 
-  public function initiatePaymentAction(Request $request, $productId) {
+  public function initiatePaymentAction($productId) {
     $productRepository = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product');
     $product = $productRepository->find($productId);
     $currentProduct = $productRepository->getCurrentProduct();
     if (!$currentProduct && $currentProduct->getId() != $product->getId()) {
-      $this->get('logger')->debug("No current product found with id: $productId");
-      throw $this->createNotFoundException("No current product found with id: $productId");
+      $this->get('logger')->debug("No current product found with id: $productId for purchasing");
+      throw $this->createNotFoundException("No current product found with id: $productId for purchasing");
     }
 
     $telenorClient = $this->get('service.telenor.client');
@@ -31,7 +31,7 @@ class PaymentController extends Controller {
     return $this->redirect($locationURL);
   }
 
-  public function successAction(Request $request, $uniqueId) {
+  public function successAction(Request $request, $paymentId) {
     /**
      * @var User $user
      */
@@ -56,7 +56,7 @@ class PaymentController extends Controller {
     return $this->redirect($url);
   }
 
-  public function cancelAction($uniqueId) {
+  public function cancelAction($paymentId) {
     $url = "polluxmusic://purchase?status=cancelled";
     return $this->redirect($url);
   }
