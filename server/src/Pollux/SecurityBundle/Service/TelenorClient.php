@@ -77,8 +77,7 @@ class TelenorClient {
         CURLOPT_TIMEOUT => 20,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -96,9 +95,7 @@ class TelenorClient {
         CURLOPT_TIMEOUT => 20,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
-    $this->logger->debug("User rights: " . $output);
+    $output = $this->executeInternal($curl);
 
     $userRights = json_decode($output);
     return $userRights;
@@ -125,8 +122,7 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -178,8 +174,7 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -207,8 +202,7 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -252,8 +246,7 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -265,6 +258,7 @@ class TelenorClient {
 
       $statusCode = $info['http_code'];
       if($statusCode >= 300) {
+        curl_close($curl);
         $this->logger->debug(sprintf("Can not handle status code: %s, response: \n%s", $statusCode, $output));
         throw new \InvalidArgumentException(sprintf("Can not handle status code: %s", $statusCode));
       }
