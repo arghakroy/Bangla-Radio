@@ -258,6 +258,22 @@ class TelenorClient {
     return json_decode($output);
   }
 
+  private function executeInternal($curl) {
+    $output = curl_exec($curl);
+    if(!curl_errno($curl)) {
+      $info = curl_getinfo($curl);
+
+      $statusCode = $info['http_code'];
+      if($statusCode >= 300) {
+        $this->logger->debug(sprintf("Can not handle status code: %s, response: \n%s", $statusCode, $output));
+        throw new \InvalidArgumentException(sprintf("Can not handle status code: %s", $statusCode));
+      }
+    }
+    curl_close($curl);
+
+    return $output;
+  }
+
   private static function prepareQueryUrl(array $parameters) {
     $query = '';
     foreach ($parameters as $key => $value) {
