@@ -90,10 +90,10 @@ class User implements UserInterface, \Serializable {
    * @ORM\ManyToMany(targetEntity="Pollux\DomainBundle\Entity\Role")
    * @ORM\JoinTable(name="user_role",
    *   joinColumns={
-   *     @ORM\JoinColumn(name="user", referencedColumnName="id")
+   *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
    *   },
    *   inverseJoinColumns={
-   *     @ORM\JoinColumn(name="role", referencedColumnName="id")
+   *     @ORM\JoinColumn(name="role_id", referencedColumnName="id")
    *   }
    * )
    */

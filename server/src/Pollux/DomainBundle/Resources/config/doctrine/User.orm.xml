@@ -21,10 +21,10 @@
     <many-to-many field="roles" target-entity="Pollux\DomainBundle\Entity\Role">
       <join-table name="user_role">
         <join-columns>
-          <join-column name="user" referenced-column-name="id"/>
+          <join-column name="user_id" referenced-column-name="id"/>
         </join-columns>
         <inverse-join-columns>
-          <join-column name="role" referenced-column-name="id"/>
+          <join-column name="role_id" referenced-column-name="id"/>
         </inverse-join-columns>
       </join-table>
     </many-to-many>
