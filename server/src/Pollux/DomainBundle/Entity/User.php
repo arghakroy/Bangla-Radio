@@ -388,4 +388,9 @@ class User implements UserInterface, \Serializable {
     list ($this->id,) = unserialize($serialized);
   }
 
+  function __toString() {
+    return $this->username;
+  }
+
+
 }
