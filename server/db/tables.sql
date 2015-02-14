@@ -43,12 +43,13 @@ CREATE TABLE IF NOT EXISTS `product` (
 -- Table `payment`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `payment` (
-  `id`           INT(11)        NOT NULL AUTO_INCREMENT,
-  `initiated_at` TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `completed_at` DATETIME       NULL     DEFAULT NULL,
-  `amount`       DECIMAL(10, 2) NULL     DEFAULT NULL,
-  `user_id`      INT(11)        NOT NULL,
-  `product_id`   INT(11)        NOT NULL,
+  `id`                   INT(11)        NOT NULL AUTO_INCREMENT,
+  `initiated_at`         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `completed_at`         DATETIME       NULL     DEFAULT NULL,
+  `amount`               DECIMAL(10, 2) NULL     DEFAULT NULL,
+  `user_id`              INT(11)        NOT NULL,
+  `product_id`           INT(11)        NOT NULL,
+  `transaction_response` TEXT           NULL     DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_payment_products_idx` (`product_id` ASC),
   INDEX `fk_payment_user_idx` (`user_id` ASC),
