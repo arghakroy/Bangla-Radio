@@ -203,4 +203,11 @@ class Payment {
   public function getUser() {
     return $this->user;
   }
+
+  /**
+   * @return Payment
+   */
+  public static function createPayment() {
+    return new Payment();
+  }
 }
