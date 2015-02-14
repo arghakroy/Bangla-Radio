@@ -133,7 +133,7 @@ class TelenorClient {
   public function getTransaction(User $user, Product $product) {
     $orderId = uniqid();
     $queryParameters = array(
-        'uniqueId' => $orderId,
+        'paymentId' => $orderId,
         'user' => $user->getUsername(),
     );
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
