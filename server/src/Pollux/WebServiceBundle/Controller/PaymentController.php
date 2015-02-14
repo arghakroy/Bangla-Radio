@@ -20,6 +20,7 @@ class PaymentController extends Controller {
     $payment = Payment::createPayment()
         ->setUser($this->getUser())
         ->setInitiatedAt(new \DateTime())
+        ->setStatus(Payment::STATE_INITIATED)
         ->setProduct($currentProduct)
         ->setAmount($currentProduct->getPricing());
     $em->persist($payment);
