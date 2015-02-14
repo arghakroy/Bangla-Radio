@@ -2,6 +2,7 @@
 
 namespace Pollux\WebServiceBundle\Controller;
 
+use Pollux\DomainBundle\Entity\Payment;
 use Pollux\DomainBundle\Entity\User;
 use Pollux\DomainBundle\Repository\ProductRepository;
 use Pollux\WebServiceBundle\Utils\Headers;
@@ -14,7 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 class PaymentController extends Controller {
 
   public function initiatePaymentAction($productId) {
-    $productRepository = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product');
+    $em = $this->getDoctrine()->getManager();
+    $productRepository = $em->getRepository('DomainBundle:Product');
     $product = $productRepository->find($productId);
     $currentProduct = $productRepository->getCurrentProduct();
     if (!$currentProduct && $currentProduct->getId() != $product->getId()) {
@@ -22,9 +24,14 @@ class PaymentController extends Controller {
       throw $this->createNotFoundException("No current product found with id: $productId for purchasing");
     }
 
-    $telenorClient = $this->get('service.telenor.client');
-
-    $transactionResponse = $telenorClient->getTransaction($this->getUser(), $currentProduct);
+    $payment = Payment::createPayment()
+        ->setUser($this->getUser())
+        ->setInitiatedAt(new \DateTime())
+        ->setProduct($currentProduct)
+        ->setAmount($currentProduct->getPricing());
+    $em->persist($payment);
+    $em->flush();
+    $transactionResponse = $this->get('service.telenor.client')->getTransaction($this->getUser(), $payment);
     $locationLinks = $transactionResponse->links[0];
     $locationURL = $locationLinks->href . "?locale=" . $this->container->getParameter('telenor.client.locale');
 
