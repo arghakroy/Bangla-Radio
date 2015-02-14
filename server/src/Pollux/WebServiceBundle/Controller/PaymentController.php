@@ -43,7 +43,7 @@ class PaymentController extends Controller {
   public function successAction($paymentId) {
     $em = $this->getDoctrine()->getManager();
     $payment = $em->getRepository('DomainBundle:Payment')->find($paymentId);
-    if(!$payment) {
+    if(!$payment || $payment->getStatus() != Payment::STATE_INITIATED) {
       $this->get('logger')->debug('Payment not found with id: ' . $paymentId);
       throw $this->createNotFoundException('Payment not found with id: ' . $paymentId);
     }
@@ -68,7 +68,7 @@ class PaymentController extends Controller {
     $em = $this->getDoctrine()->getManager();
     /* @var Payment $payment */
     $payment = $em->getRepository('DomainBundle:Payment')->find($paymentId);
-    if(!$payment) {
+    if(!$payment || $payment->getStatus() != Payment::STATE_INITIATED) {
       $this->get('logger')->debug('Payment not found with id: ' . $paymentId);
       throw $this->createNotFoundException('Payment not found with id: ' . $paymentId);
     }
