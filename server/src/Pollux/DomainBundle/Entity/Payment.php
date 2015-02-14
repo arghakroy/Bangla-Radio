@@ -11,6 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  */
 class Payment {
+
+  const STATE_INITIATED = "INITIATED";
+  const STATE_SUCCESS = "SUCCESS";
+  const STATE_FAILED = "FAILED";
+  const STATE_CANCELLED = "CANCELLED";
+
   /**
    * @var \DateTime
    *
@@ -38,6 +44,13 @@ class Payment {
    * @ORM\Column(name="amount", type="decimal", precision=10, scale=2, nullable=true)
    */
   private $amount;
+
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="status", type="status", length=32, nullable=false)
+   */
+  private $status;
 
   /**
    * @var integer
@@ -158,6 +171,27 @@ class Payment {
    */
   public function getTransactionResponse() {
     return $this->transactionResponse;
+  }
+
+  /**
+   * Set status
+   *
+   * @param string $status
+   * @return Payment
+   */
+  public function setStatus($status) {
+    $this->status = $status;
+
+    return $this;
+  }
+
+  /**
+   * Set status
+   *
+   * @return string
+   */
+  public function getStatus() {
+    return $this->status;
   }
 
   /**

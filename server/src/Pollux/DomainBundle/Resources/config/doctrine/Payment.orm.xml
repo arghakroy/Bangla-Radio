@@ -14,6 +14,7 @@
     <field name="completedAt" type="datetime" column="completed_at" nullable="true"/>
     <field name="amount" type="decimal" column="amount" precision="10" scale="2" nullable="true"/>
     <field name="transactionResponse" type="text" column="transaction_response" length="65535" nullable="true"/>
+    <field name="status" type="string" column="status" length="32" nullable="false"/>
     <one-to-one field="subscription" target-entity="Subscription" mapped-by="payment"/>
     <many-to-one field="product" target-entity="Product">
       <join-columns>
