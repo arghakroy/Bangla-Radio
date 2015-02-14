@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `user_id`              INT(11)        NOT NULL,
   `product_id`           INT(11)        NOT NULL,
   `transaction_response` TEXT           NULL     DEFAULT NULL,
+  `status`               VARCHAR(32)    NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_payment_products_idx` (`product_id` ASC),
   INDEX `fk_payment_user_idx` (`user_id` ASC),
