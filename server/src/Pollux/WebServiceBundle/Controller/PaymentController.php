@@ -46,26 +46,35 @@ class PaymentController extends Controller {
       $this->get('logger')->debug('Payment not found with id: ' . $paymentId);
       throw $this->createNotFoundException('Payment not found with id: ' . $paymentId);
     }
+
+    $payment->setCompletedAt(new \DateTime());
+    $payment->setStatus(Payment::STATE_CANCELLED);
+    $em->merge($payment);
+    $em->flush();
+
     $user = $payment->getUser();
     $userRights = $this->get('service.telenor.client')->getUserRights($user);
-    $this->get('logger')->debug(json_encode($userRights));
 
     $user->setUserRightsData(json_encode($userRights));
     $em->merge($user);
     $em->flush();
 
     $url = "polluxmusic://purchase?status=success";
-    $this->get('logger')->debug("Redirecting to: " . $url);
     return $this->redirect($url);
   }
 
   public function cancelAction($paymentId) {
     $em = $this->getDoctrine()->getManager();
+    /* @var Payment $payment */
     $payment = $em->getRepository('DomainBundle:Payment')->find($paymentId);
     if(!$payment) {
       $this->get('logger')->debug('Payment not found with id: ' . $paymentId);
       throw $this->createNotFoundException('Payment not found with id: ' . $paymentId);
     }
+    $payment->setCompletedAt(new \DateTime());
+    $payment->setStatus(Payment::STATE_CANCELLED);
+    $em->merge($payment);
+    $em->flush();
 
     $url = "polluxmusic://purchase?status=cancelled";
     return $this->redirect($url);
