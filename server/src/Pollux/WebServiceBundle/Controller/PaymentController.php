@@ -49,7 +49,7 @@ class PaymentController extends Controller {
     }
 
     $payment->setCompletedAt(new \DateTime());
-    $payment->setStatus(Payment::STATE_CANCELLED);
+    $payment->setStatus(Payment::STATE_SUCCESS);
     $em->merge($payment);
     $em->flush();
 
