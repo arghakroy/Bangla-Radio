@@ -28,6 +28,13 @@ class Payment {
   /**
    * @var string
    *
+   * @ORM\Column(name="transaction_response", type="text", length=65535, nullable=true)
+   */
+  private $transactionResponse;
+
+  /**
+   * @var string
+   *
    * @ORM\Column(name="amount", type="decimal", precision=10, scale=2, nullable=true)
    */
   private $amount;
@@ -130,6 +137,27 @@ class Payment {
    */
   public function getAmount() {
     return $this->amount;
+  }
+
+  /**
+   * Set transactionResponse
+   *
+   * @param string $transactionResponse
+   * @return Payment
+   */
+  public function setTransactionResponse($transactionResponse) {
+    $this->transactionResponse = $transactionResponse;
+
+    return $this;
+  }
+
+  /**
+   * Get transactionResponse
+   *
+   * @return string
+   */
+  public function getTransactionResponse() {
+    return $this->transactionResponse;
   }
 
   /**
