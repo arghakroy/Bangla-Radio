@@ -4,6 +4,7 @@ namespace Pollux\SecurityBundle\Service;
 
 
 use Doctrine\ORM\EntityManager;
+use Pollux\DomainBundle\Entity\Payment;
 use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\User;
 use Pollux\WebServiceBundle\Utils\Headers;
@@ -130,10 +131,10 @@ class TelenorClient {
     return json_decode($output);
   }
 
-  public function getTransaction(User $user, Product $product) {
-    $orderId = uniqid();
+  public function getTransaction(User $user, Payment $payment) {
+    $product = $payment->getProduct();
     $queryParameters = array(
-        'paymentId' => $orderId,
+        'paymentId' => $payment->getId(),
         'user' => $user->getUsername(),
     );
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -148,7 +149,7 @@ class TelenorClient {
         'timeSpec' => $product->getTimeSpec()
     );
     $parameters = array(
-        "orderId" => $orderId,
+        "orderId" => $payment->getId(),
         "purchaseDescription" => "Product description",
         "amount" => "MYR ".$product->getPricing(),
         'vatRate' => (string) $product->getVatPercentage(),
