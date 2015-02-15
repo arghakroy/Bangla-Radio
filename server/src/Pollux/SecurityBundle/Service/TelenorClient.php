@@ -260,7 +260,7 @@ class TelenorClient {
       if($statusCode >= 300) {
         curl_close($curl);
         $this->logger->debug(sprintf("Can not handle status code: %s, response: \n%s", $statusCode, $output));
-        throw new \InvalidArgumentException(sprintf("Can not handle status code: %s", $statusCode));
+        throw new TelenorException(sprintf("Can not handle status code: %s", $statusCode));
       }
     }
     curl_close($curl);
