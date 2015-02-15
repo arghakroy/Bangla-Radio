@@ -187,7 +187,7 @@ public class Prem_Category_Frag extends RootFragment {
             updateUi(false,0);
             Log.d(AppConstant.DEBUG,"No secret key");
         } else {
-            Log.d(AppConstant.DEBUG,"Secret key: "+secret);
+           Log.d(AppConstant.DEBUG,"Secret key: "+secret);
             new LoadSubscription().execute();
         }
     }

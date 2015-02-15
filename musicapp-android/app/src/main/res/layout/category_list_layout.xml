@@ -10,4 +10,9 @@
       android:layout_height="wrap_content"
       android:id="@+id/categoryItemList"
       android:layout_gravity="center_horizontal"/>
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#ddd">
+      </LinearLayout>
 </LinearLayout>
