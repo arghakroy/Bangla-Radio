@@ -105,11 +105,23 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             public void onPageSelected(int i) {
                 String title=getResources().getString(R.string.free_category_title);
                 if(i==0){
+                    getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+                    getActivity().getActionBar().setHomeButtonEnabled(false);
                     title=getResources().getString(R.string.free_category_title);
                 }else if(i==1){
                     title=Prem_Category_Frag.currentTitle;
-                }else
+                    if(title.equals(getResources().getString(R.string.category_title))){
+                        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+                        getActivity().getActionBar().setHomeButtonEnabled(false);
+                    }else{
+                        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+                        getActivity().getActionBar().setHomeButtonEnabled(true);
+                    }
+                }else{
+                    getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+                    getActivity().getActionBar().setHomeButtonEnabled(false);
                     title=getResources().getString(R.string.string_set);
+                }
 
                 getActivity().getActionBar().setTitle(title);
             }
