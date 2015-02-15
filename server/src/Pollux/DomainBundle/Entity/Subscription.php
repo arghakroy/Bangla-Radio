@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Subscription
  *
- * @ORM\Table(name="subscription")
+ * @ORM\Table(name="subscription", indexes={@ORM\Index(name="fk_subscription_payment_idx", columns={"payment_id"}), @ORM\Index(name="fk_subscription_user_idx", columns={"user_id"})})
  * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\SubscriptionRepository")
  */
 class Subscription {
@@ -17,13 +17,6 @@ class Subscription {
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
   private $dateCreated;
-
-  /**
-   * @var string
-   *
-   * @ORM\Column(name="order_id", type="string", length=100, nullable=false)
-   */
-  private $orderId;
 
   /**
    * @var string
@@ -47,11 +40,11 @@ class Subscription {
   private $description;
 
   /**
-   * @var boolean
+   * @var string
    *
-   * @ORM\Column(name="status", type="boolean", nullable=false)
+   * @ORM\Column(name="connect_tx_json", type="text", length=65535, nullable=false)
    */
-  private $status;
+  private $connectTxJson;
 
   /**
    * @var string
@@ -68,13 +61,6 @@ class Subscription {
   private $connectTxUrl;
 
   /**
-   * @var boolean
-   *
-   * @ORM\Column(name="connect_status", type="boolean", nullable=false)
-   */
-  private $connectStatus;
-
-  /**
    * @var \DateTime
    *
    * @ORM\Column(name="connect_start_time", type="datetime", nullable=false)
@@ -82,11 +68,18 @@ class Subscription {
   private $connectStartTime;
 
   /**
-   * @var string
+   * @var \DateTime
    *
-   * @ORM\Column(name="connect_tx_json", type="text", length=65535, nullable=false)
+   * @ORM\Column(name="connect_end_time", type="datetime", nullable=false)
    */
-  private $connectTxJson;
+  private $connectEndTime;
+
+  /**
+   * @var boolean
+   *
+   * @ORM\Column(name="connect_status", type="boolean", nullable=false)
+   */
+  private $connectStatus;
 
   /**
    * @var integer
@@ -96,6 +89,26 @@ class Subscription {
    * @ORM\GeneratedValue(strategy="IDENTITY")
    */
   private $id;
+
+  /**
+   * @var \Pollux\DomainBundle\Entity\Payment
+   *
+   * @ORM\OneToOne(targetEntity="Pollux\DomainBundle\Entity\Payment", inversedBy="subscription")
+   * @ORM\JoinColumns({
+   *   @ORM\JoinColumn(name="payment_id", referencedColumnName="id", unique=true)
+   * })
+   */
+  private $payment;
+
+  /**
+   * @var \Pollux\DomainBundle\Entity\User
+   *
+   * @ORM\ManyToOne(targetEntity="Pollux\DomainBundle\Entity\User")
+   * @ORM\JoinColumns({
+   *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+   * })
+   */
+  private $user;
 
 
   /**
@@ -117,27 +130,6 @@ class Subscription {
    */
   public function getDateCreated() {
     return $this->dateCreated;
-  }
-
-  /**
-   * Set orderId
-   *
-   * @param string $orderId
-   * @return Subscription
-   */
-  public function setOrderId($orderId) {
-    $this->orderId = $orderId;
-
-    return $this;
-  }
-
-  /**
-   * Get orderId
-   *
-   * @return string
-   */
-  public function getOrderId() {
-    return $this->orderId;
   }
 
   /**
@@ -204,24 +196,24 @@ class Subscription {
   }
 
   /**
-   * Set status
+   * Set connectTxJson
    *
-   * @param boolean $status
+   * @param string $connectTxJson
    * @return Subscription
    */
-  public function setStatus($status) {
-    $this->status = $status;
+  public function setConnectTxJson($connectTxJson) {
+    $this->connectTxJson = $connectTxJson;
 
     return $this;
   }
 
   /**
-   * Get status
+   * Get connectTxJson
    *
-   * @return boolean
+   * @return string
    */
-  public function getStatus() {
-    return $this->status;
+  public function getConnectTxJson() {
+    return $this->connectTxJson;
   }
 
   /**
@@ -267,27 +259,6 @@ class Subscription {
   }
 
   /**
-   * Set connectStatus
-   *
-   * @param boolean $connectStatus
-   * @return Subscription
-   */
-  public function setConnectStatus($connectStatus) {
-    $this->connectStatus = $connectStatus;
-
-    return $this;
-  }
-
-  /**
-   * Get connectStatus
-   *
-   * @return boolean
-   */
-  public function getConnectStatus() {
-    return $this->connectStatus;
-  }
-
-  /**
    * Set connectStartTime
    *
    * @param \DateTime $connectStartTime
@@ -309,24 +280,45 @@ class Subscription {
   }
 
   /**
-   * Set connectTxJson
+   * Set connectEndTime
    *
-   * @param string $connectTxJson
+   * @param \DateTime $connectEndTime
    * @return Subscription
    */
-  public function setConnectTxJson($connectTxJson) {
-    $this->connectTxJson = $connectTxJson;
+  public function setConnectEndTime($connectEndTime) {
+    $this->connectEndTime = $connectEndTime;
 
     return $this;
   }
 
   /**
-   * Get connectTxJson
+   * Get connectEndTime
    *
-   * @return string
+   * @return \DateTime
    */
-  public function getConnectTxJson() {
-    return $this->connectTxJson;
+  public function getConnectEndTime() {
+    return $this->connectEndTime;
+  }
+
+  /**
+   * Set connectStatus
+   *
+   * @param boolean $connectStatus
+   * @return Subscription
+   */
+  public function setConnectStatus($connectStatus) {
+    $this->connectStatus = $connectStatus;
+
+    return $this;
+  }
+
+  /**
+   * Get connectStatus
+   *
+   * @return boolean
+   */
+  public function getConnectStatus() {
+    return $this->connectStatus;
   }
 
   /**
@@ -336,5 +328,47 @@ class Subscription {
    */
   public function getId() {
     return $this->id;
+  }
+
+  /**
+   * Set payment
+   *
+   * @param \Pollux\DomainBundle\Entity\Payment $payment
+   * @return Subscription
+   */
+  public function setPayment(\Pollux\DomainBundle\Entity\Payment $payment = null) {
+    $this->payment = $payment;
+
+    return $this;
+  }
+
+  /**
+   * Get payment
+   *
+   * @return \Pollux\DomainBundle\Entity\Payment
+   */
+  public function getPayment() {
+    return $this->payment;
+  }
+
+  /**
+   * Set user
+   *
+   * @param \Pollux\DomainBundle\Entity\User $user
+   * @return Subscription
+   */
+  public function setUser(\Pollux\DomainBundle\Entity\User $user = null) {
+    $this->user = $user;
+
+    return $this;
+  }
+
+  /**
+   * Get user
+   *
+   * @return \Pollux\DomainBundle\Entity\User
+   */
+  public function getUser() {
+    return $this->user;
   }
 }

@@ -4,6 +4,7 @@ namespace Pollux\SecurityBundle\Service;
 
 
 use Doctrine\ORM\EntityManager;
+use Pollux\DomainBundle\Entity\Payment;
 use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\User;
 use Pollux\WebServiceBundle\Utils\Headers;
@@ -76,8 +77,7 @@ class TelenorClient {
         CURLOPT_TIMEOUT => 20,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -95,9 +95,7 @@ class TelenorClient {
         CURLOPT_TIMEOUT => 20,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
-    $this->logger->debug("User rights: " . $output);
+    $output = $this->executeInternal($curl);
 
     $userRights = json_decode($output);
     return $userRights;
@@ -124,16 +122,15 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
 
-  public function getTransaction(User $user, Product $product) {
-    $orderId = uniqid();
+  public function getTransaction(User $user, Payment $payment) {
+    $product = $payment->getProduct();
     $queryParameters = array(
-        'uniqueId' => $orderId,
+        'paymentId' => $payment->getId(),
         'user' => $user->getUsername(),
     );
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -148,7 +145,7 @@ class TelenorClient {
         'timeSpec' => $product->getTimeSpec()
     );
     $parameters = array(
-        "orderId" => $orderId,
+        "orderId" => $payment->getId(),
         "purchaseDescription" => "Product description",
         "amount" => "MYR ".$product->getPricing(),
         'vatRate' => (string) $product->getVatPercentage(),
@@ -177,8 +174,7 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -206,8 +202,7 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
   }
@@ -251,10 +246,26 @@ class TelenorClient {
         CURLOPT_POST => 1,
     ));
 
-    $output = curl_exec($curl);
-    curl_close($curl);
+    $output = $this->executeInternal($curl);
 
     return json_decode($output);
+  }
+
+  private function executeInternal($curl) {
+    $output = curl_exec($curl);
+    if(!curl_errno($curl)) {
+      $info = curl_getinfo($curl);
+
+      $statusCode = $info['http_code'];
+      if($statusCode >= 300) {
+        curl_close($curl);
+        $this->logger->debug(sprintf("Can not handle status code: %s, response: \n%s", $statusCode, $output));
+        throw new \InvalidArgumentException(sprintf("Can not handle status code: %s", $statusCode));
+      }
+    }
+    curl_close($curl);
+
+    return $output;
   }
 
   private static function prepareQueryUrl(array $parameters) {

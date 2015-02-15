@@ -4,13 +4,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-  <route id="webservice.purchase" path="/{productId}" methods="GET">
+  <route id="webservice.purchase" path="/initiate/{productId}" methods="GET">
     <default key="_controller">WebServiceBundle:Payment:initiatePayment</default>
   </route>
-  <route id="webservice.purchase.success" path="/{uniqueId}/success" methods="GET">
+  <route id="webservice.purchase.success" path="/success/{paymentId}" methods="GET">
     <default key="_controller">WebServiceBundle:Payment:success</default>
   </route>
-  <route id="webservice.purchase.cancel" path="/{uniqueId}/cancelled" methods="GET">
+  <route id="webservice.purchase.cancel" path="/cancelled/{paymentId}" methods="GET">
     <default key="_controller">WebServiceBundle:Payment:cancel</default>
   </route>
 

@@ -3,19 +3,32 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Pollux\DomainBundle\Entity\Subscription" repository-class="Pollux\DomainBundle\Repository\SubscriptionRepository" table="subscription">
+    <indexes>
+      <index name="fk_subscription_payment_idx" columns="payment_id"/>
+      <index name="fk_subscription_user_idx" columns="user_id"/>
+    </indexes>
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
     <field name="dateCreated" type="datetime" column="date_created" nullable="false"/>
-    <field name="orderId" type="string" column="order_id" length="100" nullable="false"/>
     <field name="amount" type="decimal" column="amount" precision="6" scale="2" nullable="false"/>
     <field name="vatPercentage" type="decimal" column="vat_percentage" precision="6" scale="2" nullable="false"/>
     <field name="description" type="string" column="description" length="300" nullable="false"/>
-    <field name="status" type="boolean" column="status" nullable="false"/>
+    <field name="connectTxJson" type="text" column="connect_tx_json" length="65535" nullable="false"/>
     <field name="connectTxId" type="string" column="connect_tx_id" length="150" nullable="false"/>
     <field name="connectTxUrl" type="string" column="connect_tx_url" length="350" nullable="false"/>
-    <field name="connectStatus" type="boolean" column="connect_status" nullable="false"/>
     <field name="connectStartTime" type="datetime" column="connect_start_time" nullable="false"/>
-    <field name="connectTxJson" type="text" column="connect_tx_json" length="65535" nullable="false"/>
+    <field name="connectEndTime" type="datetime" column="connect_end_time" nullable="false"/>
+    <field name="connectStatus" type="boolean" column="connect_status" nullable="false"/>
+    <one-to-one field="payment" target-entity="Payment" inversed-by="subscription">
+      <join-columns>
+        <join-column name="payment_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <many-to-one field="user" target-entity="User">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

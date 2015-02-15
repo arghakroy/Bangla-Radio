@@ -73,13 +73,27 @@ class User implements UserInterface, \Serializable {
   /**
    * @var \Doctrine\Common\Collections\Collection
    *
+   * @ORM\OneToMany(targetEntity="Pollux\DomainBundle\Entity\Payment", mappedBy="user")
+   */
+  private $payments;
+
+  /**
+   * @var \Doctrine\Common\Collections\Collection
+   *
+   * @ORM\OneToMany(targetEntity="Pollux\DomainBundle\Entity\Subscription", mappedBy="user")
+   */
+  private $subscriptions;
+
+  /**
+   * @var \Doctrine\Common\Collections\Collection
+   *
    * @ORM\ManyToMany(targetEntity="Pollux\DomainBundle\Entity\Role")
    * @ORM\JoinTable(name="user_role",
    *   joinColumns={
-   *     @ORM\JoinColumn(name="user", referencedColumnName="id")
+   *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
    *   },
    *   inverseJoinColumns={
-   *     @ORM\JoinColumn(name="role", referencedColumnName="id")
+   *     @ORM\JoinColumn(name="role_id", referencedColumnName="id")
    *   }
    * )
    */
@@ -89,6 +103,8 @@ class User implements UserInterface, \Serializable {
    * Constructor
    */
   public function __construct() {
+    $this->payments = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
     $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
   }
 
@@ -199,13 +215,8 @@ class User implements UserInterface, \Serializable {
   }
 
   /**
-   * @return string
-   */
-  public function getUserRightsData() {
-    return $this->userRightsData;
-  }
-
-  /**
+   * Set userRightsData
+   *
    * @param string $userRightsData
    * @return User
    */
@@ -215,6 +226,14 @@ class User implements UserInterface, \Serializable {
     return $this;
   }
 
+  /**
+   * Get userRightsData
+   *
+   * @return string
+   */
+  public function getUserRightsData() {
+    return $this->userRightsData;
+  }
 
   /**
    * Set sharedSecret
@@ -244,6 +263,66 @@ class User implements UserInterface, \Serializable {
    */
   public function getId() {
     return $this->id;
+  }
+
+  /**
+   * Add payments
+   *
+   * @param \Pollux\DomainBundle\Entity\Payment $payments
+   * @return User
+   */
+  public function addPayment(\Pollux\DomainBundle\Entity\Payment $payments) {
+    $this->payments[] = $payments;
+
+    return $this;
+  }
+
+  /**
+   * Remove payments
+   *
+   * @param \Pollux\DomainBundle\Entity\Payment $payments
+   */
+  public function removePayment(\Pollux\DomainBundle\Entity\Payment $payments) {
+    $this->payments->removeElement($payments);
+  }
+
+  /**
+   * Get payments
+   *
+   * @return \Doctrine\Common\Collections\Collection
+   */
+  public function getPayments() {
+    return $this->payments;
+  }
+
+  /**
+   * Add subscriptions
+   *
+   * @param \Pollux\DomainBundle\Entity\Subscription $subscriptions
+   * @return User
+   */
+  public function addSubscription(\Pollux\DomainBundle\Entity\Subscription $subscriptions) {
+    $this->subscriptions[] = $subscriptions;
+
+    return $this;
+  }
+
+  /**
+   * Remove subscriptions
+   *
+   * @param \Pollux\DomainBundle\Entity\Subscription $subscriptions
+   */
+  public function removeSubscription(\Pollux\DomainBundle\Entity\Subscription $subscriptions) {
+    $this->subscriptions->removeElement($subscriptions);
+  }
+
+  /**
+   * Get subscriptions
+   *
+   * @return \Doctrine\Common\Collections\Collection
+   */
+  public function getSubscriptions() {
+    return $this->subscriptions;
   }
 
   /**
@@ -308,5 +387,10 @@ class User implements UserInterface, \Serializable {
   public function unserialize($serialized) {
     list ($this->id,) = unserialize($serialized);
   }
+
+  function __toString() {
+    return $this->username;
+  }
+
 
 }
