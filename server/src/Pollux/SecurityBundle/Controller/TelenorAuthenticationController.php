@@ -5,6 +5,7 @@ namespace Pollux\SecurityBundle\Controller;
 
 use Pollux\DomainBundle\Entity\Role;
 use Pollux\DomainBundle\Entity\User;
+use Pollux\SecurityBundle\Service\TelenorException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -162,13 +163,16 @@ class TelenorAuthenticationController extends Controller {
       $startTime = new \DateTime();
       $endTime = clone $startTime;
       $endTime->add(new \DateInterval("P30D"));
-      $userRights = $this->get('service.telenor.client')->addUserRight($user, $currentProduct, $startTime, $endTime);
-      $this->get('logger')->debug(json_encode($userRights));
-
-      if($userRights) {
-        $user->setUserRightsData(json_encode($userRights));
-        $em->merge($user);
-        $em->flush();
+      try {
+        $userRights = $this->get('service.telenor.client')->addUserRight($user, $currentProduct, $startTime, $endTime);
+        if($userRights) {
+          $user->setUserRightsData(json_encode($userRights));
+          $em->merge($user);
+          $em->flush();
+        }
+      }
+      catch(TelenorException $ex) {
+        $this->get('logger')->warning("Failed to add free trial for user " . $user);
       }
     }
   }
