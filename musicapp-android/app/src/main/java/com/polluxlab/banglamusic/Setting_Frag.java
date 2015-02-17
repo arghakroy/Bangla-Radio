@@ -1,38 +1,22 @@
 package com.polluxlab.banglamusic;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Entity;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.content.*;
+import android.graphics.*;
+import android.net.*;
+import android.os.*;
+import android.support.annotation.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
-import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.util.AppConstant;
-import com.polluxlab.banglamusic.util.DataLoader;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by ARGHA K ROY on 11/21/2014.
@@ -118,7 +102,7 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
         if(status== AppConstant.SUBSCRIBED)
             showSubscribeUI();
         else if(status==AppConstant.LOGGED_IN){
-            setBuyBtn(Endpoint.instance().getPurchase(getActivity()));
+            setBuyBtn(Endpoint.instance().getPurchase());
             exitLayout.setVisibility(View.VISIBLE);
         }else{
             exitLayout.setVisibility(View.GONE);

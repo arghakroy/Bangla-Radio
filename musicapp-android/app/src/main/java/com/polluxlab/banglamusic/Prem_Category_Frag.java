@@ -149,7 +149,7 @@ public class Prem_Category_Frag extends RootFragment {
                     @Override
                     public void onClick(View arg0) {
                         Endpoint.init();
-                        final String url = Endpoint.instance().getPurchase(getActivity());
+                        final String url = Endpoint.instance().getPurchase();
                         Log.d(getClass().getName(), "Url: " + url);
                         Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
                         i.putExtra("url", url);
