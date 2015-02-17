@@ -3,9 +3,12 @@
 namespace Pollux\WebServiceBundle\Controller;
 
 use Pollux\DomainBundle\Entity\Payment;
+use Pollux\DomainBundle\Entity\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PaymentController extends Controller {
+
+  const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.uZ';
 
   public function initiatePaymentAction($productId) {
     $em = $this->getDoctrine()->getManager();
@@ -48,18 +51,7 @@ class PaymentController extends Controller {
       throw $this->createNotFoundException('Payment not found with id: ' . $paymentId);
     }
 
-    $payment->setCompletedAt(new \DateTime());
-    $payment->setStatus(Payment::STATE_SUCCESS);
-    $em->merge($payment);
-    $em->flush();
-
-    $user = $payment->getUser();
-    $userRights = $this->get('service.telenor.client')->getUserRights($user);
-
-    $user->setUserRightsData(json_encode($userRights));
-    $em->merge($user);
-    $em->flush();
-
+    $this->updateTransaction($payment);
     $url = "polluxmusic://purchase?status=success";
     return $this->redirect($url);
   }
@@ -82,18 +74,58 @@ class PaymentController extends Controller {
   }
 
   /**
-   * @param array $links
-   * @param $string
+   * @param $links
+   * @param $rel
    * @return \stdClass|null
    */
-  private function getLink(array $links, $string) {
+  private function getLink($links, $rel) {
     foreach($links as $link) {
-      if($link->rel == $string) {
+      if($link->rel == $rel) {
         return $link;
       }
     }
 
     return null;
+  }
+
+  private function updateTransaction(Payment $payment) {
+    $user = $payment->getUser();
+    $userRights = $this->get('service.telenor.client')->getUserRights($user);
+    foreach($userRights->rights as $userRight) {
+      $grantorContext = json_decode($userRight->grantorContext);
+      if($grantorContext->orderId == $payment->getId()) {
+        $subscription = $this->createSubscription($payment, $userRight, $user);
+        $payment->setCompletedAt(new \DateTime());
+        $payment->setStatus(Payment::STATE_SUCCESS);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($subscription);
+        $em->merge($payment);
+        $em->flush();
+
+        break;
+      }
+    }
+  }
+
+  /**
+   * @param Payment $payment
+   * @param $userRight
+   * @param $user
+   * @return Subscription
+   */
+  private function createSubscription(Payment $payment, $userRight, $user) {
+    list($start, $end) = explode("/", $userRight->timeInterval);
+    return Subscription::createSubscription()
+        ->setUser($user)
+        ->setPayment($payment)
+        ->setDateCreated(new \DateTime())
+        ->setConnectTxId($userRight->rightId)
+        ->setConnectTxUrl($this->getLink($userRight->link, 'self')->href)
+        ->setConnectStatus($userRight->active)
+        ->setConnectStartTime(date_create_from_format(self::DATE_TIME_FORMAT, $start))
+        ->setConnectEndTime(date_create_from_format(self::DATE_TIME_FORMAT, $end))
+        ->setConnectTxJson(json_encode($userRight));
   }
 
 }
