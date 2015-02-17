@@ -121,7 +121,7 @@ public class UrlHandler extends Activity {
         String url="";
         switch (v.getId()){
             case R.id.buyNowBtn:
-                url=Endpoint.instance().getPurchase(this);
+                url=Endpoint.instance().getPurchase();
                 break;
             case R.id.freeTrialOk:
                 Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
