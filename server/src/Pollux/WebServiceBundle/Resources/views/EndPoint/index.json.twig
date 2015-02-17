@@ -8,6 +8,7 @@
         "tags" : "{{ url('webservice.tags') }}",
         {% if currentProduct is not null %}
         "currentProduct" : "{{ url('webservice.product', {'productId': currentProduct.id}) }}",
+        "purchase" : "{{ url('webservice.purchase', {'productId': currentProduct.id}) }}",
         {% endif %}
         "subscriptions" : "{{ url('webservice.subscriptions') }}",
         "login" : "{{ url('telenor.authentication.login') }}"
