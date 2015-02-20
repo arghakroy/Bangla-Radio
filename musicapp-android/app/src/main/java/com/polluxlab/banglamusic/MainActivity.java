@@ -1,7 +1,5 @@
 package com.polluxlab.banglamusic;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -12,23 +10,20 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.GlobalContext;
-import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
-    private CarouselFragment carouselFragment;
+    private MainPagerFragment carouselFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +40,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         } else {
             // restoring the previously created fragment
             // and getting the reference
-            carouselFragment = (CarouselFragment) getSupportFragmentManager().getFragments().get(0);
+            carouselFragment = (MainPagerFragment) getSupportFragmentManager().getFragments().get(0);
         }
     }
 
@@ -85,7 +80,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
     private void initScreen() {
         // Creating the ViewPager container fragment once
-        carouselFragment = new CarouselFragment();
+        carouselFragment = new MainPagerFragment();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -141,7 +136,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     public void play(int command,int pos,List<Song> songs) {
         Log.d(AppConstant.DEBUG,"MainActivity play method");
         FragmentManager mgr=getSupportFragmentManager();
-        CarouselFragment carousel= (CarouselFragment) mgr.findFragmentById(R.id.container);
+        MainPagerFragment carousel= (MainPagerFragment) mgr.findFragmentById(R.id.container);
         carousel.player(command,pos,songs);
     }
 

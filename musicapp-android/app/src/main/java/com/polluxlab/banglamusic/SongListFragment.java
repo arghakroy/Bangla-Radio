@@ -10,35 +10,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Artist;
-import com.polluxlab.banglamusic.model.Category;
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Tag;
-import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
 import com.squareup.picasso.Picasso;
 
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by ARGHA K ROY on 12/26/2014.
  */
-public class Category_List_Frag extends RootFragment {
+public class SongListFragment extends RootFragment {
 
 
     ListView itemList;
@@ -56,8 +47,10 @@ public class Category_List_Frag extends RootFragment {
         helper = (PlaySoundHelper) getActivity();
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
 
-        //getActivity().getActionBar().setTitle("গানের লিস্ট");
-        Prem_Category_Frag.currentTitle=getActivity().getActionBar().getTitle()+"";
+        PremiumCategoryFrag.currentTitle=getActivity().getActionBar().getTitle()+"";
+
+        getActivity().getActionBar().setHomeButtonEnabled(false);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
         position=getArguments().getInt("position");
 
@@ -182,8 +175,8 @@ public class Category_List_Frag extends RootFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getActionBar().setTitle(Category_Sub_Frag.title);
-        Prem_Category_Frag.currentTitle=Category_Sub_Frag.title;
+        getActivity().getActionBar().setTitle(PremiumSubCategoryFragment.title);
+        PremiumCategoryFrag.currentTitle= PremiumSubCategoryFragment.title;
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         return super.onBackPressed();

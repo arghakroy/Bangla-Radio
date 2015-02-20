@@ -4,7 +4,6 @@ package com.polluxlab.banglamusic;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +19,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.OnBackPressListener;
 import com.polluxlab.banglamusic.helper.ViewPagerAdapter;
@@ -32,28 +28,16 @@ import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.jar.Attributes;
 
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
  *
  */
-public class CarouselFragment extends Fragment implements View.OnClickListener{
-
-    /**
-     * TabPagerIndicator
-     *
-     * Please refer to ViewPagerIndicator library
-     */
-
-
+public class MainPagerFragment extends Fragment implements View.OnClickListener{
 
     protected ViewPager pager;
-
     private ViewPagerAdapter adapter;
     Button freeCatBtn,prermCatBtn,settingCatBtn,closeBtn;
     ImageButton pauseBtn,prevBtn,nextBtn;
@@ -68,7 +52,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     static int currentPos;
     static int currentState;
 
-    public CarouselFragment() {
+    public MainPagerFragment() {
         // Required empty public constructor
     }
 
@@ -108,8 +92,11 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                     getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
                     getActivity().getActionBar().setHomeButtonEnabled(false);
                     title=getResources().getString(R.string.free_category_title);
+                    freeCatBtn.setBackgroundResource(R.drawable.select_btn1);
+                    prermCatBtn.setBackgroundResource(R.drawable.select_btn2_deactive);
+                    settingCatBtn.setBackgroundResource(R.drawable.select_btn3_deactive);
                 }else if(i==1){
-                    title=Prem_Category_Frag.currentTitle;
+                    title= PremiumCategoryFrag.currentTitle;
                     if(title.equals(getResources().getString(R.string.category_title))){
                         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
                         getActivity().getActionBar().setHomeButtonEnabled(false);
@@ -117,13 +104,20 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
                         getActivity().getActionBar().setHomeButtonEnabled(true);
                     }
+                    freeCatBtn.setBackgroundResource(R.drawable.select_btn1_deactive);
+                    prermCatBtn.setBackgroundResource(R.drawable.select_btn2);
+                    settingCatBtn.setBackgroundResource(R.drawable.select_btn3_deactive);
                 }else{
                     getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
                     getActivity().getActionBar().setHomeButtonEnabled(false);
                     title=getResources().getString(R.string.string_set);
+                    freeCatBtn.setBackgroundResource(R.drawable.select_btn1_deactive);
+                    prermCatBtn.setBackgroundResource(R.drawable.select_btn2_deactive);
+                    settingCatBtn.setBackgroundResource(R.drawable.select_btn3);
                 }
 
                 getActivity().getActionBar().setTitle(title);
+
             }
 
             @Override
@@ -240,13 +234,6 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             Picasso.with(getActivity()).load(currentSongs.get(currentPos).getPreview()).error(R.drawable.music_icon).into(songImage);
             pauseBtn.setImageResource(R.drawable.ic_pause);
             mManager.init();
-/*            PlayAudio.songs=songs;
-            Intent objIntent = new Intent(getActivity(), PlayAudio.class);
-            if(isMyServiceRunning(PlayAudio.class))
-                getActivity().stopService(objIntent);
-
-            objIntent.putExtra("pos",currentPos);
-            getActivity().startService(objIntent);*/
         }else if(command==0){
             mManager.stop();
             pauseBtn.setImageResource(R.drawable.ic_play);
@@ -254,10 +241,6 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             params.bottomMargin =0;
             pager.setLayoutParams(params);
             playerLay.setVisibility(View.GONE);
-/*            if(isMyServiceRunning(PlayAudio.class)) {
-                Intent objIntent = new Intent(getActivity(), PlayAudio.class);
-                getActivity().stopService(objIntent);
-            }*/
 
         }else if(command==2){
             mManager.stop();
@@ -265,28 +248,28 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     class MusicManager {
+        GetStreamLink getStreamLink;
+
         final String LOGCAT = AppConstant.DEBUG;
         String link="";
 
         public void init(){
-            new GetStreamLink().execute();
+            if(getStreamLink!=null){
+                getStreamLink.cancel(true);
+            }
+            getStreamLink=new GetStreamLink();
+            getStreamLink.execute();
         }
 
         public void play(){
-            if(mPlayer!=null){
-                if(mPlayer.isPlaying())
-                    mPlayer.stop();
+
+            try{
+                mPlayer.stop();
+                mPlayer.reset();
+                mPlayer.release();
+            }catch (Exception e){
+                e.printStackTrace();
             }
             mPlayer = new MediaPlayer();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -325,7 +308,17 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
         class GetStreamLink extends AsyncTask<String,String,String> {
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                prevBtn.setClickable(false);
+                nextBtn.setClickable(false);
+                pauseBtn.setClickable(false);
+            }
+
+            @Override
             protected String doInBackground(String... params) {
+
                 link=currentSongs.get(currentPos).getStreamLink();
                 return null;
             }
@@ -333,6 +326,11 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
+
+                prevBtn.setClickable(true);
+                nextBtn.setClickable(true);
+                pauseBtn.setClickable(true);
+
                 play();
             }
         }

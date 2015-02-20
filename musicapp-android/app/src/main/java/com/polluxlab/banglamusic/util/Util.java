@@ -185,7 +185,7 @@ public class Util {
         ModelBase.setSharedSecret(key, key);
     }
 
-    public static String toBangla(String word){
+    public static String toBanglaNumber(String word){
         String out="";
         for (int i=0;i<word.length();i++){
             switch (word.charAt(i)){
@@ -225,6 +225,47 @@ public class Util {
             }
         }
         return out;
+    }
+    public static String toBanglaMonth(String word){
+            switch (word){
+                case "January":
+                case "Jan":
+                    return "জানুয়ারী";
+                case "February":
+                case "Feb":
+                    return "ফেব্রুয়ারী";
+                case "March":
+                case "Mar":
+                    return "মার্চ";
+                case "April":
+                case "Apr":
+                    return "এপ্রিল";
+                case "May":
+                    return "মে";
+                case "June":
+                case "Jun":
+                    return "জুন";
+                case "July":
+                case "Jul":
+                    return "জুলাই";
+                case "August":
+                case "Aug":
+                    return "আগস্ট";
+                case "September":
+                case "Sep":
+                    return "সেপ্টেম্বর";
+                case "October":
+                case "Oct":
+                    return "অক্টোবর";
+                case "November":
+                case "Nov":
+                    return "নভেম্বর";
+                case "December":
+                case "Dec":
+                    return "ডিসেম্বর";
+
+            }
+        return word;
     }
 
     public static void showCustomToast(Context con,View v){
