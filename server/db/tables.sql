@@ -92,9 +92,6 @@ CREATE TABLE IF NOT EXISTS `subscription` (
   `user_id`            INT(11)       NOT NULL,
   `payment_id`         INT(11)       NOT NULL,
   `date_created`       DATETIME      NOT NULL,
-  `amount`             DECIMAL(6, 2) NOT NULL,
-  `vat_percentage`     DECIMAL(6, 2) NOT NULL,
-  `description`        VARCHAR(300)  NOT NULL,
   `connect_tx_json`    TEXT          NOT NULL,
   `connect_tx_id`      VARCHAR(150)  NOT NULL,
   `connect_tx_url`     VARCHAR(350)  NOT NULL,
@@ -102,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `subscription` (
   `connect_end_time`   DATETIME      NOT NULL,
   `connect_status`     TINYINT(1)    NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `unique_subscription_payment` (`payment_id` ASC),
   INDEX `fk_subscription_payment_idx` (`payment_id` ASC),
   INDEX `fk_subscription_user_idx` (`user_id` ASC),
   CONSTRAINT `fk_subscription_payment`

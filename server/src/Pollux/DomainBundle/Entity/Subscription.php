@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Subscription
  *
- * @ORM\Table(name="subscription", indexes={@ORM\Index(name="fk_subscription_payment_idx", columns={"payment_id"}), @ORM\Index(name="fk_subscription_user_idx", columns={"user_id"})})
+ * @ORM\Table(name="subscription", uniqueConstraints={@ORM\UniqueConstraint(name="unique_subscription_payment", columns={"payment_id"})}, indexes={@ORM\Index(name="fk_subscription_payment_idx", columns={"payment_id"}), @ORM\Index(name="fk_subscription_user_idx", columns={"user_id"})})
  * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\SubscriptionRepository")
  */
 class Subscription {
@@ -17,27 +17,6 @@ class Subscription {
    * @ORM\Column(name="date_created", type="datetime", nullable=false)
    */
   private $dateCreated;
-
-  /**
-   * @var string
-   *
-   * @ORM\Column(name="amount", type="decimal", precision=6, scale=2, nullable=false)
-   */
-  private $amount;
-
-  /**
-   * @var string
-   *
-   * @ORM\Column(name="vat_percentage", type="decimal", precision=6, scale=2, nullable=false)
-   */
-  private $vatPercentage;
-
-  /**
-   * @var string
-   *
-   * @ORM\Column(name="description", type="string", length=300, nullable=false)
-   */
-  private $description;
 
   /**
    * @var string
@@ -130,69 +109,6 @@ class Subscription {
    */
   public function getDateCreated() {
     return $this->dateCreated;
-  }
-
-  /**
-   * Set amount
-   *
-   * @param string $amount
-   * @return Subscription
-   */
-  public function setAmount($amount) {
-    $this->amount = $amount;
-
-    return $this;
-  }
-
-  /**
-   * Get amount
-   *
-   * @return string
-   */
-  public function getAmount() {
-    return $this->amount;
-  }
-
-  /**
-   * Set vatPercentage
-   *
-   * @param string $vatPercentage
-   * @return Subscription
-   */
-  public function setVatPercentage($vatPercentage) {
-    $this->vatPercentage = $vatPercentage;
-
-    return $this;
-  }
-
-  /**
-   * Get vatPercentage
-   *
-   * @return string
-   */
-  public function getVatPercentage() {
-    return $this->vatPercentage;
-  }
-
-  /**
-   * Set description
-   *
-   * @param string $description
-   * @return Subscription
-   */
-  public function setDescription($description) {
-    $this->description = $description;
-
-    return $this;
-  }
-
-  /**
-   * Get description
-   *
-   * @return string
-   */
-  public function getDescription() {
-    return $this->description;
   }
 
   /**
@@ -370,5 +286,9 @@ class Subscription {
    */
   public function getUser() {
     return $this->user;
+  }
+
+  public static function createSubscription() {
+    return new Subscription();
   }
 }
