@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.polluxlab.banglamusic.FreeCategoryFragment;
+import com.polluxlab.banglamusic.Free_Category_Frag;
 import com.polluxlab.banglamusic.PremiumCategoryFrag;
 import com.polluxlab.banglamusic.SettingFragment;
 
@@ -34,7 +34,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         final Fragment result;
         switch (position) {
             case 0:
-                return new FreeCategoryFragment();
+                return new Free_Category_Frag();
             case 1:
             	return new PremiumCategoryFrag();
             case 2:

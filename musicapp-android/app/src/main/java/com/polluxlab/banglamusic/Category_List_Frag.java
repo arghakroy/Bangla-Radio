@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 12/26/2014.
  */
-public class SongListFragment extends RootFragment {
+public class Category_List_Frag extends RootFragment {
 
 
     ListView itemList;
@@ -175,8 +175,8 @@ public class SongListFragment extends RootFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getActionBar().setTitle(PremiumSubCategoryFragment.title);
-        PremiumCategoryFrag.currentTitle= PremiumSubCategoryFragment.title;
+        getActivity().getActionBar().setTitle(Category_Sub_Frag.title);
+        PremiumCategoryFrag.currentTitle= Category_Sub_Frag.title;
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         return super.onBackPressed();

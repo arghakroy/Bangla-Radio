@@ -35,7 +35,7 @@ import java.util.List;
  * A simple {@link android.support.v4.app.Fragment} subclass.
  *
  */
-public class MainPagerFragment extends Fragment implements View.OnClickListener{
+public class CarouselFragment extends Fragment implements View.OnClickListener{
 
     protected ViewPager pager;
     private ViewPagerAdapter adapter;
@@ -52,7 +52,7 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
     static int currentPos;
     static int currentState;
 
-    public MainPagerFragment() {
+    public CarouselFragment() {
         // Required empty public constructor
     }
 

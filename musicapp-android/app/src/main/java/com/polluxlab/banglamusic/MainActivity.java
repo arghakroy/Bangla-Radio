@@ -23,7 +23,7 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
-    private MainPagerFragment carouselFragment;
+    private CarouselFragment carouselFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         } else {
             // restoring the previously created fragment
             // and getting the reference
-            carouselFragment = (MainPagerFragment) getSupportFragmentManager().getFragments().get(0);
+            carouselFragment = (CarouselFragment) getSupportFragmentManager().getFragments().get(0);
         }
     }
 
@@ -80,7 +80,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
     private void initScreen() {
         // Creating the ViewPager container fragment once
-        carouselFragment = new MainPagerFragment();
+        carouselFragment = new CarouselFragment();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -136,7 +136,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     public void play(int command,int pos,List<Song> songs) {
         Log.d(AppConstant.DEBUG,"MainActivity play method");
         FragmentManager mgr=getSupportFragmentManager();
-        MainPagerFragment carousel= (MainPagerFragment) mgr.findFragmentById(R.id.container);
+        CarouselFragment carousel= (CarouselFragment) mgr.findFragmentById(R.id.container);
         carousel.player(command,pos,songs);
     }
 

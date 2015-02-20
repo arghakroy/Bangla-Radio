@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 12/26/2014.
  */
-public class PremiumSubCategoryFragment extends RootFragment {
+public class Category_Sub_Frag extends RootFragment {
 
 
     public static String title="";
@@ -63,8 +63,8 @@ public class PremiumSubCategoryFragment extends RootFragment {
             getActivity().getActionBar().setHomeButtonEnabled(false);
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
-            PremiumSubCategoryFragment.title=getResources().getString(R.string.category_title);
-            SongListFragment listFragment = new SongListFragment();
+            Category_Sub_Frag.title=getResources().getString(R.string.category_title);
+            Category_List_Frag listFragment = new Category_List_Frag();
             listFragment.setArguments(getArguments());
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.replace(R.id.root_container, listFragment).commit();
@@ -73,8 +73,8 @@ public class PremiumSubCategoryFragment extends RootFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 getActivity().getActionBar().setTitle(categoryItem.get(i).getName());
-                SongListFragment.artist=categoryItem.get(i);
-                SongListFragment listFragment = new SongListFragment();
+                Category_List_Frag.artist=categoryItem.get(i);
+                Category_List_Frag listFragment = new Category_List_Frag();
                 listFragment.setArguments(getArguments());
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 // Store the Fragment in stack
