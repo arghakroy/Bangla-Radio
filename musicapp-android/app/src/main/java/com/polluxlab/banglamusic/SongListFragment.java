@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 12/26/2014.
  */
-public class Category_List_Frag extends RootFragment {
+public class SongListFragment extends RootFragment {
 
 
     ListView itemList;
@@ -47,7 +47,7 @@ public class Category_List_Frag extends RootFragment {
         helper = (PlaySoundHelper) getActivity();
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
 
-        PremiumCategoryFrag.currentTitle=getActivity().getActionBar().getTitle()+"";
+        PremiumCategoryFragment.currentTitle=getActivity().getActionBar().getTitle()+"";
 
         getActivity().getActionBar().setHomeButtonEnabled(false);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -175,8 +175,8 @@ public class Category_List_Frag extends RootFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getActionBar().setTitle(Category_Sub_Frag.title);
-        PremiumCategoryFrag.currentTitle= Category_Sub_Frag.title;
+        getActivity().getActionBar().setTitle(PremiumSubCategoryFragment.title);
+        PremiumCategoryFragment.currentTitle= PremiumSubCategoryFragment.title;
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         return super.onBackPressed();

@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.polluxlab.banglamusic.Free_Category_Frag;
-import com.polluxlab.banglamusic.PremiumCategoryFrag;
-import com.polluxlab.banglamusic.SettingFragment;
+import com.polluxlab.banglamusic.AccountFragment;
+import com.polluxlab.banglamusic.FreeCategoryFragment;
+import com.polluxlab.banglamusic.PremiumCategoryFragment;
 
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -34,11 +34,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         final Fragment result;
         switch (position) {
             case 0:
-                return new Free_Category_Frag();
+                return new FreeCategoryFragment();
             case 1:
-            	return new PremiumCategoryFrag();
+            	return new PremiumCategoryFragment();
             case 2:
-                return new SettingFragment();
+                return new AccountFragment();
             default:
                 result = null;
                 break;

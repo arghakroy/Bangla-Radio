@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 12/26/2014.
  */
-public class Category_Sub_Frag extends RootFragment {
+public class PremiumSubCategoryFragment extends RootFragment {
 
 
     public static String title="";
@@ -49,7 +49,7 @@ public class Category_Sub_Frag extends RootFragment {
         View rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
         con = getActivity();
 
-        PremiumCategoryFrag.currentTitle=getActivity().getActionBar().getTitle()+"";
+        PremiumCategoryFragment.currentTitle=getActivity().getActionBar().getTitle()+"";
         //getActivity().getActionBar().setTitle("শিল্পীদের লিস্ট");
 
         position = getArguments().getInt("position");
@@ -63,8 +63,8 @@ public class Category_Sub_Frag extends RootFragment {
             getActivity().getActionBar().setHomeButtonEnabled(false);
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
-            Category_Sub_Frag.title=getResources().getString(R.string.category_title);
-            Category_List_Frag listFragment = new Category_List_Frag();
+            PremiumSubCategoryFragment.title=getResources().getString(R.string.category_title);
+            SongListFragment listFragment = new SongListFragment();
             listFragment.setArguments(getArguments());
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.replace(R.id.root_container, listFragment).commit();
@@ -73,8 +73,8 @@ public class Category_Sub_Frag extends RootFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 getActivity().getActionBar().setTitle(categoryItem.get(i).getName());
-                Category_List_Frag.artist=categoryItem.get(i);
-                Category_List_Frag listFragment = new Category_List_Frag();
+                SongListFragment.artist=categoryItem.get(i);
+                SongListFragment listFragment = new SongListFragment();
                 listFragment.setArguments(getArguments());
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 // Store the Fragment in stack
@@ -191,7 +191,7 @@ public class Category_Sub_Frag extends RootFragment {
 
     @Override
     public boolean onBackPressed() {
-        PremiumCategoryFrag.currentTitle=getResources().getString(R.string.category_title);
+        PremiumCategoryFragment.currentTitle=getResources().getString(R.string.category_title);
         getActivity().getActionBar().setTitle(getResources().getString(R.string.category_title));
         getActivity().getActionBar().setHomeButtonEnabled(false);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);

@@ -2,8 +2,6 @@ package com.polluxlab.banglamusic;
 
 
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -35,7 +33,7 @@ import java.util.List;
  * A simple {@link android.support.v4.app.Fragment} subclass.
  *
  */
-public class CarouselFragment extends Fragment implements View.OnClickListener{
+public class MainPagerFragment extends Fragment implements View.OnClickListener{
 
     protected ViewPager pager;
     private ViewPagerAdapter adapter;
@@ -52,7 +50,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
     static int currentPos;
     static int currentState;
 
-    public CarouselFragment() {
+    public MainPagerFragment() {
         // Required empty public constructor
     }
 
@@ -96,7 +94,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener{
                     prermCatBtn.setBackgroundResource(R.drawable.select_btn2_deactive);
                     settingCatBtn.setBackgroundResource(R.drawable.select_btn3_deactive);
                 }else if(i==1){
-                    title= PremiumCategoryFrag.currentTitle;
+                    title= PremiumCategoryFragment.currentTitle;
                     if(title.equals(getResources().getString(R.string.category_title))){
                         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
                         getActivity().getActionBar().setHomeButtonEnabled(false);

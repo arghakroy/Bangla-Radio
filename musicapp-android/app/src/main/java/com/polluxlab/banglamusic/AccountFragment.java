@@ -2,7 +2,6 @@ package com.polluxlab.banglamusic;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Entity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -10,34 +9,29 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
-import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.util.AppConstant;
-import com.polluxlab.banglamusic.util.DataLoader;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
+
 
 /**
  * Created by ARGHA K ROY on 11/21/2014.
  */
-public class Setting_Frag extends RootFragment implements View.OnClickListener{
+public class AccountFragment extends RootFragment implements View.OnClickListener{
 
     TextView remainDays,lastDate;
     Button buyBtn,helpBtn,exitBtn;
@@ -92,8 +86,12 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
             Date d2= null;
             try {
                 d2 = from.parse(endDate);
-                remainDays.setText(Util.toBangla((d2.getTime()-d1.getTime())/(1000*60*60*24)+1+" "));
-                lastDate.setText("আপনার মেয়াদ শেষ হবে  "+Util.toBangla(to.format(d2)));
+                String date=to.format(d2);
+                String month=date.split(" ")[0];
+                remainDays.setText(Util.toBanglaNumber((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24) + 1 + " "));
+                lastDate.setText("আপনার মেয়াদ শেষ হবে -\n"+Util.toBanglaMonth(month)+Util.toBanglaNumber(
+                        date.substring(month.length(), date.length())
+                ));
             } catch (ParseException e) {
                 Log.d(AppConstant.DEBUG,"Error in setting");
                 e.printStackTrace();
@@ -118,7 +116,7 @@ public class Setting_Frag extends RootFragment implements View.OnClickListener{
         if(status== AppConstant.SUBSCRIBED)
             showSubscribeUI();
         else if(status==AppConstant.LOGGED_IN){
-            setBuyBtn(Endpoint.instance().getPurchase(getActivity()));
+            setBuyBtn(Endpoint.instance().getPurchase());
             exitLayout.setVisibility(View.VISIBLE);
         }else{
             exitLayout.setVisibility(View.GONE);
