@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.polluxlab.banglamusic.util.Util;
+
 /**
  * Created by ARGHA K ROY on 2/3/2015.
  */
@@ -95,7 +97,7 @@ public class NotificationsActivity extends Activity{
             LinearLayout.LayoutParams txvPars = (LinearLayout.LayoutParams) titleTextView.getLayoutParams();
             txvPars.gravity = Gravity.LEFT;
             txvPars.width = metrics.widthPixels;
-            txvPars.leftMargin=5;
+            txvPars.leftMargin= Util.getDipValue(this,5);
             titleTextView.setLayoutParams(txvPars);
             titleTextView.setGravity(Gravity.LEFT);
         }

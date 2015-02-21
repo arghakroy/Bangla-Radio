@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.GlobalContext;
+import com.polluxlab.banglamusic.util.Util;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
             LinearLayout.LayoutParams txvPars = (LinearLayout.LayoutParams) titleTextView.getLayoutParams();
             txvPars.gravity = Gravity.LEFT;
             txvPars.width = metrics.widthPixels;
-            txvPars.leftMargin=5;
+            txvPars.leftMargin= Util.getDipValue(this,5);
             titleTextView.setLayoutParams(txvPars);
 
             titleTextView.setGravity(Gravity.LEFT);

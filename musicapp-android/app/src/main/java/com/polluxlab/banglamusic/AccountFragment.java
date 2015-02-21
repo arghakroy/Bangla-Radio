@@ -61,9 +61,10 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
         helpBtn.setOnClickListener(this);
 
         buyBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
-
         setupBroadCast();
-        updateUI(currentStatus);
+        if(Util.isConnectingToInternet(getActivity())) {
+            updateUI(currentStatus);
+        }
         return rootView;
 
     }

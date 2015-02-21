@@ -38,67 +38,67 @@ import com.polluxlab.banglamusic.model.ModelBase;
 public class Util {
 
 
-	/**
-	 * Checking for all possible internet providers
-	 * **/
-	public static boolean isConnectingToInternet(Context con){
-		ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectivity != null)
-		{
-			NetworkInfo[] info = connectivity.getAllNetworkInfo();
-			if (info != null)
-				for (int i = 0; i < info.length; i++)
-					if (info[i].getState() == NetworkInfo.State.CONNECTED)
-					{
-						return true;
-					}
+    /**
+     * Checking for all possible internet providers
+     * **/
+    public static boolean isConnectingToInternet(Context con){
+        ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
 
-		}
-		return false;
-	}
+        }
+        return false;
+    }
 
 
 
-	public static void showNoInternetDialog(final Context con) {
+    public static void showNoInternetDialog(final Context con) {
 
-		AlertDialog.Builder build=new AlertDialog.Builder(con);
-		build.setTitle("No Internet");
-		build.setMessage("Internet is not available. Please check your connection");
-		build.setCancelable(true);
-		build.setPositiveButton("Settings", new Dialog.OnClickListener() {
+        AlertDialog.Builder build=new AlertDialog.Builder(con);
+        build.setTitle("No Internet");
+        build.setMessage("Internet is not available. Please check your connection");
+        build.setCancelable(true);
+        build.setPositiveButton("Settings", new Dialog.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-				con.startActivity(intent);
-			}
-		});
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                con.startActivity(intent);
+            }
+        });
 
-		build.setNegativeButton("Cancel", new Dialog.OnClickListener() {
+        build.setNegativeButton("Cancel", new Dialog.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				dialog.cancel();
-			}
-		});
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                dialog.cancel();
+            }
+        });
 
-		AlertDialog alert=build.create();
-		alert.show();
-	}
-	public static boolean validEmail(String email) {
-	    Pattern pattern = Patterns.EMAIL_ADDRESS;
-	    return pattern.matcher(email).matches();
-	}
+        AlertDialog alert=build.create();
+        alert.show();
+    }
+    public static boolean validEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
+    }
 
-	public static void showToast(Context con,String message){
-		Toast.makeText(con, message, Toast.LENGTH_SHORT).show();
-	}
+    public static void showToast(Context con,String message){
+        Toast.makeText(con, message, Toast.LENGTH_SHORT).show();
+    }
 
-	public static boolean isGPSOn(Context context)
-	{
-		return Boolean.valueOf(((LocationManager)context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled("gps")).booleanValue();
-	}
+    public static boolean isGPSOn(Context context)
+    {
+        return Boolean.valueOf(((LocationManager)context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled("gps")).booleanValue();
+    }
 
     public static String getUserId(Context context){
         TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -107,22 +107,22 @@ public class Util {
     }
 
 
-	public static String getAmPm(int hour) {
-		if(hour<12){
-			return "AM";
-		}else{
-			return "PM";
-		}
-	}
+    public static String getAmPm(int hour) {
+        if(hour<12){
+            return "AM";
+        }else{
+            return "PM";
+        }
+    }
 
-	public static String formatHour(int hour) {
-		if(hour==0){
-			hour=12;
-		}else{
-			hour-=12;
-		}
-		return hour+"";
-	}
+    public static String formatHour(int hour) {
+        if(hour==0){
+            hour=12;
+        }else{
+            hour-=12;
+        }
+        return hour+"";
+    }
 
     public static Date parseISO8601Date(String dateString){
         DateFormat df1 = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ");
@@ -227,44 +227,44 @@ public class Util {
         return out;
     }
     public static String toBanglaMonth(String word){
-            switch (word){
-                case "January":
-                case "Jan":
-                    return "জানুয়ারী";
-                case "February":
-                case "Feb":
-                    return "ফেব্রুয়ারী";
-                case "March":
-                case "Mar":
-                    return "মার্চ";
-                case "April":
-                case "Apr":
-                    return "এপ্রিল";
-                case "May":
-                    return "মে";
-                case "June":
-                case "Jun":
-                    return "জুন";
-                case "July":
-                case "Jul":
-                    return "জুলাই";
-                case "August":
-                case "Aug":
-                    return "আগস্ট";
-                case "September":
-                case "Sep":
-                    return "সেপ্টেম্বর";
-                case "October":
-                case "Oct":
-                    return "অক্টোবর";
-                case "November":
-                case "Nov":
-                    return "নভেম্বর";
-                case "December":
-                case "Dec":
-                    return "ডিসেম্বর";
+        switch (word){
+            case "January":
+            case "Jan":
+                return "জানুয়ারী";
+            case "February":
+            case "Feb":
+                return "ফেব্রুয়ারী";
+            case "March":
+            case "Mar":
+                return "মার্চ";
+            case "April":
+            case "Apr":
+                return "এপ্রিল";
+            case "May":
+                return "মে";
+            case "June":
+            case "Jun":
+                return "জুন";
+            case "July":
+            case "Jul":
+                return "জুলাই";
+            case "August":
+            case "Aug":
+                return "আগস্ট";
+            case "September":
+            case "Sep":
+                return "সেপ্টেম্বর";
+            case "October":
+            case "Oct":
+                return "অক্টোবর";
+            case "November":
+            case "Nov":
+                return "নভেম্বর";
+            case "December":
+            case "Dec":
+                return "ডিসেম্বর";
 
-            }
+        }
         return word;
     }
 
@@ -274,5 +274,9 @@ public class Util {
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(v);
         toast.show();
+    }
+    public static int getDipValue(Context context,int value){
+        float d = context.getResources().getDisplayMetrics().density;
+        return  (int)(value * d); // margin in pixels
     }
 }
