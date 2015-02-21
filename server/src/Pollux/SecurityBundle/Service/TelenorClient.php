@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TelenorClient {
 
+  const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.uZ';
+
   /**
    * @var LoggerInterface
    */
@@ -284,6 +286,22 @@ class TelenorClient {
     }
 
     return $headers;
+  }
+
+
+  /**
+   * @param $links
+   * @param $rel
+   * @return \stdClass|null
+   */
+  public static function getLink($links, $rel) {
+    foreach($links as $link) {
+      if($link->rel == $rel) {
+        return $link;
+      }
+    }
+
+    return null;
   }
 
 }
