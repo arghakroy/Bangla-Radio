@@ -3,8 +3,12 @@
 namespace Pollux\SecurityBundle\Controller;
 
 
+use Pollux\DomainBundle\Entity\Payment;
+use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\Role;
+use Pollux\DomainBundle\Entity\Subscription;
 use Pollux\DomainBundle\Entity\User;
+use Pollux\SecurityBundle\Service\TelenorClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +42,7 @@ class TelenorAuthenticationController extends Controller {
     $logger->debug("User Info $accessToken->access_token");
 
     $url = "polluxmusic://cancelled";
-    if ($this->isValidUserInfo($userInfo, $request->query->get('state'))) {
+    if($this->isValidUserInfo($userInfo, $request->query->get('state'))) {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
@@ -139,6 +143,7 @@ class TelenorAuthenticationController extends Controller {
     $em->persist($user);
     $em->flush();
 
+    $this->addFreeTrial($user);
     return $user;
   }
 
@@ -158,6 +163,59 @@ class TelenorAuthenticationController extends Controller {
     $user->setUserInfoData(json_encode($userInfo));
     $em->merge($user);
     $em->flush();
+  }
+
+  /**
+   * @param $user
+   */
+  private function addFreeTrial(User $user) {
+    $freeProduct = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
+    $userRights = $this->get('service.telenor.client')->getUserRights($user);
+
+    foreach ($userRights->rights as $userRight) {
+      if ($this->hasFreeSku($userRight, $freeProduct)) {
+        $freePayment = $this->addFreeProduct($user, $freeProduct);
+        $subscription = $this->createSubscription($freePayment, $userRight, $user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($subscription);
+        $em->flush();
+        break;
+      }
+    }
+  }
+
+  private function hasFreeSku($userRight, Product $freeProduct) {
+    return $userRight->sku == $freeProduct->getSku();
+  }
+
+  private function createSubscription(Payment $payment, $userRight, $user) {
+    list($start, $end) = explode("/", $userRight->timeInterval);
+    return Subscription::createSubscription()
+        ->setUser($user)
+        ->setPayment($payment)
+        ->setDateCreated(new \DateTime())
+        ->setConnectTxId($userRight->rightId)
+        ->setConnectTxUrl(TelenorClient::getLink($userRight->link, 'self')->href)
+        ->setConnectStatus($userRight->active)
+        ->setConnectStartTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $start))
+        ->setConnectEndTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $end))
+        ->setConnectTxJson(json_encode($userRight));
+  }
+
+  private function addFreeProduct(User $user, Product $freeProduct) {
+    $em = $this->getDoctrine()->getManager();
+    $now = new \DateTime();
+
+    $freePayment = Payment::createPayment()
+        ->setUser($user)
+        ->setInitiatedAt($now)
+        ->setCompletedAt($now)
+        ->setAmount($freeProduct->getPricing())
+        ->setProduct($freeProduct)
+        ->setTransactionResponse('{"free": true}');
+    $em->persist($freePayment);
+    return $freePayment;
   }
 
 }
