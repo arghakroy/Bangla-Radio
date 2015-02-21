@@ -15,7 +15,7 @@
     </firewall>
 
     <rule path="^/webservice/subscriptions" role="ROLE_USER"/>
-    <rule path="^/webservice/purchase/initiate" role="ROLE_USER"/>
+    <rule path="^/webservice/payment/initiate" role="ROLE_USER"/>
 
     <provider name="administrators">
       <entity class="Pollux\DomainBundle\Entity\User" property="username" />
