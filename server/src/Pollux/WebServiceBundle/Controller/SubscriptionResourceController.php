@@ -7,22 +7,11 @@ use Pollux\DomainBundle\Entity\User;
 use Pollux\WebServiceBundle\Utils\Headers;
 use Pollux\WebServiceBundle\Utils\MimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionResourceController extends Controller {
 
-  public function getCollectionAction() {
-    //get the `secret` header with the request
-
-
-    //get the user info from server based on the secret provided by the client
-
-
-    //if no `secret` send the client a 412 precondition failed error
-  }
-
-  public function getAction(Request $request) {
+  public function getAction() {
     /**
      * @var User $user
      */
