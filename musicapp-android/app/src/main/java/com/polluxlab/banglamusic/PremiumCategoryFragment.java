@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 11/20/2014.
  */
-public class Prem_Category_Frag extends RootFragment {
+public class PremiumCategoryFragment extends RootFragment {
 
     GridView categoryList;
     public static String currentTitle="";
@@ -50,7 +50,7 @@ public class Prem_Category_Frag extends RootFragment {
     LayoutInflater inflater;
     BroadcastReceiver broadCastReceive;
 
-    public Prem_Category_Frag(){
+    public PremiumCategoryFragment(){
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Prem_Category_Frag extends RootFragment {
                 updateUi(true,AppConstant.LOGGED_IN);
             }
             if(subscribed)
-                Setting_Frag.currentStatus=AppConstant.SUBSCRIBED;
+                AccountFragment.currentStatus=AppConstant.SUBSCRIBED;
         }
     }
 
@@ -123,11 +123,11 @@ public class Prem_Category_Frag extends RootFragment {
                 categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Category_Sub_Frag.title=premCategories.get(i).getTitle();
+                        PremiumSubCategoryFragment.title=premCategories.get(i).getTitle();
                         getActivity().getActionBar().setTitle(premCategories.get(i).getTitle());
                         Bundle bun = new Bundle();
                         bun.putInt("position", i);
-                        Category_Sub_Frag subFragment = new Category_Sub_Frag();
+                        PremiumSubCategoryFragment subFragment = new PremiumSubCategoryFragment();
                         subFragment.setArguments(bun);
                         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                         // Store the Fragment in stack

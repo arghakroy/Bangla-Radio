@@ -10,35 +10,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Artist;
-import com.polluxlab.banglamusic.model.Category;
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.model.Song;
 import com.polluxlab.banglamusic.model.Tag;
-import com.polluxlab.banglamusic.util.JSONParser;
 import com.polluxlab.banglamusic.util.Util;
 import com.squareup.picasso.Picasso;
 
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by ARGHA K ROY on 12/26/2014.
  */
-public class Category_List_Frag extends RootFragment {
+public class SongListFragment extends RootFragment {
 
 
     ListView itemList;
@@ -56,8 +47,10 @@ public class Category_List_Frag extends RootFragment {
         helper = (PlaySoundHelper) getActivity();
         itemList=(ListView) rootView.findViewById(R.id.categoryItemList);
 
-        //getActivity().getActionBar().setTitle("গানের লিস্ট");
-        Prem_Category_Frag.currentTitle=getActivity().getActionBar().getTitle()+"";
+        PremiumCategoryFragment.currentTitle=getActivity().getActionBar().getTitle()+"";
+
+        getActivity().getActionBar().setHomeButtonEnabled(false);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
         position=getArguments().getInt("position");
 
@@ -89,21 +82,30 @@ public class Category_List_Frag extends RootFragment {
             return i;
         }
 
+        class ViewHolder{
+            TextView categoryName;
+            TextView categoryAlbum;
+            ImageView im;
+            public ViewHolder(View v){
+                categoryName= (TextView) v.findViewById(R.id.singleListItemTitle);
+                categoryAlbum= (TextView) v.findViewById(R.id.singleListItemArtist);
+                im= (ImageView) v.findViewById(R.id.singleListItemImage);
+            }
+        }
+
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
-            View rowView=view;
-            if(rowView==null){
+            ViewHolder holder;
+            if(view==null){
                 LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                rowView = inflater.inflate(R.layout.single_list_item, null);
-            }
-
-            TextView categoryName= (TextView) rowView.findViewById(R.id.singleListItemTitle);
-            TextView categoryAlbum= (TextView) rowView.findViewById(R.id.singleListItemArtist);
-            ImageView im= (ImageView) rowView.findViewById(R.id.singleListItemImage);
-            categoryName.setText(categoryItem.get(i).getTitle());
-            categoryAlbum.setText(categoryItem.get(i).getAlbum());
-            Picasso.with(getActivity()).load(categoryItem.get(i).getPreview()).error(R.drawable.music_icon).into(im);
-            return rowView;
+                view = inflater.inflate(R.layout.single_list_item, null);
+                holder=new ViewHolder(view);
+                view.setTag(holder);
+            }else holder= (ViewHolder) view.getTag();
+            holder.categoryName.setText(categoryItem.get(i).getTitle());
+            holder.categoryAlbum.setText(categoryItem.get(i).getAlbum());
+            Picasso.with(getActivity()).load(categoryItem.get(i).getPreview()).error(R.drawable.music_icon).into(holder.im);
+            return view;
         }
     }
     class GetSongs extends AsyncTask<String,String,String> {
@@ -182,8 +184,8 @@ public class Category_List_Frag extends RootFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getActionBar().setTitle(Category_Sub_Frag.title);
-        Prem_Category_Frag.currentTitle=Category_Sub_Frag.title;
+        getActivity().getActionBar().setTitle(PremiumSubCategoryFragment.title);
+        PremiumCategoryFragment.currentTitle= PremiumSubCategoryFragment.title;
         getActivity().getActionBar().setHomeButtonEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         return super.onBackPressed();

@@ -37,7 +37,7 @@
           android:layout_height="wrap_content"
           android:visibility="visible"
           android:text="@string/noti_dami_text3"
-          android:textSize="14sp"/>
+          android:textSize="17sp"/>
     </LinearLayout>
     <ImageView
       android:layout_gravity="center"

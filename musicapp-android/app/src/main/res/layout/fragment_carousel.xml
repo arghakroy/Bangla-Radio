@@ -125,7 +125,7 @@
           android:layout_weight="1"
           android:background="@drawable/select_btn1"
           android:textColor="#000"
-          android:layout_marginRight="10dp"
+          android:layout_marginRight="5dp"
           android:textSize="20sp"
           android:textStyle="bold"
           android:text="@string/free_category_title"/>
@@ -135,9 +135,11 @@
           android:layout_width="0dp"
           android:layout_height="40dp"
           android:layout_weight="1"
-          android:background="@drawable/select_btn2"
+          android:background="@drawable/select_btn2_deactive"
           android:textColor="#000"
-          android:layout_marginRight="10dp"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          android:layout_marginRight="5dp"
           android:text="@string/string_prem"/>
 
         <Button
@@ -145,8 +147,10 @@
           android:layout_width="0dp"
           android:layout_height="40dp"
           android:layout_weight="1"
-          android:background="@drawable/select_btn3"
+          android:background="@drawable/select_btn3_deactive"
           android:textColor="#000"
+          android:textSize="20sp"
+          android:textStyle="bold"
           android:text="@string/string_set"/>
     </LinearLayout>
 </LinearLayout>

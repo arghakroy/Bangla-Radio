@@ -1,16 +1,15 @@
 package com.polluxlab.banglamusic.helper;
 
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.polluxlab.banglamusic.Free_Category_Frag;
-import com.polluxlab.banglamusic.Prem_Category_Frag;
-import com.polluxlab.banglamusic.Setting_Frag;
+import com.polluxlab.banglamusic.AccountFragment;
+import com.polluxlab.banglamusic.FreeCategoryFragment;
+import com.polluxlab.banglamusic.PremiumCategoryFragment;
 
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -35,11 +34,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         final Fragment result;
         switch (position) {
             case 0:
-                return new Free_Category_Frag();
+                return new FreeCategoryFragment();
             case 1:
-            	return new Prem_Category_Frag();
+            	return new PremiumCategoryFragment();
             case 2:
-                return new Setting_Frag();
+                return new AccountFragment();
             default:
                 result = null;
                 break;

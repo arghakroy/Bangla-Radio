@@ -39,7 +39,6 @@
                   android:label="লগইন"/>
         <activity android:name=".NotificationsActivity" android:screenOrientation="portrait"
                   android:label="নতুন সংযোজন"/>
-        <service android:name="PlayAudio"  android:enabled="true"></service>
     </application>
 
 </manifest>

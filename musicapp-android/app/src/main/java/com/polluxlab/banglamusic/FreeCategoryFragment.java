@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by ARGHA K ROY on 11/20/2014.
  */
-public class Free_Category_Frag extends RootFragment {
+public class FreeCategoryFragment extends RootFragment {
 
     ListView freeSongListView;
 
@@ -38,7 +38,7 @@ public class Free_Category_Frag extends RootFragment {
     List<Song> freeCategories;
     PlaySoundHelper helper;
 
-    public Free_Category_Frag(){
+    public FreeCategoryFragment(){
     }
 
     @Override
