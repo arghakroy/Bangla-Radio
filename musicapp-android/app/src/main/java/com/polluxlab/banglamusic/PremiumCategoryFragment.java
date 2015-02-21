@@ -64,7 +64,10 @@ public class PremiumCategoryFragment extends RootFragment {
         rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
         categoryList= (GridView) rootView.findViewById(R.id.categoryList);
         dialogUi= (LinearLayout) rootView.findViewById(R.id.premView);
-        checkAllowed();
+
+        if(Util.isConnectingToInternet(getActivity())){
+            checkAllowed();
+        }
         return rootView;
     }
 
@@ -187,7 +190,7 @@ public class PremiumCategoryFragment extends RootFragment {
             updateUi(false,0);
             Log.d(AppConstant.DEBUG,"No secret key");
         } else {
-           Log.d(AppConstant.DEBUG,"Secret key: "+secret);
+            Log.d(AppConstant.DEBUG,"Secret key: "+secret);
             new LoadSubscription().execute();
         }
     }
