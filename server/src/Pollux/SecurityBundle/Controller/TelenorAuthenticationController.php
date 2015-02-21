@@ -5,11 +5,9 @@ namespace Pollux\SecurityBundle\Controller;
 
 use Pollux\DomainBundle\Entity\Role;
 use Pollux\DomainBundle\Entity\User;
-use Pollux\SecurityBundle\Service\TelenorException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -45,9 +43,7 @@ class TelenorAuthenticationController extends Controller {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
-      $user = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      $this->addFreeTrial($user);
-
+      $this->updateUser($phoneNumber, $accessToken, $userInfo);
       $url = "polluxmusic://success?sharedSecret={$userInfo->sub}";
     }
 
@@ -150,31 +146,6 @@ class TelenorAuthenticationController extends Controller {
     $user->setUserInfoData(json_encode($userInfo));
     $em->merge($user);
     $em->flush();
-
-    return $user;
   }
 
-  private function addFreeTrial(User $user) {
-    $em = $this->getDoctrine()->getManager();
-    $currentProduct = $em->getRepository('DomainBundle:Product')->getCurrentProduct();
-    $now = new \DateTime();
-    if($currentProduct->getSku() === 'MY-RADIO-RADIOBANGLA-TRIAL-M'
-        && $now >= $currentProduct->getStartDate()
-        && $now <= $currentProduct->getEndDate()) {
-      $startTime = new \DateTime();
-      $endTime = clone $startTime;
-      $endTime->add(new \DateInterval("P30D"));
-      try {
-        $userRights = $this->get('service.telenor.client')->addUserRight($user, $currentProduct, $startTime, $endTime);
-        if($userRights) {
-          $user->setUserRightsData(json_encode($userRights));
-          $em->merge($user);
-          $em->flush();
-        }
-      }
-      catch(TelenorException $ex) {
-        $this->get('logger')->warning("Failed to add free trial for user " . $user);
-      }
-    }
-  }
 }
