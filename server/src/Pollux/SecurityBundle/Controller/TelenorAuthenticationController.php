@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class TelenorAuthenticationController extends Controller {
 
@@ -39,7 +38,7 @@ class TelenorAuthenticationController extends Controller {
     $logger->debug("User Info $accessToken->access_token");
 
     $url = "polluxmusic://cancelled";
-    if($this->isValidUserInfo($userInfo, $request->query->get('state'))) {
+    if ($this->isValidUserInfo($userInfo, $request->query->get('state'))) {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
@@ -114,33 +113,46 @@ class TelenorAuthenticationController extends Controller {
    * @param $userInfo
    * @return User
    */
-  public function updateUser($phoneNumber, $accessToken, $userInfo) {
-    $em = $this->getDoctrine()->getManager();
-    $user = null;
-    try {
-      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($userInfo->sub);
-    }
-    catch(UsernameNotFoundException $ex) {
-      $this->get('logger')->debug("New user found with sub: $userInfo->sub");
-    }
-
+  private function updateUser($phoneNumber, $accessToken, $userInfo) {
+    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userInfo->sub);
     if (!$user) {
-      $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
-      $user = new User();
-      $user->setUsername($userInfo->sub);
-      $em->persist($user);
-
-      $user->addRole($roleUser);
-      $em->persist($user);
-
-      $em->flush();
+      $this->get('logger')->debug("New user found with sub: $userInfo->sub");
+      $user = $this->addNewUser($userInfo);
     }
 
+    $this->updateAccessTokenFor($user, $accessToken, $userInfo);
+  }
+
+  /**
+   * @param $userInfo
+   * @return User
+   */
+  private function addNewUser($userInfo) {
+    $em = $this->getDoctrine()->getManager();
+    $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
+    $user = new User();
+    $user->setUsername($userInfo->sub);
+    $user->setSharedSecret(uniqid("", true));
+    $em->persist($user);
+
+    $user->addRole($roleUser);
+    $em->persist($user);
+    $em->flush();
+
+    return $user;
+  }
+
+  /**
+   * @param User $user
+   * @param $accessToken
+   * @param $userInfo
+   */
+  private function updateAccessTokenFor(User $user, $accessToken, $userInfo) {
+    $em = $this->getDoctrine()->getManager();
     $expireTime = new \DateTime();
     $expireTime->add(new \DateInterval("PT3600S"));
     $user->setExpireTime($expireTime);
 
-    $user->setSharedSecret(uniqid("", true));
     $user->setAccessToken($accessToken->access_token);
     $user->setAccessTokenData(json_encode($accessToken));
     $user->setUserInfoData(json_encode($userInfo));
