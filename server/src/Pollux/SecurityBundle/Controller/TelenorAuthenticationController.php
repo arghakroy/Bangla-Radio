@@ -41,7 +41,7 @@ class TelenorAuthenticationController extends Controller {
     $logger->debug("User Info $accessToken->access_token");
 
     $url = "polluxmusic://cancelled";
-    if($this->isValidUserInfo($userInfo)) {
+    if($this->isValidUserInfo($userInfo, $request->query->get('state'))) {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
@@ -103,12 +103,13 @@ class TelenorAuthenticationController extends Controller {
    * @param $userInfo
    * @return bool
    */
-  public function isValidUserInfo($userInfo) {
-    return true;
-    return property_exists($userInfo, 'phone_number_verified')
-    && $userInfo->phone_number_verified
-    && property_exists($userInfo, 'phone_number')
-    && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
+  public function isValidUserInfo($userInfo, $queryStateValue) {
+    $sessionStateValue = $this->get('session')->get(self::TELENOR_OAUTH_STATE);
+    return $sessionStateValue && $sessionStateValue == $queryStateValue;
+//      && property_exists($userInfo, 'phone_number_verified')
+//      && $userInfo->phone_number_verified
+//      && property_exists($userInfo, 'phone_number')
+//      && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
   }
 
   /**
