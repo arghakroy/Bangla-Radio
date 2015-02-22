@@ -88,8 +88,7 @@ public class PremiumCategoryFragment extends RootFragment {
         protected Subscription doInBackground(String... params) {
             Endpoint.init();
             Subscription s = Endpoint.instance().getSubscription(
-                    Util.getSecretKey(getActivity())
-            );
+                    Util.getSecretKey(getActivity()));
             if( s != null) {
                 subscribed = true;
                 return s;
@@ -104,14 +103,14 @@ public class PremiumCategoryFragment extends RootFragment {
             pDialog.dismiss();
             //Util.showToast(getActivity(), "Suscribed : " + subscribed);
             Log.d(AppConstant.DEBUG,"Subscribed: "+subscribed);
-            if(subscribed)
-                updateUi(subscribed,AppConstant.SUBSCRIBED);
-            else if(!Util.getSecretKey(getActivity()).isEmpty()){
+            if(subscribed) {
+                updateUi(subscribed, AppConstant.SUBSCRIBED);
+                AccountFragment.currentStatus = AppConstant.SUBSCRIBED;
+            }else if(!Util.getSecretKey(getActivity()).isEmpty()){
                 Log.d(AppConstant.DEBUG,"Logged in");
                 updateUi(true,AppConstant.LOGGED_IN);
+                AccountFragment.currentStatus=AppConstant.LOGGED_IN;
             }
-            if(subscribed)
-                AccountFragment.currentStatus=AppConstant.SUBSCRIBED;
         }
     }
 
@@ -153,7 +152,7 @@ public class PremiumCategoryFragment extends RootFragment {
                     public void onClick(View arg0) {
                         Endpoint.init();
                         final String url = Endpoint.instance().getPurchase();
-                        Log.d(getClass().getName(), "Url: " + url);
+                        Log.d(AppConstant.DEBUG, "Url: " + url);
                         Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
                         i.putExtra("url", url);
                         startActivity(i);
@@ -175,7 +174,6 @@ public class PremiumCategoryFragment extends RootFragment {
                     Endpoint.init();
                     final String url = Endpoint.instance().getAuthUrl();
                     Log.d(getClass().getName(), "Url: " + url);
-
                     Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
                     i.putExtra("url", url);
                     startActivity(i);

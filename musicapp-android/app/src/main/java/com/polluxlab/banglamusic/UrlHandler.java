@@ -32,7 +32,6 @@ public class UrlHandler extends Activity {
         super.onCreate(savedInstanceState);
         GlobalContext.set(getApplicationContext());
         getActionBar().hide();
-
         final Uri URIdata = getIntent().getData();
         if(URIdata == null){
             setContentView(R.layout.buy_fail_layout);
@@ -100,7 +99,6 @@ public class UrlHandler extends Activity {
         }
     }
 
-    //TODO: Implement it
     private void loadPremiumContent(int status) {
         Intent premIntent=new Intent("update-prem-ui");
         premIntent.putExtra("status",status);

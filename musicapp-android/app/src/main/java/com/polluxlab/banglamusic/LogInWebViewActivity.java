@@ -22,7 +22,11 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ARGHA K ROY on 1/23/2015.
@@ -40,11 +44,14 @@ public class LogInWebViewActivity extends Activity {
         webView= (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setBuiltInZoomControls(false);
         String url=getIntent().getStringExtra("url");
         webView.setWebViewClient(new SSLTolerentWebViewClient());
-        if(url!=null)
-            webView.loadUrl(url);
+        if(url!=null){
+            Map<String, String> headers = new HashMap<String, String>();
+            headers.put(Util.getSecretKey(this), Util.getSecretKey(this));
+            webView.loadUrl(url,headers);
+        }
 
     }
 
@@ -88,6 +95,7 @@ public class LogInWebViewActivity extends Activity {
 
              if (url.contains("polluxmusic")) { //checking the URL for scheme required
                  //and sending it within an explicit Intent
+                 Log.d(AppConstant.DEBUG,url);
                  Intent myapp_intent = new Intent(LogInWebViewActivity.this, UrlHandler.class);
                  myapp_intent.setData(Uri.parse(url));
                  startActivity(myapp_intent);
