@@ -295,8 +295,9 @@ class TelenorClient {
    * @return \stdClass|null
    */
   public static function getLink($links, $rel) {
+    $rel = strtoupper($rel);
     foreach($links as $link) {
-      if($link->rel == $rel) {
+      if((strtoupper($link->rel))== $rel) {
         return $link;
       }
     }
