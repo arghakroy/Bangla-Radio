@@ -4,11 +4,10 @@ namespace Pollux\WebServiceBundle\Controller;
 
 use Pollux\DomainBundle\Entity\Payment;
 use Pollux\DomainBundle\Entity\Subscription;
+use Pollux\SecurityBundle\Service\TelenorClient;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PaymentController extends Controller {
-
-  const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.uZ';
 
   public function initiatePaymentAction($productId) {
     $em = $this->getDoctrine()->getManager();
@@ -37,7 +36,7 @@ class PaymentController extends Controller {
     $em->persist($payment);
     $em->flush();
 
-    $paymentLink = $this->getLink($transactionResponse->links, 'payment');
+    $paymentLink = TelenorClient::getLink($transactionResponse->links, 'payment');
     $locationURL = $paymentLink->href . "?locale=" . $this->container->getParameter('telenor.client.locale');
 
     return $this->redirect($locationURL);
@@ -73,21 +72,6 @@ class PaymentController extends Controller {
     return $this->redirect($url);
   }
 
-  /**
-   * @param $links
-   * @param $rel
-   * @return \stdClass|null
-   */
-  private function getLink($links, $rel) {
-    foreach($links as $link) {
-      if($link->rel == $rel) {
-        return $link;
-      }
-    }
-
-    return null;
-  }
-
   private function updateTransaction(Payment $payment) {
     $user = $payment->getUser();
     $userRights = $this->get('service.telenor.client')->getUserRights($user);
@@ -121,10 +105,10 @@ class PaymentController extends Controller {
         ->setPayment($payment)
         ->setDateCreated(new \DateTime())
         ->setConnectTxId($userRight->rightId)
-        ->setConnectTxUrl($this->getLink($userRight->link, 'self')->href)
+        ->setConnectTxUrl(TelenorClient::getLink($userRight->link, 'self')->href)
         ->setConnectStatus($userRight->active)
-        ->setConnectStartTime(date_create_from_format(self::DATE_TIME_FORMAT, $start))
-        ->setConnectEndTime(date_create_from_format(self::DATE_TIME_FORMAT, $end))
+        ->setConnectStartTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $start))
+        ->setConnectEndTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $end))
         ->setConnectTxJson(json_encode($userRight));
   }
 

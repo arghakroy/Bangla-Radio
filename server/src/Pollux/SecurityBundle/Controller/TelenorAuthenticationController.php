@@ -3,16 +3,17 @@
 namespace Pollux\SecurityBundle\Controller;
 
 
+use Pollux\DomainBundle\Entity\Payment;
+use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\Role;
+use Pollux\DomainBundle\Entity\Subscription;
 use Pollux\DomainBundle\Entity\User;
-use Pollux\SecurityBundle\Service\TelenorException;
+use Pollux\SecurityBundle\Service\TelenorClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class TelenorAuthenticationController extends Controller {
 
@@ -41,13 +42,11 @@ class TelenorAuthenticationController extends Controller {
     $logger->debug("User Info $accessToken->access_token");
 
     $url = "polluxmusic://cancelled";
-    if($this->isValidUserInfo($userInfo)) {
+    if($this->isValidUserInfo($userInfo, $request->query->get('state'))) {
       $phoneNumber = $this->get('session')->remove(self::PHONE_NUMBER);
       $this->get('session')->remove(self::TELENOR_OAUTH_STATE);
 
-      $user = $this->updateUser($phoneNumber, $accessToken, $userInfo);
-      $this->addFreeTrial($user);
-
+      $this->updateUser($phoneNumber, $accessToken, $userInfo);
       $url = "polluxmusic://success?sharedSecret={$userInfo->sub}";
     }
 
@@ -103,12 +102,13 @@ class TelenorAuthenticationController extends Controller {
    * @param $userInfo
    * @return bool
    */
-  public function isValidUserInfo($userInfo) {
-    return true;
-    return property_exists($userInfo, 'phone_number_verified')
-    && $userInfo->phone_number_verified
-    && property_exists($userInfo, 'phone_number')
-    && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
+  public function isValidUserInfo($userInfo, $queryStateValue) {
+    $sessionStateValue = $this->get('session')->get(self::TELENOR_OAUTH_STATE);
+    return $sessionStateValue && $sessionStateValue == $queryStateValue;
+//      && property_exists($userInfo, 'phone_number_verified')
+//      && $userInfo->phone_number_verified
+//      && property_exists($userInfo, 'phone_number')
+//      && $userInfo->phone_number == $this->get('session')->get(self::PHONE_NUMBER);
   }
 
   /**
@@ -117,63 +117,105 @@ class TelenorAuthenticationController extends Controller {
    * @param $userInfo
    * @return User
    */
-  public function updateUser($phoneNumber, $accessToken, $userInfo) {
-    $em = $this->getDoctrine()->getManager();
-    $user = null;
-    try {
-      $user = $em->getRepository('DomainBundle:User')->loadUserByUsername($userInfo->sub);
-    }
-    catch(UsernameNotFoundException $ex) {
-      $this->get('logger')->debug("New user found with sub: $userInfo->sub");
-    }
-
+  private function updateUser($phoneNumber, $accessToken, $userInfo) {
+    $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userInfo->sub);
     if (!$user) {
-      $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
-      $user = new User();
-      $user->setUsername($userInfo->sub);
-      $em->persist($user);
-
-      $user->addRole($roleUser);
-      $em->persist($user);
-
-      $em->flush();
+      $this->get('logger')->debug("New user found with sub: $userInfo->sub");
+      $user = $this->addNewUser($userInfo);
     }
 
+    $this->updateAccessTokenFor($user, $accessToken, $userInfo);
+  }
+
+  /**
+   * @param $userInfo
+   * @return User
+   */
+  private function addNewUser($userInfo) {
+    $em = $this->getDoctrine()->getManager();
+    $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
+    $user = new User();
+    $user->setUsername($userInfo->sub);
+    $user->setSharedSecret(uniqid("", true));
+    $em->persist($user);
+
+    $user->addRole($roleUser);
+    $em->persist($user);
+    $em->flush();
+
+    $this->addFreeTrial($user);
+    return $user;
+  }
+
+  /**
+   * @param User $user
+   * @param $accessToken
+   * @param $userInfo
+   */
+  private function updateAccessTokenFor(User $user, $accessToken, $userInfo) {
+    $em = $this->getDoctrine()->getManager();
     $expireTime = new \DateTime();
     $expireTime->add(new \DateInterval("PT3600S"));
     $user->setExpireTime($expireTime);
 
-    $user->setSharedSecret(uniqid("", true));
     $user->setAccessToken($accessToken->access_token);
     $user->setAccessTokenData(json_encode($accessToken));
     $user->setUserInfoData(json_encode($userInfo));
     $em->merge($user);
     $em->flush();
-
-    return $user;
   }
 
+  /**
+   * @param $user
+   */
   private function addFreeTrial(User $user) {
-    $em = $this->getDoctrine()->getManager();
-    $currentProduct = $em->getRepository('DomainBundle:Product')->getCurrentProduct();
-    $now = new \DateTime();
-    if($currentProduct->getSku() === 'MY-RADIO-RADIOBANGLA-TRIAL-M'
-        && $now >= $currentProduct->getStartDate()
-        && $now <= $currentProduct->getEndDate()) {
-      $startTime = new \DateTime();
-      $endTime = clone $startTime;
-      $endTime->add(new \DateInterval("P30D"));
-      try {
-        $userRights = $this->get('service.telenor.client')->addUserRight($user, $currentProduct, $startTime, $endTime);
-        if($userRights) {
-          $user->setUserRightsData(json_encode($userRights));
-          $em->merge($user);
-          $em->flush();
-        }
-      }
-      catch(TelenorException $ex) {
-        $this->get('logger')->warning("Failed to add free trial for user " . $user);
+    $freeProduct = $this->getDoctrine()->getManager()->getRepository('DomainBundle:Product')->getCurrentProduct();
+    $userRights = $this->get('service.telenor.client')->getUserRights($user);
+
+    foreach ($userRights->rights as $userRight) {
+      if ($this->hasFreeSku($userRight, $freeProduct)) {
+        $freePayment = $this->addFreeProduct($user, $freeProduct);
+        $subscription = $this->createSubscription($freePayment, $userRight, $user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($subscription);
+        $em->flush();
+        break;
       }
     }
   }
+
+  private function hasFreeSku($userRight, Product $freeProduct) {
+    return $userRight->sku == $freeProduct->getSku();
+  }
+
+  private function createSubscription(Payment $payment, $userRight, $user) {
+    list($start, $end) = explode("/", $userRight->timeInterval);
+    return Subscription::createSubscription()
+        ->setUser($user)
+        ->setPayment($payment)
+        ->setDateCreated(new \DateTime())
+        ->setConnectTxId($userRight->rightId)
+        ->setConnectTxUrl(TelenorClient::getLink($userRight->link, 'self')->href)
+        ->setConnectStatus($userRight->active)
+        ->setConnectStartTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $start))
+        ->setConnectEndTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $end))
+        ->setConnectTxJson(json_encode($userRight));
+  }
+
+  private function addFreeProduct(User $user, Product $freeProduct) {
+    $em = $this->getDoctrine()->getManager();
+    $now = new \DateTime();
+
+    $freePayment = Payment::createPayment()
+        ->setUser($user)
+        ->setInitiatedAt($now)
+        ->setCompletedAt($now)
+        ->setAmount($freeProduct->getPricing())
+        ->setProduct($freeProduct)
+        ->setTransactionResponse('{"free": true}');
+    $em->persist($freePayment);
+    return $freePayment;
+  }
+
 }
