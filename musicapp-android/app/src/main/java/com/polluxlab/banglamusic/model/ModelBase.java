@@ -19,100 +19,98 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
-/**
- * Created by samiron on 1/17/2015.
- */
 public abstract class ModelBase implements ModelVerifiable, Serializable {
 
-    protected transient static final String ENDPOINT_URL = "http://128.199.142.142/musicapp/server/web/app_dev.php/webservice/";
-    private static DefaultHttpClient httpClient = null;
-    protected static Gson gson = new Gson();
+  protected transient static final String ENDPOINT_URL = "http://128.199.142.142/musicapp/server/web/app_dev.php/webservice/";
+  private static DefaultHttpClient httpClient = null;
+  protected static Gson gson = new Gson();
 
-    protected static String get(String url){
-        HttpGet httpGet = new HttpGet(url);
-        return executeRequest(httpGet);
+  protected static String get(String url) {
+    HttpGet httpGet = new HttpGet(url);
+    return executeRequest(httpGet);
+  }
+
+  private static String executeRequest(HttpUriRequest request) {
+    ensureHttpClient();
+    HttpResponse httpResponse = null;
+    Log.i("", "============================================");
+    for (Header h : request.getAllHeaders()) {
+      Log.i("WEB-HEADER", String.format("%s -> %s", h.getName(), h.getValue()));
     }
-
-    private static String executeRequest(HttpUriRequest request){
-        ensureHttpClient();
-        HttpResponse httpResponse = null;
-        Log.i("", "============================================");
-        for( Header h : request.getAllHeaders()){
-            Log.i("WEB-HEADER", String.format("%s -> %s", h.getName(), h.getValue()));
-        }
-        Log.i("WEB-REQUEST", request.getURI().toString());
-        try {
-            httpResponse = httpClient.execute(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new String();
-        } finally {
-
-        }
-        String response = "";
-        if( httpResponse.getStatusLine().getStatusCode() == 200 ){
-            response = readResponse(httpResponse);
-        }
-        try {
-          httpResponse.getEntity().consumeContent();
-        } catch (IOException e) {
-          Log.d(ModelBase.class.getName(), "Failed to consume entity", e);
-        }
-        Log.i("WEB-RESPONSE", response);
-        Log.i("", "============================================");
-        return response;
+    Log.i("WEB-REQUEST", request.getURI().toString());
+    try {
+      httpResponse = httpClient.execute(request);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return "";
     }
-
-    protected static String get(String url, List<Header> headers){
-        HttpGet httpGet = new HttpGet(url);
-        for(Header h : headers){
-            httpGet.addHeader(h);
-        }
-        return executeRequest(httpGet);
+    String response = "";
+    if (httpResponse.getStatusLine().getStatusCode() == 200) {
+      response = readResponse(httpResponse);
     }
-
-    protected static String post(String Url, String data){
-        ensureHttpClient();
-        throw new RuntimeException("Not yet implemented");
+    try {
+      httpResponse.getEntity().consumeContent();
+    } catch (IOException e) {
+      Log.d(ModelBase.class.getName(), "Failed to consume entity", e);
     }
+    Log.i("WEB-RESPONSE", response);
+    Log.i("", "============================================");
+    return response;
+  }
 
-    private static void ensureHttpClient(){
-        if( httpClient == null ) {
-            httpClient = new DefaultHttpClient();
-        }
+  protected static String get(String url, List<Header> headers) {
+    HttpGet httpGet = new HttpGet(url);
+    for (Header h : headers) {
+      httpGet.addHeader(h);
     }
+    return executeRequest(httpGet);
+  }
 
-    public static void setSharedSecret(String username, String password){
-        if ( httpClient != null){
-            URI u = URI.create(ENDPOINT_URL);
-            AuthScope authscope = new AuthScope(u.getHost(), u.getPort());
-            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
-            CredentialsProvider credentialsProvider = httpClient.getCredentialsProvider();
-            credentialsProvider.setCredentials(authscope, credentials);
-        }
+  protected static String post(String Url, String data) {
+    ensureHttpClient();
+    throw new RuntimeException("Not yet implemented");
+  }
+
+  private static void ensureHttpClient() {
+    if (httpClient == null) {
+      httpClient = new DefaultHttpClient();
     }
+  }
 
-    private static String readResponse(HttpResponse response){
-        try {
-            HttpEntity he = response.getEntity();
-            if ( he == null)
-                return new String();
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    he.getContent(), "utf-8"), 8);
-            String line = null;
-            StringBuilder sb = new StringBuilder();
-            while ((line = in.readLine()) != null) {
-                sb.append(line);
-            }
-            he.consumeContent();
-            return sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new String();
-        }
+  public static void setSharedSecret(String username, String password) {
+    if (httpClient != null) {
+      URI u = URI.create(ENDPOINT_URL);
+      AuthScope authscope = new AuthScope(u.getHost(), u.getPort());
+      UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
+      CredentialsProvider credentialsProvider = httpClient.getCredentialsProvider();
+      credentialsProvider.setCredentials(authscope, credentials);
     }
+  }
 
-    @Override
-    public boolean valid(){ return true; }
+  private static String readResponse(HttpResponse response) {
+    try {
+      HttpEntity he = response.getEntity();
+      if (he == null) {
+        return "";
+      }
+      BufferedReader in = new BufferedReader(new InputStreamReader(
+          he.getContent(), "utf-8"), 8);
+      String line = null;
+      StringBuilder sb = new StringBuilder();
+      while ((line = in.readLine()) != null) {
+        sb.append(line);
+      }
+      he.consumeContent();
+      return sb.toString();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return "";
+    }
+  }
+
+  @Override
+  public boolean valid() {
+    return true;
+  }
 }
 
