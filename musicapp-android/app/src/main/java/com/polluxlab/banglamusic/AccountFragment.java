@@ -117,7 +117,7 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
         if(status== AppConstant.SUBSCRIBED)
             showSubscribeUI();
         else if(status==AppConstant.LOGGED_IN){
-            setBuyBtn("http://google.com");
+            setBuyBtn(Endpoint.instance().getPurchase());
             exitLayout.setVisibility(View.VISIBLE);
         }else{
             exitLayout.setVisibility(View.GONE);
