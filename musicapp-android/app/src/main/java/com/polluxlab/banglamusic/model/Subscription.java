@@ -1,18 +1,12 @@
 package com.polluxlab.banglamusic.model;
 
-import android.util.Log;
-
+import android.util.*;
 import com.google.gson.annotations.SerializedName;
 import com.polluxlab.banglamusic.util.AppConstant;
-import com.polluxlab.banglamusic.util.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by samiron on 1/22/2015.
@@ -70,20 +64,6 @@ public class Subscription extends ModelBase {
 
     public String getStatus() {
         return status;
-    }
-
-    @Override
-    public boolean valid(){
-        if( this.endDate.trim().isEmpty())
-            return false;
-
-        Date d = this.getEndDate();
-        if ( d == null )
-            return false;
-        if( d.before(new Date())){
-            return false;
-        }
-        return true;
     }
 
 }

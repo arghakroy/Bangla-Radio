@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
-public abstract class ModelBase implements ModelVerifiable, Serializable {
+public abstract class ModelBase implements Serializable {
 
   protected transient static final String ENDPOINT_URL = "http://128.199.142.142/musicapp/server/web/app_dev.php/webservice/";
   private static DefaultHttpClient httpClient = null;
@@ -108,9 +108,5 @@ public abstract class ModelBase implements ModelVerifiable, Serializable {
     }
   }
 
-  @Override
-  public boolean valid() {
-    return true;
-  }
 }
 
