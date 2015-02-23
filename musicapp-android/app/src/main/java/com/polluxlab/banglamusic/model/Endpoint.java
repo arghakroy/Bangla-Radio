@@ -44,9 +44,8 @@ public class Endpoint extends ModelBase {
         return this.links.getSelf();
     }
 
-    public static String getAuthUrl(){
-        //login url need https in the link, So it is hardcoded for now
-        return "https://128.199.142.142/musicapp/server/web/app_dev.php/webservice/auth/login";
+    public String getAuthUrl(){
+        return links.getLogin().replace("http", "https");
     }
 
     public Subscription getSubscription(String secret){

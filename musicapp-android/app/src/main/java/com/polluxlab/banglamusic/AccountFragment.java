@@ -121,7 +121,7 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
             exitLayout.setVisibility(View.VISIBLE);
         }else{
             exitLayout.setVisibility(View.GONE);
-            setBuyBtn(Endpoint.getAuthUrl());
+            setBuyBtn(Endpoint.instance().getAuthUrl());
         }
     }
 
