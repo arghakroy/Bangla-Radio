@@ -54,7 +54,7 @@ public class Endpoint extends ModelBase {
     }
 
     public String getPurchase(){
-        return "https://128.199.142.142/musicapp/server/web/app_dev.php/webservice/payment/initiate/3";
+      return links.getPurchase();
     }
 
     /**
