@@ -1,5 +1,6 @@
 package com.polluxlab.banglamusic.model;
 
+import android.util.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -18,10 +19,13 @@ public class Endpoint extends ModelBase {
   public static Endpoint instance() {
     if (self == null) {
       try {
-        String response = get(ModelBase.ENDPOINT_URL);
-        self = gson.fromJson(response, Endpoint.class);
-      } catch (Exception e) {
-        e.printStackTrace();
+        synchronized (Endpoint.class) {
+          String response = get(ModelBase.ENDPOINT_URL);
+          self = gson.fromJson(response, Endpoint.class);
+        }
+      } catch (RuntimeException e) {
+        Log.e(Endpoint.class.getName(), "Failed to initialize Endpoint", e);
+        throw e;
       }
     }
 
