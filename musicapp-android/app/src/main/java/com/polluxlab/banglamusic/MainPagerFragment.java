@@ -239,7 +239,6 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
             params.bottomMargin =0;
             pager.setLayoutParams(params);
             playerLay.setVisibility(View.GONE);
-
         }else if(command==2){
             mManager.stop();
             pauseBtn.setImageResource(R.drawable.ic_play);
@@ -298,8 +297,10 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
         }
 
         public void stop(){
-            if(mPlayer!=null && mPlayer.isPlaying()){
+            try{
                 mPlayer.stop();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
 
@@ -309,6 +310,7 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
             protected void onPreExecute() {
                 super.onPreExecute();
 
+                closeBtn.setClickable(false);
                 prevBtn.setClickable(false);
                 nextBtn.setClickable(false);
                 pauseBtn.setClickable(false);
@@ -324,7 +326,7 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-
+                closeBtn.setClickable(true);
                 prevBtn.setClickable(true);
                 nextBtn.setClickable(true);
                 pauseBtn.setClickable(true);
