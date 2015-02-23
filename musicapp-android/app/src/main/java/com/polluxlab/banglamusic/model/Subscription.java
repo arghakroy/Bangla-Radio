@@ -33,6 +33,7 @@ public class Subscription extends ModelBase {
 
     private String status;
     private Links links;
+    private String phone_number;
 
     public String getPackageName() {
         return packageName;
@@ -64,6 +65,11 @@ public class Subscription extends ModelBase {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getPhone_number(){
+        if(phone_number==null)return "";
+        return phone_number;
     }
 
 }

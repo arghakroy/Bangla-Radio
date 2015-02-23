@@ -210,7 +210,6 @@ public class PremiumCategoryFragment extends RootFragment {
         premCategories.add(s4);
     }
 
-
     class MyListAdapter extends BaseAdapter{
         int images[]={R.drawable.pic0,R.drawable.pic_test_2,R.drawable.pic_test_1,R.drawable.pic5};
 

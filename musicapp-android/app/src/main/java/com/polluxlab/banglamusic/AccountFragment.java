@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.polluxlab.banglamusic.helper.RootFragment;
 import com.polluxlab.banglamusic.model.Endpoint;
+import com.polluxlab.banglamusic.model.Subscription;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
@@ -33,15 +34,17 @@ import java.util.Date;
  */
 public class AccountFragment extends RootFragment implements View.OnClickListener{
 
-    TextView remainDays,lastDate;
+    TextView remainDays,lastDate,phoneNumber;
     Button buyBtn,helpBtn,exitBtn;
     LinearLayout accountStatusContainer;
     LinearLayout accountBuyContainer;
     LinearLayout exitLayout;
 
+    SharedPreferences sh;
     BroadcastReceiver broadCastReceive;
     public static int currentStatus=0;
-    public String endDate="";
+    private String endDate="";
+    private String phoneNum="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,13 +56,14 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
         accountBuyContainer = (LinearLayout) rootView.findViewById(R.id.account_buy_container);
         remainDays= (TextView) rootView.findViewById(R.id.account_remainning_days);
         lastDate= (TextView) rootView.findViewById(R.id.account_last_date);
+        phoneNumber= (TextView) rootView.findViewById(R.id.accountPhoneNumber);
         helpBtn= (Button) rootView.findViewById(R.id.helpLineBtn);
         exitBtn= (Button) rootView.findViewById(R.id.accountExitButton);
         exitLayout= (LinearLayout) rootView.findViewById(R.id.accExitLayout);
 
         exitBtn.setOnClickListener(this);
         helpBtn.setOnClickListener(this);
-
+        sh=getActivity().getSharedPreferences(AppConstant.PREF_NAME,Context.MODE_PRIVATE);
         buyBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
         setupBroadCast();
         if(Util.isConnectingToInternet(getActivity())) {
@@ -79,6 +83,14 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
             edit.putString("enddate",endDate);
             edit.commit();
         }else endDate=sh.getString("enddate","");
+
+        if(!phoneNum.isEmpty()){
+            SharedPreferences.Editor edit=sh.edit();
+            edit.putString("phoneNum",phoneNum);
+            edit.commit();
+        }else phoneNum=sh.getString("phoneNum","");
+
+        phoneNumber.setText(phoneNum);
 
         if(!endDate.isEmpty()){
             Date d1=new Date();
@@ -114,15 +126,18 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
 
     public void updateUI(int status){
         Log.d(AppConstant.DEBUG,status+"");
-        if(status== AppConstant.SUBSCRIBED)
+        if(status== AppConstant.SUBSCRIBED){
             showSubscribeUI();
+        }
         else if(status==AppConstant.LOGGED_IN){
             setBuyBtn(Endpoint.instance().getPurchase());
             exitLayout.setVisibility(View.VISIBLE);
+            phoneNum=sh.getString("phoneNum","");
         }else{
             exitLayout.setVisibility(View.GONE);
             setBuyBtn(Endpoint.instance().getAuthUrl());
         }
+        phoneNumber.setText(phoneNum);
     }
 
     public void setupBroadCast(){
@@ -133,6 +148,7 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
                 int status=intent.getIntExtra("status",0);
                 currentStatus=status;
                 endDate=intent.getStringExtra("enddate");
+                phoneNum=intent.getStringExtra("phone_number");
                 updateUI(status);
             }
         };
