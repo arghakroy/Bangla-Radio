@@ -86,7 +86,6 @@ public class PremiumCategoryFragment extends RootFragment {
 
         @Override
         protected Subscription doInBackground(String... params) {
-            Endpoint.init();
             Subscription s = Endpoint.instance().getSubscription(
                     Util.getSecretKey(getActivity()));
             if( s != null) {
@@ -150,7 +149,6 @@ public class PremiumCategoryFragment extends RootFragment {
 
                     @Override
                     public void onClick(View arg0) {
-                        Endpoint.init();
                         final String url = Endpoint.instance().getPurchase();
                         Log.d(AppConstant.DEBUG, "Url: " + url);
                         Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
@@ -171,7 +169,6 @@ public class PremiumCategoryFragment extends RootFragment {
 
                 @Override
                 public void onClick(View arg0) {
-                    Endpoint.init();
                     final String url = Endpoint.instance().getAuthUrl();
                     Log.d(getClass().getName(), "Url: " + url);
                     Intent i = new Intent(getActivity(), LogInWebViewActivity.class);

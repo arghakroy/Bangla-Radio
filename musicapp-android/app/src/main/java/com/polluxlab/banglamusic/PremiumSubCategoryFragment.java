@@ -158,7 +158,6 @@ public class PremiumSubCategoryFragment extends RootFragment {
         protected String doInBackground(String... st) {
             categoryItem=new ArrayList<>();
             try {
-                Endpoint.init();
                 List<Tag> tag=Endpoint.instance().getTags();
                 for (int i=0;i<tag.size();i++){
                     if(tag.get(i).getName().equals("BanglaSong")){

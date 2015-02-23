@@ -121,7 +121,6 @@ public class FreeCategoryFragment extends RootFragment {
         protected String doInBackground(String... st) {
             freeCategories = new ArrayList<>();
             try {
-                Endpoint.init();
                 List<Tag> tags = Endpoint.instance().getTags();
                 for( Tag t : tags ){
                     if(t.getName().equalsIgnoreCase("free")){

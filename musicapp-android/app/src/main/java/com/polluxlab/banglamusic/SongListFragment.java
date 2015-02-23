@@ -133,7 +133,6 @@ public class SongListFragment extends RootFragment {
                     categoryItem=artist.getSongs();
                     return null;
                 }
-                Endpoint.init();
                 List<Tag> tags=Endpoint.instance().getTags();
                 if(position==0){
                     for( Tag t : tags ){
