@@ -24,6 +24,7 @@ import java.util.List;
  */
 public abstract class ModelBase implements ModelVerifiable, Serializable {
 
+    protected transient static final String ENDPOINT_URL = "http://128.199.142.142/musicapp/server/web/app_dev.php/webservice/";
     private static DefaultHttpClient httpClient = null;
     protected static Gson gson = new Gson();
 
@@ -83,7 +84,7 @@ public abstract class ModelBase implements ModelVerifiable, Serializable {
 
     public static void setSharedSecret(String username, String password){
         if ( httpClient != null){
-            URI u = URI.create(Endpoint.ENDPOINT_URL);
+            URI u = URI.create(ENDPOINT_URL);
             AuthScope authscope = new AuthScope(u.getHost(), u.getPort());
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             CredentialsProvider credentialsProvider = httpClient.getCredentialsProvider();
