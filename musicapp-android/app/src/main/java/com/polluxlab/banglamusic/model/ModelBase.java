@@ -1,17 +1,13 @@
 package com.polluxlab.banglamusic.model;
 
-import android.util.Log;
-
+import android.util.*;
 import com.google.gson.Gson;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -55,6 +51,11 @@ public abstract class ModelBase implements ModelVerifiable, Serializable {
         String response = "";
         if( httpResponse.getStatusLine().getStatusCode() == 200 ){
             response = readResponse(httpResponse);
+        }
+        try {
+          httpResponse.getEntity().consumeContent();
+        } catch (IOException e) {
+          Log.d(ModelBase.class.getName(), "Failed to consume entity", e);
         }
         Log.i("WEB-RESPONSE", response);
         Log.i("", "============================================");
