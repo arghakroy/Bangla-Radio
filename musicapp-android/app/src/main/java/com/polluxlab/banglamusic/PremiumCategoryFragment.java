@@ -170,7 +170,7 @@ public class PremiumCategoryFragment extends RootFragment {
                 @Override
                 public void onClick(View arg0) {
                     final String url = Endpoint.instance().getAuthUrl();
-                    Log.d(getClass().getName(), "Url: " + url);
+                    Log.d(AppConstant.DEBUG, "Url: " + url);
                     Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
                     i.putExtra("url", url);
                     startActivity(i);

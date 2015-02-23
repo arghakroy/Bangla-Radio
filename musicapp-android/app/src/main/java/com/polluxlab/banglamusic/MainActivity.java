@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
             LinearLayout.LayoutParams txvPars = (LinearLayout.LayoutParams) titleTextView.getLayoutParams();
             txvPars.gravity = Gravity.LEFT;
             txvPars.width = metrics.widthPixels;
-            txvPars.leftMargin= Util.getDipValue(this,5);
+           // txvPars.leftMargin= Util.getDipValue(this,1);
             titleTextView.setLayoutParams(txvPars);
 
             titleTextView.setGravity(Gravity.LEFT);

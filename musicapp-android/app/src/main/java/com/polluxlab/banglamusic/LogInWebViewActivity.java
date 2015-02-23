@@ -10,6 +10,8 @@ import android.util.*;
 import android.view.*;
 import android.webkit.*;
 import android.widget.*;
+
+import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
@@ -37,55 +39,58 @@ public class LogInWebViewActivity extends Activity {
         String url=getIntent().getStringExtra("url");
         webView.setWebViewClient(new SSLTolerentWebViewClient());
         if(url!=null){
-            Map<String, String> headers = getStringStringHashMap();
-            webView.loadUrl(url,headers);
+            if(Endpoint.instance().getPurchase().equals(url)){
+                Map<String, String> headers = getStringStringHashMap();
+                webView.loadUrl(url,headers);
+            }else
+                webView.loadUrl(url);
         }
     }
 
-     class SSLTolerentWebViewClient extends WebViewClient {
+    class SSLTolerentWebViewClient extends WebViewClient {
 
-         ProgressDialog pDialog=new ProgressDialog(LogInWebViewActivity.this);
+        ProgressDialog pDialog=new ProgressDialog(LogInWebViewActivity.this);
 
-         @Override
-         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-             super.onPageStarted(view, url, favicon);
-             if(!pDialog.isShowing()) {
-                 LayoutInflater inflater = getLayoutInflater();
-                 View layout = inflater.inflate(R.layout.progress_layout,null);
-                 pDialog.setIndeterminate(true);
-                 pDialog.setCancelable(true);
-                 pDialog.show();
-                 pDialog.setContentView(layout);
-             }
-         }
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            if(!pDialog.isShowing()) {
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.progress_layout,null);
+                pDialog.setIndeterminate(true);
+                pDialog.setCancelable(true);
+                pDialog.show();
+                pDialog.setContentView(layout);
+            }
+        }
 
-         @Override
-         public void onPageFinished(WebView view, String url) {
-             super.onPageFinished(view, url);
-             pDialog.dismiss();
-         }
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            pDialog.dismiss();
+        }
 
-         @Override
+        @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             handler.proceed(); // Ignore SSL certificate errors
         }
 
-         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-             //called for any redirect to stay inside the WebView
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            //called for any redirect to stay inside the WebView
 
-             if (url.contains("polluxmusic")) { //checking the URL for scheme required
-                 //and sending it within an explicit Intent
-                 Log.d(AppConstant.DEBUG,url);
-                 Intent myapp_intent = new Intent(LogInWebViewActivity.this, UrlHandler.class);
-                 myapp_intent.setData(Uri.parse(url));
-                 startActivity(myapp_intent);
-                 finish();
-                 return true; //this might be unnecessary because another Activity
-                 //start had already been called
-             }
-             view.loadUrl(url); //handling non-customschemed redirects inside the WebView
-             return false; // then it is not handled by default action
-         }
+            if (url.contains("polluxmusic")) { //checking the URL for scheme required
+                //and sending it within an explicit Intent
+                Log.d(AppConstant.DEBUG,url);
+                Intent myapp_intent = new Intent(LogInWebViewActivity.this, UrlHandler.class);
+                myapp_intent.setData(Uri.parse(url));
+                startActivity(myapp_intent);
+                finish();
+                return true; //this might be unnecessary because another Activity
+                //start had already been called
+            }
+            view.loadUrl(url); //handling non-customschemed redirects inside the WebView
+            return false; // then it is not handled by default action
+        }
     }
 
     private void centerActionBarTitle()

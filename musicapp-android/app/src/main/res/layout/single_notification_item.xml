@@ -35,7 +35,7 @@
         <com.polluxlab.banglamusic.helper.MyTextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:visibility="visible"
+          android:visibility="gone"
           android:text="@string/noti_dami_text3"
           android:textSize="17sp"/>
     </LinearLayout>
