@@ -1,30 +1,19 @@
 package com.polluxlab.banglamusic;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.net.http.SslError;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.HttpAuthHandler;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.app.*;
+import android.content.*;
+import android.graphics.*;
+import android.net.*;
+import android.net.http.*;
+import android.os.*;
+import android.util.*;
+import android.view.*;
+import android.webkit.*;
+import android.widget.*;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,11 +37,9 @@ public class LogInWebViewActivity extends Activity {
         String url=getIntent().getStringExtra("url");
         webView.setWebViewClient(new SSLTolerentWebViewClient());
         if(url!=null){
-            Map<String, String> headers = new HashMap<String, String>();
-            headers.put(Util.getSecretKey(this), Util.getSecretKey(this));
+            Map<String, String> headers = getStringStringHashMap();
             webView.loadUrl(url,headers);
         }
-
     }
 
      class SSLTolerentWebViewClient extends WebViewClient {
@@ -82,13 +69,6 @@ public class LogInWebViewActivity extends Activity {
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
             handler.proceed(); // Ignore SSL certificate errors
         }
-
-         @Override
-         public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
-             super.onReceivedHttpAuthRequest(view, handler, host, realm);
-             String secret=Util.getSecretKey(LogInWebViewActivity.this);
-             handler.proceed(secret, secret);
-         }
 
          public boolean shouldOverrideUrlLoading(WebView view, String url) {
              //called for any redirect to stay inside the WebView
@@ -141,4 +121,19 @@ public class LogInWebViewActivity extends Activity {
             titleTextView.setGravity(Gravity.LEFT);
         }
     }
+
+    private Map<String, String> getStringStringHashMap() {
+        String secret= Util.getSecretKey(this);
+        Map<String, String> map = new HashMap<>();
+        String usernameRandomPassword = secret + ":" + secret;
+        String authorization = null;
+        try {
+            authorization = "Basic " + Base64.encodeToString(usernameRandomPassword.getBytes("UTF-8"), Base64.NO_WRAP);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        map.put("Authorization", authorization);
+        return map;
+    }
+
 }
