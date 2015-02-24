@@ -6,12 +6,16 @@
               android:layout_height="match_parent">
 
     <ImageView
-      android:layout_width="wrap_content"
+      android:layout_width="250dp"
       android:layout_height="wrap_content"
       android:id="@+id/buyNowImage"
       android:adjustViewBounds="true"
       android:src="@drawable/buy_dialog_logo"
       android:layout_gravity="center_horizontal"/>
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_weight="1"></LinearLayout>
     <com.polluxlab.banglamusic.helper.MyButton
       android:layout_width="200dp"
       android:layout_height="wrap_content"
@@ -23,6 +27,6 @@
       android:textColor="#000"
       android:id="@+id/buyNowBtn"
       android:onClick="btnClicked"
-      android:layout_marginTop="15dp"
+      android:layout_margin="10dp"
       android:layout_gravity="center_horizontal"/>
 </LinearLayout>

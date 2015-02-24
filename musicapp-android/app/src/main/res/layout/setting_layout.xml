@@ -95,7 +95,7 @@
           android:text="@string/string_buy"
           android:id="@+id/account_buy_btn"
           android:background="@drawable/buy_now2"
-          android:layout_margin="25dp"
+          android:layout_margin="15dp"
           android:textSize="30sp"
           android:padding="10dp"
           android:textStyle="bold"
@@ -112,6 +112,7 @@
       android:textSize="25sp"
       android:paddingLeft="25dp"
       android:paddingRight="25dp"
+      android:layout_marginBottom="5dp"
       android:layout_gravity="center_horizontal"/>
 
     <LinearLayout
@@ -130,14 +131,14 @@
           android:layout_weight="1"
           android:text=""
           android:background="#959595"
-          android:padding="10dp"
+          android:padding="5dp"
           android:textSize="25sp"
           android:layout_marginRight="2dp"/>
         <com.polluxlab.banglamusic.helper.MyButton
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:text="বাহির"
-          android:textSize="25sp"
+          android:textSize="20sp"
           android:id="@+id/accountExitButton"
           android:background="#434343"
           android:textColor="#fff"

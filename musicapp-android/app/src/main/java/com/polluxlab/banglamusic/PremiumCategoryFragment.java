@@ -164,6 +164,7 @@ public class PremiumCategoryFragment extends RootFragment {
             ImageView im = (ImageView) v.findViewById(R.id.buyNowImage);
             im.setImageResource(R.drawable.log_in_logo);
             Button loginSubmitBtn = (Button) rootView.findViewById(R.id.buyNowBtn);
+            loginSubmitBtn.setText("OK");
             loginSubmitBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
             loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
 
