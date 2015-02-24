@@ -251,7 +251,7 @@ public class PremiumCategoryFragment extends RootFragment {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Util.showToast(context,"Received broadccast");
+                //Util.showToast(context,"Received broadccast");
                 int status=intent.getIntExtra("status", 0);
                 updateUi(true,status);
             }
