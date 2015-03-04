@@ -2,7 +2,9 @@
 
 namespace Pollux\WebServiceBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Pollux\DomainBundle\Entity\Payment;
+use Pollux\DomainBundle\Entity\Product;
 use Pollux\DomainBundle\Entity\Subscription;
 use Pollux\SecurityBundle\Service\TelenorClient;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,14 +21,7 @@ class PaymentController extends Controller {
       throw $this->createNotFoundException("No current product found with id: $productId for purchasing");
     }
 
-    $payment = Payment::createPayment()
-        ->setUser($this->getUser())
-        ->setInitiatedAt(new \DateTime())
-        ->setStatus(Payment::STATE_INITIATED)
-        ->setProduct($currentProduct)
-        ->setAmount($currentProduct->getPricing());
-    $em->persist($payment);
-    $em->flush();
+    $payment = $this->createPayment($currentProduct, $em);
     $this->get('logger')->debug(sprintf('Initiated payment for user: %s with payment: %s', $this->getUser(), $payment->getId()));
 
     $transactionResponse = $this->get('service.telenor.client')->getTransaction($this->getUser(), $payment);
@@ -110,6 +105,19 @@ class PaymentController extends Controller {
         ->setConnectStartTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $start))
         ->setConnectEndTime(date_create_from_format(TelenorClient::DATE_TIME_FORMAT, $end))
         ->setConnectTxJson(json_encode($userRight));
+  }
+
+  private function createPayment(Product $currentProduct, EntityManager $em) {
+    $payment = Payment::createPayment()
+        ->setUser($this->getUser())
+        ->setInitiatedAt(new \DateTime())
+        ->setStatus(Payment::STATE_INITIATED)
+        ->setProduct($currentProduct)
+        ->setAmount($currentProduct->getPricing());
+    $em->persist($payment);
+    $em->flush();
+
+    return $payment;
   }
 
 }
