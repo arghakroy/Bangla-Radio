@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `subscription` (
     ON UPDATE RESTRICT,
   CONSTRAINT `fk_subscription_user`
   FOREIGN KEY (`user_id`)
-  REFERENCES `musicapp_dev`.`user` (`id`)
+  REFERENCES `user` (`id`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT
 )
