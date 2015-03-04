@@ -111,6 +111,7 @@ public class UrlHandler extends Activity {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 settingIntent.putExtra("enddate", formatter.format(subscription.getEndDate()));
             }
+            settingIntent.putExtra("phone_number",subscription.getPhone_number());
         }
         sendBroadcast(settingIntent);
     }

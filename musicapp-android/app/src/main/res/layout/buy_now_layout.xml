@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <ImageView
-      android:layout_width="wrap_content"
+      android:layout_width="300dp"
       android:layout_height="wrap_content"
       android:id="@+id/buyNowImage"
       android:adjustViewBounds="true"
@@ -23,6 +23,7 @@
       android:textColor="#000"
       android:id="@+id/buyNowBtn"
       android:onClick="btnClicked"
-      android:layout_marginTop="15dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginBottom="5dp"
       android:layout_gravity="center_horizontal"/>
 </LinearLayout>

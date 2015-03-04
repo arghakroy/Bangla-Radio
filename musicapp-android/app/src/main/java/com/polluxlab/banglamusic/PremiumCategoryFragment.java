@@ -164,13 +164,14 @@ public class PremiumCategoryFragment extends RootFragment {
             ImageView im = (ImageView) v.findViewById(R.id.buyNowImage);
             im.setImageResource(R.drawable.log_in_logo);
             Button loginSubmitBtn = (Button) rootView.findViewById(R.id.buyNowBtn);
+            loginSubmitBtn.setText("OK");
             loginSubmitBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
             loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
                     final String url = Endpoint.instance().getAuthUrl();
-                    Log.d(getClass().getName(), "Url: " + url);
+                    Log.d(AppConstant.DEBUG, "Url: " + url);
                     Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
                     i.putExtra("url", url);
                     startActivity(i);
@@ -209,7 +210,6 @@ public class PremiumCategoryFragment extends RootFragment {
         s4.setTitile("টক শো");
         premCategories.add(s4);
     }
-
 
     class MyListAdapter extends BaseAdapter{
         int images[]={R.drawable.pic0,R.drawable.pic_test_2,R.drawable.pic_test_1,R.drawable.pic5};
@@ -251,7 +251,7 @@ public class PremiumCategoryFragment extends RootFragment {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Util.showToast(context,"Received broadccast");
+                //Util.showToast(context,"Received broadccast");
                 int status=intent.getIntExtra("status", 0);
                 updateUi(true,status);
             }
