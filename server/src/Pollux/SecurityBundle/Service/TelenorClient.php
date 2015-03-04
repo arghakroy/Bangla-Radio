@@ -131,10 +131,7 @@ class TelenorClient {
 
   public function getTransaction(User $user, Payment $payment) {
     $product = $payment->getProduct();
-    $queryParameters = array(
-        'paymentId' => $payment->getId(),
-        'user' => $user->getUsername(),
-    );
+    $queryParameters = array('paymentId' => $payment->getId());
     $transactionRedirectUrl = $this->router->generate('webservice.purchase.success', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
     $transactionCancelUrl = $this->router->generate('webservice.purchase.cancel', $queryParameters, UrlGeneratorInterface::ABSOLUTE_URL);
     $userInfo = json_decode($user->getUserInfoData());
@@ -177,6 +174,7 @@ class TelenorClient {
     ));
 
     $output = $this->executeInternal($curl);
+    $this->logger->debug($output);
 
     return json_decode($output);
   }
