@@ -62,7 +62,7 @@ class TelenorAuthenticationController extends Controller {
     $queryParameters = array(
         'response_type' => 'code',
         'client_id' => $this->container->getParameter('telenor.client.id'),
-        'scope' => 'payment.transactions.read payment.transactions.write payment.agreements.read payment.agreements.write id.user.right.read openid profile',
+        'scope' => 'payment.transactions.read payment.transactions.write payment.agreements.read payment.agreements.write id.user.right.read openid profile phone',
         'state' => $state,
         'redirect_uri' => $callbackUrl,
         'telenordigital_authentication_method' => 'signup_msisdn',
