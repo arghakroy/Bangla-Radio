@@ -40,13 +40,20 @@ class PaymentController extends Controller {
   public function successAction($paymentId) {
     $em = $this->getDoctrine()->getManager();
     $payment = $em->getRepository('DomainBundle:Payment')->find($paymentId);
-    if(!$payment || $payment->getStatus() != Payment::STATE_INITIATED) {
+    if(!$payment) {
       $this->get('logger')->debug('Payment not found with id: ' . $paymentId);
       throw $this->createNotFoundException('Payment not found with id: ' . $paymentId);
     }
 
-    $this->updateTransaction($payment);
-    $url = "polluxmusic://purchase?status=success";
+    $url = "polluxmusic://purchase?status=cancelled";
+    if ($payment->getStatus() == Payment::STATE_SUCCESS) {
+      $url = "polluxmusic://purchase?status=success";
+    }
+    else if ($payment->getStatus() == Payment::STATE_INITIATED) {
+      $this->updateTransaction($payment);
+      $url = "polluxmusic://purchase?status=success";
+    }
+
     return $this->redirect($url);
   }
 
