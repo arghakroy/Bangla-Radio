@@ -19,14 +19,13 @@ class SubscriptionResourceController extends Controller {
      */
     $user = $this->getUser();
     $userInfoObj = json_decode($user->getUserInfoData());
-    $phoneNumber = $userInfoObj['phone_number'];
-    if(!isset($phoneNumber)){
-      $phoneNumber='';
-    }
     $now = new \DateTime();
     foreach($user->getSubscriptions() as $subscription) {
       if($now <= $subscription->getConnectEndTime() && $now >= $subscription->getConnectStartTime()) {
-        $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array('entity' => $subscription, 'phone_number' => $phoneNumber));
+        $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array(
+            'entity' => $subscription,
+            'phone_number' => $userInfoObj->phone_number
+        ));
         $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
         return $response;
       }
