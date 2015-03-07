@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/singleCategoryLayout"
+              android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:padding="10dp"
+      android:orientation="vertical">
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:id="@+id/singleListItemTitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/noti_dami_text1"
+          android:maxLines="1"
+          android:ellipsize="marquee"
+          android:textSize="20sp"/>
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:visibility="visible"
+          android:text="@string/noti_dami_text2"
+          android:maxLines="1"
+          android:ellipsize="marquee"
+          android:textSize="17sp"/>
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:visibility="gone"
+          android:text="@string/noti_dami_text3"
+          android:textSize="17sp"/>
+    </LinearLayout>
+    <ImageView
+      android:layout_gravity="center"
+      android:layout_width="40dp"
+      android:layout_height="wrap_content"
+      android:padding="5dp"
+      android:visibility="gone"
+      android:background="@android:color/transparent"
+      android:src="@drawable/ic_play"/>
+</LinearLayout>

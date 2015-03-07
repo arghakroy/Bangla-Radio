@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/singleCategoryLayout"
+              android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:layout_height="wrap_content">
+
+    <ImageView
+      android:id="@+id/singleListItemImage"
+      android:layout_width="50dp"
+      android:minWidth="50dp"
+      android:layout_height="wrap_content"
+      android:adjustViewBounds="true"
+      android:layout_marginLeft="14dp"
+      android:layout_marginRight="6dp"
+      android:layout_marginTop="6dp"
+      android:layout_marginBottom="6dp"
+      android:src="@drawable/pic_test_3"/>
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:padding="10dp"
+      android:orientation="vertical">
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:id="@+id/singleListItemTitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/dami_text1"
+          android:textSize="18sp"/>
+
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:id="@+id/singleListItemArtist"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:visibility="visible"
+          android:text="@string/dami_text2"
+          android:textSize="16sp"/>
+    </LinearLayout>
+    <ImageView
+      android:layout_gravity="center"
+      android:layout_width="40dp"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="8dp"
+      android:padding="5dp"
+      android:id="@+id/playBtn"
+      android:background="@android:color/transparent"
+      android:src="@drawable/ic_play"/>
+</LinearLayout>

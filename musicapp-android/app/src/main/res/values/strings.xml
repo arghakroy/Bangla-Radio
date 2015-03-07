@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bangla Radio</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="category_title">সূচি</string>
+    <string name="string_free">ফ্রি</string>
+    <string name="string_prem">স্পেশাল</string>
+    <string name="string_set">অ্যাকাউন্ট</string>
+    <string name="string_buy">এখনি কিনুন</string>
+    <string name="string_st1"> আকর্ষনীয় রেডিওর</string>
+    <string name="string_st2"> স্পেশাল অনুষ্ঠান শুনুন </string>
+    <string name="string_pkg1">১ সপ্তাহ মাত্র ১ রিংগিত</string>
+    <string name="string_premprice">প্রিমিয়াম মূল্য</string>
+    <string name="string_dayrest"> দিন বাকি</string>
+    <string name="string_only">শুধুমাত্র</string>
+    <string name="string_customer">গ্রাহকদের জন্য</string>
+    <string name="dami_text1">আমি অপার হয়ে বসে আছি</string>
+    <string name="dami_text2">শিল্পীঃ ফরিদা পারভিন</string>
+    <string name="title_activity_url_handler">UrlHandler</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="free_category_title">ফ্রি শুনুন</string>
+    <string name="buy_success_msg">আপনার নবায়ন সফল হয়েছে</string>
+    <string name="expire_date">মেয়াদ শেষ হবে ২৫ জুন ২০১৫</string>
+    <string name="try_again">অনুগ্রহ করে আবার চেষ্টা করুন</string>
+    <string name="fail_message">আপনার নবায়ন সফল হয়নি</string>
+
+    <string name="noti_dami_text1">ডিবি পরিচয়ে ধরে নিয়ে যাওয়ার অভিযোগ, পুলিশের অস্বীকার</string>
+    <string name="noti_dami_text2">রাজধানীর রূপনগর থেকে গত বৃহস্পতিবার রাতে বুকে-পিঠে-পেটে ১০টি গুলিবিদ্ধ অবস্থায় উদ্ধার করা লাশটি আরিফুল ইসলামের (২৩)। তিনি একটি বেসরকারি বিশ্ববিদ্যালয়ের ছাত্র ও জাতীয়তাবাদী ছাত্রদলের নেতা ছিলেন বলে জানিয়েছেন তাঁর স্বজনেরা।</string>
+    <string name="noti_dami_text3">নিজস্ব প্রতিবেদক</string>
+</resources>

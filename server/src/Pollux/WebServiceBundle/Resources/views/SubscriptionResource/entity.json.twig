@@ -1,8 +1,8 @@
 {
-    "sku": "{{ entity.sku }}",
-    "status": "{{ entity.status }}",
-    "start_date": "{{ entity.start_date }}",
-    "end_date": "{{ entity.end_date }}",
+    "sku": "{{ entity.payment.product.sku }}",
+    "start_date": "{{ entity.connectStartTime|date }}",
+    "end_date": "{{ entity.connectEndTime|date }}",
+    "phone_number": "{{ phoneNumber | default }}",
     "links" : {
         "self": "{{ url('webservice.subscriptions') }}"
     }

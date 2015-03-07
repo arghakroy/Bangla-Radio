@@ -7,7 +7,7 @@
   <config>
     <role id="ROLE_USER">ROLE_USER</role>
     <role id="ROLE_ADMIN">ROLE_ADMIN</role>
-    <role id="ROLE_SUPER_ADMIN">ROLE_ADMIN, ROLE_USER, ROLE_ALLOWED_TO_SWITCH</role>
+    <role id="ROLE_SUPER_ADMIN">ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH</role>
 
     <firewall name="webservice" pattern="^/webservice">
       <anonymous/>
@@ -15,6 +15,7 @@
     </firewall>
 
     <rule path="^/webservice/subscriptions" role="ROLE_USER"/>
+    <rule path="^/webservice/payment/initiate" role="ROLE_USER"/>
 
     <provider name="administrators">
       <entity class="Pollux\DomainBundle\Entity\User" property="username" />

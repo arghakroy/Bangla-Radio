@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Product
  *
- * @ORM\Table(name="products")
+ * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="Pollux\DomainBundle\Repository\ProductRepository")
  */
 class Product {
@@ -24,6 +24,20 @@ class Product {
    * @ORM\Column(name="sku", type="string", length=100, nullable=false)
    */
   private $sku;
+
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="time_spec", type="string", length=100, nullable=false)
+   */
+  private $timeSpec;
+
+  /**
+   * @var string
+   *
+   * @ORM\Column(name="product_name", type="string", length=100, nullable=false)
+   */
+  private $productName;
 
   /**
    * @var string
@@ -54,25 +68,11 @@ class Product {
   private $status;
 
   /**
-   * @var float
+   * @var string
    *
-   * @ORM\Column(name="vat_percentage", type="float", precision=10, scale=0, nullable=false)
+   * @ORM\Column(name="vat_percentage", type="decimal", precision=6, scale=2, nullable=false)
    */
   private $vatPercentage;
-  
-  /**
-   * @var string
-   *
-   * @ORM\Column(name="product_name", type="string", length=255, nullable=false)
-   */
-  private $productName;
-  
-  /**
-   * @var string
-   *
-   * @ORM\Column(name="time_spec", type="string", length=20, nullable=false)
-   */
-  private $timeSpec;
 
   /**
    * @var integer
@@ -125,27 +125,6 @@ class Product {
   public function getSku() {
     return $this->sku;
   }
-  
-  /**
-   * Set productName
-   *
-   * @param string $productName
-   * @return Product
-   */
-  public function setProductName($productName) {
-    $this->productName = $productName;
-
-    return $this;
-  }
-  
-  /**
-   * Get productName
-   *
-   * @return string
-   */
-  public function getProductName() {
-    return $this->productName;
-  }
 
   /**
    * Set timeSpec
@@ -158,7 +137,7 @@ class Product {
 
     return $this;
   }
-  
+
   /**
    * Get timeSpec
    *
@@ -166,6 +145,27 @@ class Product {
    */
   public function getTimeSpec() {
     return $this->timeSpec;
+  }
+
+  /**
+   * Set productName
+   *
+   * @param string $productName
+   * @return Product
+   */
+  public function setProductName($productName) {
+    $this->productName = $productName;
+
+    return $this;
+  }
+
+  /**
+   * Get productName
+   *
+   * @return string
+   */
+  public function getProductName() {
+    return $this->productName;
   }
 
   /**
@@ -255,7 +255,7 @@ class Product {
   /**
    * Set vatPercentage
    *
-   * @param float $vatPercentage
+   * @param string $vatPercentage
    * @return Product
    */
   public function setVatPercentage($vatPercentage) {
@@ -267,7 +267,7 @@ class Product {
   /**
    * Get vatPercentage
    *
-   * @return float
+   * @return string
    */
   public function getVatPercentage() {
     return $this->vatPercentage;

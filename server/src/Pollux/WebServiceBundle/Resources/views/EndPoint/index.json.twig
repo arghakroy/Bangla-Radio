@@ -6,9 +6,11 @@
         "albums" : "{{ url('webservice.albums') }}",
         "playlists" : "{{ url('webservice.playlists') }}",
         "tags" : "{{ url('webservice.tags') }}",
-        "products" : "{{ url('webservice.products') }}",
+        {% if currentProduct is not null %}
+        "currentProduct" : "{{ url('webservice.product', {'productId': currentProduct.id}) }}",
+        "purchase" : "{{ url('webservice.purchase', {'productId': currentProduct.id}) }}",
+        {% endif %}
         "subscriptions" : "{{ url('webservice.subscriptions') }}",
-        "purchase": "{{ url('webservice.purchase') }}",
-        "login": "https://128.199.142.142/musicapp/server/web/app_dev.php/webservice/auth/login/"
+        "login" : "{{ url('telenor.authentication.login') }}"
     }
 }

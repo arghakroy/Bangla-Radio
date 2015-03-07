@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/notificationBorderMenu"
+          android:showAsAction="always"
+          android:title=""
+          android:actionLayout="@layout/menu_layout"/>
+    <item android:id="@+id/notificationMenu"
+          android:title="Notifications"
+          android:showAsAction="always"
+      android:icon="@drawable/ic_action_noti_icon"/>
+</menu>

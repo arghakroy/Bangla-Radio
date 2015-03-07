@@ -12,7 +12,7 @@
   <import resource="@WebServiceBundle/Resources/config/routing/tag.xml" prefix="/tags"/>
   <import resource="@WebServiceBundle/Resources/config/routing/product.xml" prefix="/products"/>
   <import resource="@WebServiceBundle/Resources/config/routing/subscription.xml" prefix="/subscriptions"/>
-  <import resource="@WebServiceBundle/Resources/config/routing/payment.xml" prefix="/purchase"/>
+  <import resource="@WebServiceBundle/Resources/config/routing/payment.xml" prefix="/payment"/>
   <import resource="@PolluxSecurityBundle/Resources/config/routing.xml" prefix="/auth"/>
 
 </routes>

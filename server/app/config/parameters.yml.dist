@@ -26,3 +26,4 @@ parameters:
     telenor.client.endpoint:   ~
     telenor.client.id:      ~
     telenor.client.secret:  ~
+    telenor.client.locale:  ~
