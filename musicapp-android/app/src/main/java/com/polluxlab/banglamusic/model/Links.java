@@ -63,23 +63,13 @@ public class Links extends ModelBase {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String response = InternalStorageSimple.fetch(key);
         Subscription s = null;
-
-        if( !response.isEmpty() ){
-            Log.d(AppConstant.DEBUG, "Fetched from cache: \n" + response);
-            s = gson.fromJson(response, Subscription.class);
-        } else {
-            Log.d(AppConstant.DEBUG, "Couldn't find from local storage");
-        }
-        if( s == null ){
-            response = get(this.subscriptions);
-            Log.d(AppConstant.DEBUG,"Response "+response+" "+s);
-            Log.d(AppConstant.DEBUG, "Fetched from webservice " + response);
-            if( !response.isEmpty() ) {
-                s = gson.fromJson(response, Subscription.class);
-                InternalStorageSimple.store(key, response);
-            }
+        String response = get(this.subscriptions);
+        Log.d(AppConstant.DEBUG, "Response " + response + " " + s);
+        Log.d(AppConstant.DEBUG, "Fetched from webservice " + response);
+        if( !response.isEmpty() ) {
+          s = gson.fromJson(response, Subscription.class);
+          InternalStorageSimple.store(key, response);
         }
         return s;
     }
