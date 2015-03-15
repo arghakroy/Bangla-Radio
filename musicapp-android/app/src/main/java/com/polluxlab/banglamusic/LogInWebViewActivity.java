@@ -10,13 +10,11 @@ import android.util.*;
 import android.view.*;
 import android.webkit.*;
 import android.widget.*;
-
 import com.polluxlab.banglamusic.model.Endpoint;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +53,7 @@ public class LogInWebViewActivity extends Activity {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            Log.d(getClass().getName(), "onPageStarted url: " + url);
             super.onPageStarted(view, url, favicon);
             if(!pDialog.isShowing()) {
                 LayoutInflater inflater = getLayoutInflater();
@@ -68,6 +67,7 @@ public class LogInWebViewActivity extends Activity {
 
         @Override
         public void onPageFinished(WebView view, String url) {
+            Log.d(getClass().getName(), "onPageFinished url: " + url);
             super.onPageFinished(view, url);
             pDialog.dismiss();
         }
@@ -78,20 +78,19 @@ public class LogInWebViewActivity extends Activity {
         }
 
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //called for any redirect to stay inside the WebView
-
+            Log.d(getClass().getName(), "shouldOverrideUrlLoading url: " + url);
             if (url.contains("polluxmusic")) { //checking the URL for scheme required
-                //and sending it within an explicit Intent
                 Log.d(AppConstant.DEBUG,url);
                 Intent myapp_intent = new Intent(LogInWebViewActivity.this, UrlHandler.class);
                 myapp_intent.setData(Uri.parse(url));
                 startActivity(myapp_intent);
                 finish();
-                return true; //this might be unnecessary because another Activity
-                //start had already been called
+                return true;
             }
-            view.loadUrl(url); //handling non-customschemed redirects inside the WebView
-            return false; // then it is not handled by default action
+            else {
+              view.loadUrl(url);
+              return false;
+            }
         }
     }
 

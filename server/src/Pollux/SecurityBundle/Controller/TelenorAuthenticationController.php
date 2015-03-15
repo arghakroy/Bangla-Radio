@@ -121,38 +121,38 @@ class TelenorAuthenticationController extends Controller {
     $user = $this->getDoctrine()->getManager()->getRepository('DomainBundle:User')->findUserByUsername($userInfo->sub);
     if (!$user) {
       $this->get('logger')->debug("New user found with sub: $userInfo->sub");
-      $user = $this->addNewUser($userInfo);
+      $user = $this->addNewUser($userInfo, $accessToken);
+      $this->addFreeTrial($user);
     }
-
-    $this->updateAccessTokenFor($user, $accessToken, $userInfo);
+    else {
+      $this->updateAccessToken($user, $accessToken, $userInfo);
+    }
   }
 
-  /**
-   * @param $userInfo
-   * @return User
-   */
-  private function addNewUser($userInfo) {
+  private function addNewUser($userInfo, $accessToken) {
+    $expireTime = new \DateTime();
+    $expireTime->add(new \DateInterval("PT3600S"));
+
     $em = $this->getDoctrine()->getManager();
     $roleUser = $em->getRepository('DomainBundle:Role')->loadRoleByName(Role::ROLE_USER);
+
     $user = new User();
     $user->setUsername($userInfo->sub);
     $user->setSharedSecret(uniqid("", true));
+    $user->setExpireTime($expireTime);
+    $user->setAccessToken($accessToken->access_token);
+    $user->setAccessTokenData(json_encode($accessToken));
+    $user->setUserInfoData(json_encode($userInfo));
     $em->persist($user);
 
     $user->addRole($roleUser);
-    $em->persist($user);
+    $em->merge($user);
     $em->flush();
 
-    $this->addFreeTrial($user);
     return $user;
   }
 
-  /**
-   * @param User $user
-   * @param $accessToken
-   * @param $userInfo
-   */
-  private function updateAccessTokenFor(User $user, $accessToken, $userInfo) {
+  private function updateAccessToken(User $user, $accessToken, $userInfo) {
     $em = $this->getDoctrine()->getManager();
     $expireTime = new \DateTime();
     $expireTime->add(new \DateInterval("PT3600S"));

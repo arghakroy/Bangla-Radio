@@ -2,7 +2,7 @@
     "sku": "{{ entity.payment.product.sku }}",
     "start_date": "{{ entity.connectStartTime|date }}",
     "end_date": "{{ entity.connectEndTime|date }}",
-    "phone_number": "{{ $phoneNumber | '' }}",
+    "phone_number": "{{ phoneNumber | default }}",
     "links" : {
         "self": "{{ url('webservice.subscriptions') }}"
     }
