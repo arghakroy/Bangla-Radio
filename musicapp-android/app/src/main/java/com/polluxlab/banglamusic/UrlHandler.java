@@ -139,7 +139,7 @@ public class UrlHandler extends Activity {
                 finish();
                 return;
         }
-        openBrowser(url,true);
+        openBrowser(url,false);
     }
 
     public void openBrowser(String url,boolean defaultBrowser){
