@@ -40,11 +40,12 @@ public class LogInWebViewActivity extends Activity {
         String url=getIntent().getStringExtra("url");
         webView.setWebViewClient(new SSLTolerentWebViewClient());
         if(url!=null){
-            if(Endpoint.instance().getPurchase().equals(url)){
-                Map<String, String> headers = getStringStringHashMap();
-                webView.loadUrl(url,headers);
-            }else
-                webView.loadUrl(url);
+            Map<String, String> headers = Collections.emptyMap();
+            if(url.contains("payment")) {
+                headers = getStringStringHashMap();
+            }
+            Log.d(getClass().getName(), "Loading url: " + url);
+            webView.loadUrl(url,headers);
         }
     }
 

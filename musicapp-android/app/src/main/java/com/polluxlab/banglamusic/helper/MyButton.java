@@ -30,7 +30,9 @@ public class MyButton extends Button {
     }
 
     private void setType(Context context){
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), AppConstant.FONT));
-        this.setShadowLayer(1.5f, 5, 5, android.R.color.black);
+        if(!this.isInEditMode()) {
+            this.setTypeface(Typeface.createFromAsset(context.getAssets(), AppConstant.FONT));
+            this.setShadowLayer(1.5f, 5, 5, android.R.color.black);
+        }
     }
 }

@@ -5,8 +5,13 @@ import android.util.*;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.InternalStorageSimple;
 
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by samiron on 1/17/2015.
@@ -73,9 +78,17 @@ public class Links extends ModelBase {
             Log.d(AppConstant.DEBUG, "Couldn't find from local storage");
         }
         if( s == null ){
-            response = get(this.subscriptions);
+            String authorization="";
+            try {
+                 authorization = "Basic " + Base64.encodeToString((secret+":"+secret).getBytes("UTF-8"), Base64.NO_WRAP);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            Header header=new BasicHeader("Authorization",authorization);
+            response = get(this.subscriptions,header);
             Log.d(AppConstant.DEBUG,"Response "+response+" "+s);
             Log.d(AppConstant.DEBUG, "Fetched from webservice " + response);
+            Log.d(AppConstant.DEBUG,"Subscription url:"+this.subscriptions);
             if( !response.isEmpty() ) {
                 s = gson.fromJson(response, Subscription.class);
                 InternalStorageSimple.store(key, response);

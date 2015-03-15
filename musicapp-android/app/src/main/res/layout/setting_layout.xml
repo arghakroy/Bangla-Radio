@@ -6,17 +6,12 @@
                 android:orientation="vertical">
 
     <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="0dp"
-      android:layout_weight="1"></LinearLayout>
-
-    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       android:orientation="vertical"
-      android:background="#447452"
-      android:layout_margin="25dp"
-      android:padding="15dp"
+      android:background="#43C26B"
+      android:layout_weight="1"
+      android:gravity="center"
       android:id="@+id/account_status_container"
       android:visibility="gone">
 
@@ -25,6 +20,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center_horizontal"
+          android:visibility="gone"
           >
 
             <com.polluxlab.banglamusic.helper.MyTextView
@@ -47,22 +43,28 @@
         <com.polluxlab.banglamusic.helper.MyTextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="মেয়াদ শেষ হবে ৫ ডিসেম্বর ২০১৪"
+          android:text="আপনার মেয়াদ শেষ হবে"
           android:textColor="#fff"
           android:gravity="center_horizontal"
-          android:textSize="18sp"
+          android:textSize="25sp"/>
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="৫ ডিসেম্বর ২০১৪"
+          android:textColor="#fff"
+          android:gravity="center_horizontal"
+          android:textSize="30sp"
           android:id="@+id/account_last_date"/>
     </LinearLayout>
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="#F9F9F9"
+      android:layout_height="0dp"
+      android:background="#43C26B"
       android:gravity="center"
-      android:padding="10dp"
-      android:layout_margin="20dp"
       android:orientation="vertical"
       android:visibility="visible"
+      android:layout_weight="1"
       android:id="@+id/account_buy_container">
 
         <com.polluxlab.banglamusic.helper.MyTextView
@@ -70,7 +72,7 @@
           android:layout_height="wrap_content"
           android:text="@string/string_st1"
           android:textSize="22sp"
-          android:textColor="#C72121"
+          android:textColor="#fff"
           />
 
         <com.polluxlab.banglamusic.helper.MyTextView
@@ -78,82 +80,115 @@
           android:layout_height="wrap_content"
           android:text="@string/string_st2"
           android:textSize="22sp"
-          android:textColor="#C72121"
+          android:textColor="#fff"
           />
 
         <com.polluxlab.banglamusic.helper.MyTextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/string_pkg1"
-          android:textSize="22sp"
+          android:textSize="25sp"
 
           />
 
         <Button
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/string_buy"
           android:id="@+id/account_buy_btn"
-          android:background="@drawable/buy_now2"
+          android:background="@drawable/buy_now"
           android:layout_margin="15dp"
           android:textSize="30sp"
-          android:padding="10dp"
-          android:textStyle="bold"
-          android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
-
-    <com.polluxlab.banglamusic.helper.MyButton
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="গ্রাহক সেবা"
-      android:id="@+id/helpLineBtn"
-      android:background="@drawable/buy_now"
-      android:textStyle="bold"
-      android:textSize="25sp"
-      android:paddingLeft="25dp"
-      android:paddingRight="25dp"
-      android:layout_marginBottom="5dp"
-      android:layout_gravity="center_horizontal"/>
-
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="0dp"
-      android:layout_weight="1"></LinearLayout>
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/accExitLayout"
-      android:visibility="gone">
-        <TextView
-          android:id="@+id/accountPhoneNumber"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text=""
-          android:background="#959595"
-          android:padding="5dp"
-          android:textSize="25sp"
-          android:layout_marginRight="2dp"/>
-        <com.polluxlab.banglamusic.helper.MyButton
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:text="বাহির"
-          android:textSize="20sp"
-          android:id="@+id/accountExitButton"
-          android:background="#434343"
-          android:textColor="#fff"
           android:paddingLeft="25dp"
           android:paddingRight="25dp"
+          android:textStyle="normal"
           android:layout_gravity="center_horizontal"/>
     </LinearLayout>
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:orientation="vertical">
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:visibility="gone"
+          android:id="@+id/logOutLayout"
+          android:padding="15dp">
+            <ImageView
+              android:layout_width="50dp"
+              android:layout_height="wrap_content"
+              android:paddingRight="10dp"
+              android:adjustViewBounds="true"
+              android:src="@drawable/person"/>
+            <com.polluxlab.banglamusic.helper.MyTextView
+              android:id="@+id/accountPhoneNumber"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:textSize="20sp"
+              android:text="১২৩৪৫৬৭৮৯০"/>
+            <com.polluxlab.banglamusic.helper.MyButton
+              android:id="@+id/accountExitButton"
+              android:layout_width="80dp"
+              android:layout_height="35dp"
+              android:background="#FA4A4C"
+              android:textColor="#fff"
+              android:text="বাহির"/>
+        </LinearLayout>
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="#ddd"></LinearLayout>
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:padding="15dp">
+            <ImageView
+              android:layout_width="50dp"
+              android:layout_height="wrap_content"
+              android:paddingRight="10dp"
+              android:adjustViewBounds="true"
+              android:src="@drawable/call_btn"/>
+            <com.polluxlab.banglamusic.helper.MyTextView
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:textSize="20sp"
+              android:text="গ্রাহক সেবা"/>
+            <com.polluxlab.banglamusic.helper.MyButton
+              android:id="@+id/helpLineBtn"
+              android:layout_width="80dp"
+              android:layout_height="35dp"
+              android:background="#FA4A4C"
+              android:textColor="#fff"
+              android:text="কল"/>
+        </LinearLayout>
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="#ddd"></LinearLayout>
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="0dp"
+          android:layout_weight="1"></LinearLayout>
+        <ImageView
+          android:layout_width="100dp"
+          android:layout_height="wrap_content"
+          android:src="@drawable/footer_ic"
+          android:visibility="visible"
+          android:padding="2dp"
+          android:adjustViewBounds="true"/>
+        <com.polluxlab.banglamusic.helper.MyTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="14sp"
+          android:layout_marginBottom="2dp"
+          android:text="ভার্সন ১.০"/>
+    </LinearLayout>
 
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="App Version - 1.0.0"
-      android:textSize="15sp"
-      android:id="@+id/textView2"
-      android:layout_gravity="center_horizontal"
-      android:padding="10dp"/>
 
 </LinearLayout>

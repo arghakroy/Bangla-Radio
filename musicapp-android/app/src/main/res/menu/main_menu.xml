@@ -9,5 +9,5 @@
     <item android:id="@+id/notificationMenu"
           android:title="Notifications"
           android:showAsAction="always"
-      android:icon="@drawable/ic_action_noti_icon"/>
+      android:icon="@drawable/ic_action_notification_icon_red"/>
 </menu>

@@ -3,20 +3,12 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <gradient android:startColor="#AAE3FF"
-                      android:endColor="#6CB9FA"
-                      android:angle="90"/>
-            <corners android:radius="20dip" />
-            <stroke android:color="#348195" android:width="2dp"/>
+            <solid android:color="#12AAEB"/>
         </shape>
     </item>
     <item>
         <shape>
-            <gradient android:startColor="#6CB9FA"
-                      android:endColor="#AAE3FF"
-                      android:angle="90"/>
-            <corners android:radius="20dip" />
-            <stroke android:color="#348195" android:width="2dp"/>
+            <solid android:color="#12AAEB"/>
         </shape>
     </item>
 </selector>

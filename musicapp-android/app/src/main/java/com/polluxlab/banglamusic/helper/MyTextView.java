@@ -32,4 +32,5 @@ public class MyTextView extends TextView {
         this.setTypeface(Typeface.createFromAsset(context.getAssets(), AppConstant.FONT));
         this.setShadowLayer(1.5f, 5, 5, android.R.color.black);
     }
+
 }

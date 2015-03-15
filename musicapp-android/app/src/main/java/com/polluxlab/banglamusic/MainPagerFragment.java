@@ -91,8 +91,8 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
                     getActivity().getActionBar().setHomeButtonEnabled(false);
                     title=getResources().getString(R.string.free_category_title);
                     freeCatBtn.setBackgroundResource(R.drawable.select_btn1);
-                    prermCatBtn.setBackgroundResource(R.drawable.select_btn2_deactive);
-                    settingCatBtn.setBackgroundResource(R.drawable.select_btn3_deactive);
+                    prermCatBtn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    settingCatBtn.setBackgroundResource(getResources().getColor(android.R.color.transparent));
                 }else if(i==1){
                     title= PremiumCategoryFragment.currentTitle;
                     if(title.equals(getResources().getString(R.string.category_title))){
@@ -102,15 +102,15 @@ public class MainPagerFragment extends Fragment implements View.OnClickListener{
                         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
                         getActivity().getActionBar().setHomeButtonEnabled(true);
                     }
-                    freeCatBtn.setBackgroundResource(R.drawable.select_btn1_deactive);
+                    freeCatBtn.setBackgroundResource(getResources().getColor(android.R.color.transparent));
                     prermCatBtn.setBackgroundResource(R.drawable.select_btn2);
-                    settingCatBtn.setBackgroundResource(R.drawable.select_btn3_deactive);
+                    settingCatBtn.setBackgroundResource(getResources().getColor(android.R.color.transparent));
                 }else{
                     getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
                     getActivity().getActionBar().setHomeButtonEnabled(false);
                     title=getResources().getString(R.string.string_set);
-                    freeCatBtn.setBackgroundResource(R.drawable.select_btn1_deactive);
-                    prermCatBtn.setBackgroundResource(R.drawable.select_btn2_deactive);
+                    freeCatBtn.setBackgroundResource(getResources().getColor(android.R.color.transparent));
+                    prermCatBtn.setBackgroundResource(getResources().getColor(android.R.color.transparent));
                     settingCatBtn.setBackgroundResource(R.drawable.select_btn3);
                 }
 

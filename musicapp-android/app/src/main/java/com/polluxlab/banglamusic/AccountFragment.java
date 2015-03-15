@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +26,12 @@ import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -37,8 +42,7 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
     TextView remainDays,lastDate,phoneNumber;
     Button buyBtn,helpBtn,exitBtn;
     LinearLayout accountStatusContainer;
-    LinearLayout accountBuyContainer;
-    LinearLayout exitLayout;
+    LinearLayout accountBuyContainer,logOutLayout;
 
     SharedPreferences sh;
     BroadcastReceiver broadCastReceive;
@@ -54,12 +58,12 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
         buyBtn= (Button) rootView.findViewById(R.id.account_buy_btn);
         accountStatusContainer = (LinearLayout) rootView.findViewById(R.id.account_status_container);
         accountBuyContainer = (LinearLayout) rootView.findViewById(R.id.account_buy_container);
+        logOutLayout= (LinearLayout) rootView.findViewById(R.id.logOutLayout);
         remainDays= (TextView) rootView.findViewById(R.id.account_remainning_days);
         lastDate= (TextView) rootView.findViewById(R.id.account_last_date);
         phoneNumber= (TextView) rootView.findViewById(R.id.accountPhoneNumber);
         helpBtn= (Button) rootView.findViewById(R.id.helpLineBtn);
         exitBtn= (Button) rootView.findViewById(R.id.accountExitButton);
-        exitLayout= (LinearLayout) rootView.findViewById(R.id.accExitLayout);
 
         exitBtn.setOnClickListener(this);
         helpBtn.setOnClickListener(this);
@@ -75,14 +79,15 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
 
     public void showSubscribeUI(){
         accountStatusContainer.setVisibility(View.VISIBLE);
-        exitLayout.setVisibility(View.VISIBLE);
         accountBuyContainer.setVisibility(View.GONE);
+        logOutLayout.setVisibility(View.VISIBLE);
         SharedPreferences sh=getActivity().getSharedPreferences(AppConstant.PREF_NAME,Context.MODE_PRIVATE);
         if(!endDate.isEmpty()){
             SharedPreferences.Editor edit=sh.edit();
             edit.putString("enddate",endDate);
             edit.commit();
         }else endDate=sh.getString("enddate","");
+        Log.d(AppConstant.DEBUG,"End date "+endDate);
 
         if(!phoneNum.isEmpty()){
             SharedPreferences.Editor edit=sh.edit();
@@ -93,16 +98,14 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
         phoneNumber.setText(phoneNum);
 
         if(!endDate.isEmpty()){
-            Date d1=new Date();
-            SimpleDateFormat from = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat from = new SimpleDateFormat("MMMM dd',' yyyy hh':'mm");
             SimpleDateFormat to = new SimpleDateFormat("MMM dd',' yyyy");
             Date d2= null;
             try {
                 d2 = from.parse(endDate);
                 String date=to.format(d2);
                 String month=date.split(" ")[0];
-                remainDays.setText(Util.toBanglaNumber((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24) + 1 + " "));
-                lastDate.setText("আপনার মেয়াদ শেষ হবে -\n"+Util.toBanglaMonth(month)+Util.toBanglaNumber(
+                lastDate.setText(Util.toBanglaMonth(month)+Util.toBanglaNumber(
                         date.substring(month.length(), date.length())
                 ));
             } catch (ParseException e) {
@@ -117,9 +120,7 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
         buyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
-                i.putExtra("url", URL);
-                startActivity(i);
+                openBrowser(URL, true);
             }
         });
     }
@@ -130,11 +131,11 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
             showSubscribeUI();
         }
         else if(status==AppConstant.LOGGED_IN){
+            logOutLayout.setVisibility(View.VISIBLE);
             setBuyBtn(Endpoint.instance().getPurchase());
-            exitLayout.setVisibility(View.VISIBLE);
             phoneNum=sh.getString("phoneNum","");
         }else{
-            exitLayout.setVisibility(View.GONE);
+            logOutLayout.setVisibility(View.GONE);
             setBuyBtn(Endpoint.instance().getAuthUrl());
         }
         phoneNumber.setText(phoneNum);
@@ -177,6 +178,35 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
                 intent.setData(Uri.parse(uri));
                 startActivity(intent);
                 break;
+        }
+    }
+
+
+    public void openBrowser(String url,boolean defaultBrowser){
+        if(defaultBrowser){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            String secret= Util.getSecretKey(getActivity());
+            Map<String, String> map = new HashMap<>();
+            String usernameRandomPassword = secret + ":" + secret;
+            String authorization = null;
+            try {
+                authorization = "Basic " + Base64.encodeToString(usernameRandomPassword.getBytes("UTF-8"), Base64.NO_WRAP);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            map.put("Authorization", authorization);
+            Bundle bundle = new Bundle();
+            if(map!=null){
+                for(String key: map.keySet()){
+                    bundle.putString(key, map.get(key));
+                }
+            }
+            browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+            startActivity(browserIntent);
+        }else{
+            Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
+            i.putExtra("url", url);
+            startActivity(i);
         }
     }
 }

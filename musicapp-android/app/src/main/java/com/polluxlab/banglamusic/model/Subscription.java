@@ -31,7 +31,6 @@ public class Subscription extends ModelBase {
     @SerializedName("end_date")
     private String endDate;
 
-    private String status;
     private Links links;
     private String phone_number;
 
@@ -43,8 +42,8 @@ public class Subscription extends ModelBase {
         return parseDate(this.startDate);
     }
 
-    public Date getEndDate() {
-        return parseDate(this.endDate);
+    public String getEndDate() {
+        return this.endDate;
     }
 
     private Date parseDate(String date){
@@ -52,20 +51,17 @@ public class Subscription extends ModelBase {
         if( this.endDate.trim().isEmpty() ){
             return null;
         }
-        //"end_date": "2015-02-01"
-        SimpleDateFormat from = new SimpleDateFormat("yyyy-MM-dd");
+        //"end_date": "March 11, 2015 04:15"
+        SimpleDateFormat from = new SimpleDateFormat("MMMM dd',' yyyy hh':'mm");
         try {
             return from.parse(date);
         } catch (ParseException e) {
-            Log.d(getClass().getName(), "Failed to parse date");
+            Log.d(AppConstant.DEBUG, "Failed to parse date");
             e.printStackTrace();
             return null;
         }
     }
 
-    public String getStatus() {
-        return status;
-    }
 
     public String getPhone_number(){
         if(phone_number==null)return "";

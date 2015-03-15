@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.net.*;
 import android.os.*;
+import android.provider.Browser;
 import android.util.*;
 import android.view.*;
 import com.polluxlab.banglamusic.model.Endpoint;
@@ -13,7 +14,10 @@ import com.polluxlab.banglamusic.util.DataLoader;
 import com.polluxlab.banglamusic.util.GlobalContext;
 import com.polluxlab.banglamusic.util.Util;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UrlHandler extends Activity {
 
@@ -85,13 +89,13 @@ public class UrlHandler extends Activity {
         if (subscription != null) {
             if("MY-RADIO-RADIOBANGLA-FULL-W".equalsIgnoreCase(subscription.getPackageName())) {
               Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
-              setContentView(R.layout.free_trial_layout);
+              setContentView(R.layout.free_gift_layout);
             }
             else {
               Log.d("MUSIC", "User has subscription. Showing premium content");
-              loadPremiumContent(AppConstant.SUBSCRIBED);
               finish();
             }
+            loadPremiumContent(AppConstant.SUBSCRIBED);
         } else {
             loadPremiumContent(AppConstant.LOGGED_IN);
             Log.d("MUSIC", "User DOESNT have subscription. We should show buy now screen");
@@ -107,9 +111,9 @@ public class UrlHandler extends Activity {
         Intent settingIntent=new Intent("update-setting-ui");
         settingIntent.putExtra("status",status);
         if(status==AppConstant.SUBSCRIBED){
+            Log.d(AppConstant.DEBUG,"End "+subscription.getEndDate());
             if(subscription.getEndDate()!=null) {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                settingIntent.putExtra("enddate", formatter.format(subscription.getEndDate()));
+                settingIntent.putExtra("enddate", subscription.getEndDate().toString());
             }
             settingIntent.putExtra("phone_number",subscription.getPhone_number());
         }
@@ -135,10 +139,34 @@ public class UrlHandler extends Activity {
                 finish();
                 return;
         }
-//        Util.showToast(this,url);
-        Intent i = new Intent(this,LogInWebViewActivity.class);
-        i.putExtra("url", url);
-        startActivity(i);
-        finish();
+        openBrowser(url,true);
+    }
+
+    public void openBrowser(String url,boolean defaultBrowser){
+        if(defaultBrowser){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            String secret= Util.getSecretKey(this);
+            Map<String, String> map = new HashMap<>();
+            String usernameRandomPassword = secret + ":" + secret;
+            String authorization = null;
+            try {
+                authorization = "Basic " + Base64.encodeToString(usernameRandomPassword.getBytes("UTF-8"), Base64.NO_WRAP);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            map.put("Authorization", authorization);
+            Bundle bundle = new Bundle();
+            if(map!=null){
+                for(String key: map.keySet()){
+                    bundle.putString(key, map.get(key));
+                }
+            }
+            browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+            startActivity(browserIntent);
+        }else{
+            Intent i = new Intent(this, LogInWebViewActivity.class);
+            i.putExtra("url", url);
+            startActivity(i);
+        }
     }
 }

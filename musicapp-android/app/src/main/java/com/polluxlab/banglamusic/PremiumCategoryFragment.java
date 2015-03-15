@@ -1,19 +1,26 @@
 package com.polluxlab.banglamusic;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -30,8 +37,11 @@ import com.polluxlab.banglamusic.model.Tag;
 import com.polluxlab.banglamusic.util.AppConstant;
 import com.polluxlab.banglamusic.util.Util;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ARGHA K ROY on 11/20/2014.
@@ -64,6 +74,8 @@ public class PremiumCategoryFragment extends RootFragment {
         rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
         categoryList= (GridView) rootView.findViewById(R.id.categoryList);
         dialogUi= (LinearLayout) rootView.findViewById(R.id.premView);
+
+        // showFullDialog();
 
         if(Util.isConnectingToInternet(getActivity())){
             checkAllowed();
@@ -151,30 +163,22 @@ public class PremiumCategoryFragment extends RootFragment {
                     public void onClick(View arg0) {
                         final String url = Endpoint.instance().getPurchase();
                         Log.d(AppConstant.DEBUG, "Url: " + url);
-                        Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
-                        i.putExtra("url", url);
-                        startActivity(i);
+                        openBrowser(url,false);
                     }
                 });
             }
         } else {
-            View v = getActivity().getLayoutInflater().inflate(R.layout.buy_now_layout, null);
+            View v = getActivity().getLayoutInflater().inflate(R.layout.log_in_layout, null);
             dialogUi.addView(v);
             categoryList.setVisibility(View.GONE);
-            ImageView im = (ImageView) v.findViewById(R.id.buyNowImage);
-            im.setImageResource(R.drawable.log_in_logo);
-            Button loginSubmitBtn = (Button) rootView.findViewById(R.id.buyNowBtn);
-            loginSubmitBtn.setText("OK");
-            loginSubmitBtn.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), AppConstant.FONT));
+            Button loginSubmitBtn = (Button) rootView.findViewById(R.id.logInNowBtn);
             loginSubmitBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
                     final String url = Endpoint.instance().getAuthUrl();
                     Log.d(AppConstant.DEBUG, "Url: " + url);
-                    Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
-                    i.putExtra("url", url);
-                    startActivity(i);
+                    openBrowser(url,false);
                 }
             });
         }
@@ -187,6 +191,7 @@ public class PremiumCategoryFragment extends RootFragment {
             Log.d(AppConstant.DEBUG,"No secret key");
         } else {
             Log.d(AppConstant.DEBUG,"Secret key: "+secret);
+            //updateUi(true,AppConstant.SUBSCRIBED);
             new LoadSubscription().execute();
         }
     }
@@ -246,7 +251,7 @@ public class PremiumCategoryFragment extends RootFragment {
         }
     }
 
-    public void setupBroadCast(){
+    private void setupBroadCast(){
         broadCastReceive=new BroadcastReceiver() {
 
             @Override
@@ -258,6 +263,50 @@ public class PremiumCategoryFragment extends RootFragment {
         };
         Log.d(AppConstant.DEBUG,"registerred premium ui");
         getActivity().registerReceiver(broadCastReceive, new IntentFilter("update-prem-ui"));
+    }
+
+    private void showFullDialog(){
+        Dialog dialog = new Dialog(getActivity(),android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.buy_now_layout);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.show();
+    }
+
+    public void openBrowser(String url,boolean defaultBrowser){
+        if(defaultBrowser){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if(url.contains("xxxx")) {
+                String secret= Util.getSecretKey(getActivity());
+                Map<String, String> map = new HashMap<>();
+                String usernameRandomPassword = secret + ":" + secret;
+                String authorization = null;
+                try {
+                    authorization = "Basic " + Base64.encodeToString(usernameRandomPassword.getBytes("UTF-8"), Base64.NO_WRAP);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                map.put("Authorization", authorization);
+                Bundle bundle = new Bundle();
+                if(map!=null){
+                    for(String key: map.keySet()){
+                        bundle.putString(key, map.get(key));
+                    }
+                }
+                browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+            }
+            startActivity(browserIntent);
+        }else{
+            Intent i = new Intent(getActivity(), LogInWebViewActivity.class);
+            i.putExtra("url", url);
+            startActivity(i);
+        }
     }
 
     @Override

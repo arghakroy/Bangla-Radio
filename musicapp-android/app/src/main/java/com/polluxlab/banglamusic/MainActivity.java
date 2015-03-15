@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MainActivity extends FragmentActivity implements PlaySoundHelper{
 
     private MainPagerFragment carouselFragment;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
+        this.menu=menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -100,10 +103,19 @@ public class MainActivity extends FragmentActivity implements PlaySoundHelper{
         if(item.getItemId()==android.R.id.home) onBackPressed();
         switch (item.getItemId()){
             case R.id.notificationMenu:
-                startActivity(new Intent(this,NotificationsActivity.class));
+                startActivityForResult(new Intent(this, NotificationsActivity.class), 1001);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1001){
+            MenuItem item = menu.findItem(R.id.notificationMenu);
+            item.setIcon(R.drawable.ic_action_noti_icon);
+        }
     }
 
     /**
