@@ -145,23 +145,25 @@ public class UrlHandler extends Activity {
     public void openBrowser(String url,boolean defaultBrowser){
         if(defaultBrowser){
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            String secret= Util.getSecretKey(this);
-            Map<String, String> map = new HashMap<>();
-            String usernameRandomPassword = secret + ":" + secret;
-            String authorization = null;
-            try {
-                authorization = "Basic " + Base64.encodeToString(usernameRandomPassword.getBytes("UTF-8"), Base64.NO_WRAP);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            map.put("Authorization", authorization);
-            Bundle bundle = new Bundle();
-            if(map!=null){
-                for(String key: map.keySet()){
-                    bundle.putString(key, map.get(key));
+            if(url.contains("payment")) {
+                String secret= Util.getSecretKey(this);
+                Map<String, String> map = new HashMap<>();
+                String usernameRandomPassword = secret + ":" + secret;
+                String authorization = null;
+                try {
+                    authorization = "Basic " + Base64.encodeToString(usernameRandomPassword.getBytes("UTF-8"), Base64.NO_WRAP);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
+                map.put("Authorization", authorization);
+                Bundle bundle = new Bundle();
+                if(map!=null){
+                    for(String key: map.keySet()){
+                        bundle.putString(key, map.get(key));
+                    }
+                }
+                browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
             }
-            browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
             startActivity(browserIntent);
         }else{
             Intent i = new Intent(this, LogInWebViewActivity.class);

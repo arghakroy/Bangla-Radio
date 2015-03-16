@@ -111,10 +111,12 @@ public class FreeCategoryFragment extends RootFragment {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog=new ProgressDialog(con);
-            pDialog.setMessage("Loading. Please wait...");
-            pDialog.setIndeterminate(false);
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View layout = inflater.inflate(R.layout.progress_layout,null);
+            pDialog.setIndeterminate(true);
             pDialog.setCancelable(true);
             pDialog.show();
+            pDialog.setContentView(layout);
         }
 
         @Override

@@ -90,10 +90,12 @@ public class PremiumCategoryFragment extends RootFragment {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog=new ProgressDialog(con);
-            pDialog.setMessage("Loading. Please wait...");
-            pDialog.setIndeterminate(false);
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View layout = inflater.inflate(R.layout.progress_layout,null);
+            pDialog.setIndeterminate(true);
             pDialog.setCancelable(true);
             pDialog.show();
+            pDialog.setContentView(layout);
         }
 
         @Override
@@ -282,7 +284,7 @@ public class PremiumCategoryFragment extends RootFragment {
     public void openBrowser(String url,boolean defaultBrowser){
         if(defaultBrowser){
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            if(url.contains("xxxx")) {
+            if(url.contains("payment")) {
                 String secret= Util.getSecretKey(getActivity());
                 Map<String, String> map = new HashMap<>();
                 String usernameRandomPassword = secret + ":" + secret;
