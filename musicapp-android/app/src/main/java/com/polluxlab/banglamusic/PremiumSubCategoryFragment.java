@@ -47,10 +47,10 @@ public class PremiumSubCategoryFragment extends RootFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.category_layout_frag, container, false);
+        rootView.findViewById(R.id.premView).setVisibility(View.GONE);
         con = getActivity();
 
         PremiumCategoryFragment.currentTitle=getActivity().getActionBar().getTitle()+"";
-        //getActivity().getActionBar().setTitle("শিল্পীদের লিস্ট");
 
         position = getArguments().getInt("position");
         categoryItemList = (GridView) rootView.findViewById(R.id.categoryList);
