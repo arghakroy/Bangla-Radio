@@ -88,10 +88,7 @@ public class LogInWebViewActivity extends Activity {
                 finish();
                 return true;
             }
-            else {
-              view.loadUrl(url);
-              return false;
-            }
+            return false;
         }
     }
 
