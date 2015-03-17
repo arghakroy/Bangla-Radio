@@ -10,7 +10,7 @@
       android:layout_height="0dp"
       android:orientation="vertical"
       android:background="#43C26B"
-      android:layout_weight="1"
+      android:layout_weight="2"
       android:gravity="center"
       android:id="@+id/account_status_container"
       android:visibility="gone">
@@ -20,7 +20,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center_horizontal"
-          android:visibility="gone"
+          android:visibility="visible"
           >
 
             <com.polluxlab.banglamusic.helper.MyTextView
@@ -29,7 +29,7 @@
               android:text="৫ "
               android:textColor="#fff"
               android:gravity="center_horizontal"
-              android:textSize="45sp"
+              android:textSize="40sp"
               android:id="@+id/account_remainning_days"/>
 
             <com.polluxlab.banglamusic.helper.MyTextView
@@ -64,14 +64,14 @@
       android:gravity="center"
       android:orientation="vertical"
       android:visibility="visible"
-      android:layout_weight="1"
+      android:layout_weight="2"
       android:id="@+id/account_buy_container">
 
         <com.polluxlab.banglamusic.helper.MyTextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/string_st1"
-          android:textSize="22sp"
+          android:textSize="20sp"
           android:textColor="#fff"
           />
 
@@ -79,7 +79,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/string_st2"
-          android:textSize="22sp"
+          android:textSize="20sp"
           android:textColor="#fff"
           />
 
@@ -98,7 +98,7 @@
           android:id="@+id/account_buy_btn"
           android:background="@drawable/buy_now"
           android:layout_margin="15dp"
-          android:textSize="30sp"
+          android:textSize="25sp"
           android:paddingLeft="25dp"
           android:paddingRight="25dp"
           android:textStyle="normal"
@@ -107,8 +107,9 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      android:layout_weight="1"
+      android:layout_weight="3"
       android:gravity="center"
+      android:visibility="visible"
       android:orientation="vertical">
         <LinearLayout
           android:layout_width="match_parent"
@@ -116,7 +117,7 @@
           android:gravity="center"
           android:visibility="gone"
           android:id="@+id/logOutLayout"
-          android:padding="15dp">
+          android:padding="10dp">
             <ImageView
               android:layout_width="50dp"
               android:layout_height="wrap_content"
@@ -146,7 +147,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
-          android:padding="15dp">
+          android:padding="10dp">
             <ImageView
               android:layout_width="50dp"
               android:layout_height="wrap_content"
