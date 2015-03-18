@@ -31,13 +31,13 @@ public class LogInWebViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_layout);
         centerActionBarTitle();
-
         webView= (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setBuiltInZoomControls(false);
         String url=getIntent().getStringExtra("url");
         webView.setWebViewClient(new SSLTolerentWebViewClient());
+
         if(url!=null){
             Map<String, String> headers = Collections.emptyMap();
             if(url.contains("payment")) {
@@ -86,9 +86,10 @@ public class LogInWebViewActivity extends Activity {
                 myapp_intent.setData(Uri.parse(url));
                 startActivity(myapp_intent);
                 finish();
-                return true;
+            }else{
+                view.loadUrl(url);
             }
-            return false;
+            return true;
         }
     }
 

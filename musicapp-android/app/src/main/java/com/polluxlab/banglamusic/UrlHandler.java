@@ -88,12 +88,12 @@ public class UrlHandler extends Activity {
     private void performBasedOnSubscription() {
         if (subscription != null) {
             if("MY-RADIO-RADIOBANGLA-FULL-W".equalsIgnoreCase(subscription.getPackageName())) {
-              Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
-              setContentView(R.layout.free_gift_layout);
+                Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
+                setContentView(R.layout.free_gift_layout);
             }
             else {
-              Log.d("MUSIC", "User has subscription. Showing premium content");
-              finish();
+                Log.d("MUSIC", "User has subscription. Showing premium content");
+                finish();
             }
             loadPremiumContent(AppConstant.SUBSCRIBED);
         } else {
@@ -129,17 +129,17 @@ public class UrlHandler extends Activity {
             case R.id.freeTrialOk:
                 Log.d("MUSIC", "User has trial subscription. Showing premium content for trial subscription");
                 loadPremiumContent(AppConstant.SUBSCRIBED);
-                finish();
-                return;
+                break;
             case R.id.buyFailBtn:
                 url = Endpoint.instance().getAuthUrl();
                 break;
             case R.id.buySuccessBtn:
             default:
-                finish();
-                return;
+                break;
         }
-        openBrowser(url,false);
+        if(!url.isEmpty())
+            openBrowser(url,false);
+        finish();
     }
 
     public void openBrowser(String url,boolean defaultBrowser){
