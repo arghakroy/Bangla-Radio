@@ -24,7 +24,7 @@ class SubscriptionResourceController extends Controller {
       if($now <= $subscription->getConnectEndTime() && $now >= $subscription->getConnectStartTime()) {
         $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array(
             'entity' => $subscription,
-            'phone_number' => $userInfoObj->phone_number
+            'phoneNumber' => $userInfoObj->phone_number
         ));
         $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
         return $response;
