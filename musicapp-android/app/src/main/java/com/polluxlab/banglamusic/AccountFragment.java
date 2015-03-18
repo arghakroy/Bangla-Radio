@@ -138,7 +138,7 @@ public class AccountFragment extends RootFragment implements View.OnClickListene
             logOutLayout.setVisibility(View.GONE);
             setBuyBtn(Endpoint.instance().getAuthUrl());
         }
-        phoneNumber.setText(phoneNum);
+        phoneNumber.setText(Util.toBanglaNumber(phoneNum));
     }
 
     public void setupBroadCast(){
