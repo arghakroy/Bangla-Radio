@@ -17,7 +17,7 @@ class ProfileResourceController extends Controller {
     $user = $this->getUser();
     $userInfo = json_decode($user->getUserInfoData());
 
-    $response = $this->render('WebServiceBundle:SubscriptionResource:entity.json.twig', array(
+    $response = $this->render('WebServiceBundle:Profile:get.json.twig', array(
         'phoneNumber' => $userInfo->phone_number
     ));
     $response->headers->set(Headers::CONTENT_TYPE, MimeType::APPLICATION_JSON);
