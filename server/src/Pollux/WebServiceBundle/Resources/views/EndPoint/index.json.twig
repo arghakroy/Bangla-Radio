@@ -11,6 +11,7 @@
         "purchase" : "{{ url('webservice.purchase', {'productId': currentProduct.id}) }}",
         {% endif %}
         "subscriptions" : "{{ url('webservice.subscriptions') }}",
+        "profile" : "{{ url('webservice.profile') }}",
         "login" : "{{ url('telenor.authentication.login') }}"
     }
 }
