@@ -14,6 +14,7 @@
       <http-basic realm="Webservice"/>
     </firewall>
 
+    <rule path="^/webservice/profile" role="ROLE_USER"/>
     <rule path="^/webservice/subscriptions" role="ROLE_USER"/>
     <rule path="^/webservice/payment/initiate" role="ROLE_USER"/>
 
