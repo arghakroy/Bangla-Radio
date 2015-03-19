@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ProfileResourceController extends Controller {
 
-  public function getProfile() {
+  public function getProfileAction() {
     /**
      * @var User $user
      */
